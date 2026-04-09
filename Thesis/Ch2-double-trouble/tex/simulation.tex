@@ -10,8 +10,8 @@ The results in \cref{fig:proposed} demonstrate that our method outperforms two p
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/n3BP_20fold.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/n3BP_fast_20fold.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//n3BP_20fold.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//n3BP_fast_20fold.png}
     \caption{Predictions when data is sampled from our model (\cref{eq:proposed_prior}). Each row corresponds to a simulated dataset (\cref{sec:simulation}). \emph{Left}: %The dashed black line shows the observed number of variants as a function of the sample number.
     The samples (horizontal axis) appear in the following order: pilot from population 1, pilot from population 2, follow-up from population 1, follow-up from population 2. A vertical dashed gray line separates the two populations in the pilot and follow-up, respectively. Vertical gray shading covers the pilot data. In the follow-up region, we plot mean (lines) and 1 standard deviation intervals (shaded regions) from ground truth (dashed black; also appears for the pilot) and three methods: our proposed method (solid red), the dependent version of the single-population 3BP (dash-dot blue), and the independent version of the 3BP (dotted green). \emph{Center and Right}: For each $\vecoccurrence$ with component values up to 10, we plot the relative residual for predictions from our method (right) and the dependent 3BP (center). \revision{Note: color scales are dataset-specific.} A square is gray when the observed value is strictly less than 2 in at least one fold or $\vecoccurrence = (0,0)$. 
     }

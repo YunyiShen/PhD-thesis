@@ -16,15 +16,15 @@ In this section, we briefly describe how the proposed $R^2$ metric is used in ou
 \label{app:emd-big-table}
 In this section, we provide the summary table (\cref{tab:emd_combined}) for comparing forecasting and interpolation performance in terms of EMD over all the experiments of interest. For the interpolation results, we report the mean and standard deviation for each method, aggregated over different random seeds and interpolation held-out time points. Detailed per-time-point results are provided for each experiment in the corresponding “Interpolation results” subsubsection later in \cref{app:further-exp-details}. 
 
-\input{tables/summary_combined_emd}
+\input{Ch4-snapmmd/tables/summary_combined_emd}
 
 \subsection{Full results for interpolation task}
 \label{app:complete-summary-interpolation}
 In this section, we provide summary tables for all methods for the interpolation task. In \cref{tab:interp-summary-complete-mmd} we provide the summary table for MMD. In \cref{tab:interp-summary-complete-emd} we provide the summary table for EMD. As in \cref{app:emd-big-table}, we report the mean and standard deviation for each method, aggregated over different random seeds and interpolation held-out time points. We find that in almost all experiments, SnapMMD provides better or matching interpolation performance relative to competitors.
 
-\input{tables/summary_interpolation_mmd}
+\input{Ch4-snapmmd/tables/summary_interpolation_mmd}
 
-\input{tables/summary_interpolation_emd}
+\input{Ch4-snapmmd/tables/summary_interpolation_emd}
 
 
 \clearpage
@@ -58,7 +58,7 @@ If we look at the middle row of \cref{fig:LV-appendix}, we see that from a visua
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/LV_appendix_diff_arrows.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/LV_appendix_diff_arrows.pdf}
     \caption{Experimental results for the Lotka-Volterra system. \textit{Top row}: forecast prediction task. A method is successful if the forecast predicted points (in red) match the red points in the ground truth figure. \textit{Middle row:} ground truth vector field (left) and reconstructed vector fields with the three methods. \textit{Bottom row:} Difference between reconstructed vector fields and ground truth. For each point of interest on the grid, we represent the difference between the two vectors with an arrow and color it according to the magnitude of the difference (colorbar to the right).}
     \label{fig:LV-appendix}
 \end{figure}
@@ -86,22 +86,22 @@ We evaluate model performance on the interpolation task in the classic LV experi
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/LV_interpolationing.png}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/LV_interpolationing.png}
     \caption{LV interpolation}
     \label{fig:lv-appendix-parametric-interpol}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/LV_classic_interpolation_metric.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/LV_classic_interpolation_metric.pdf}
     \caption{LV interpolation metrics}
     \label{fig:lv-metrics-interpol}
 \end{figure}
 
 
-\input{tables/LV_classic_MMD}
+\input{Ch4-snapmmd/tables/LV_classic_MMD}
 
-\input{tables/LV_classic_EMD}
+\input{Ch4-snapmmd/tables/LV_classic_EMD}
 
 \clearpage
 
@@ -134,14 +134,14 @@ In this section we further discuss results for the repressilator experiment with
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=\linewidth]{Figs/Repressilator_forecasting.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/Repressilator_forecasting.pdf}
     \caption{Forecasting task for the repressilator system with parametric model family. }
     \label{fig:repr-parametric-forecast}
 \end{figure}
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=\linewidth]{Figs/Repressilator_appendix_diff_arrows.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/Repressilator_appendix_diff_arrows.pdf}
     \caption{Experimental results for the repressilator system using parametric model as model family.\textit{Top row}: forecast prediction task. A method is successful if the forecast predicted points (in red) match the red points in the ground truth figure. \textit{Middle row:} ground truth vector field (left) and reconstructed vector fields with the three methods. \textit{Bottom row:} Difference between reconstructed vector fields and ground truth. For each point of interest on the grid, we represent the difference between the two vectors with an arrow and color it according to the magnitude of the difference (colorbar to the right).}
     \label{fig:repr-appendix-parametric}
 \end{figure}
@@ -179,7 +179,7 @@ The metric curves in \cref{fig:repr-metric-interpol} and tables \cref{tab:repr-c
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/Repressilator_interpolationing.png}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/Repressilator_interpolationing.png}
     
     \caption{Parametric interpolation}
     \label{fig:repr-appendix-parametric-interpol}
@@ -187,14 +187,14 @@ The metric curves in \cref{fig:repr-metric-interpol} and tables \cref{tab:repr-c
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/Repressilator_classic_interpolation_metric.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/Repressilator_classic_interpolation_metric.pdf}
     \caption{Parametric interpolation metric}
     \label{fig:repr-metric-interpol}
 \end{figure}
 
-\input{tables/Repressilator_classic_MMD}
+\input{Ch4-snapmmd/tables/Repressilator_classic_MMD}
 
-\input{tables/Repressilator_classic_EMD}
+\input{Ch4-snapmmd/tables/Repressilator_classic_EMD}
 
 \clearpage
 
@@ -242,7 +242,7 @@ In the third row of \cref{tab:repr-mlp}, we see that for this model choice our m
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\linewidth]{Figs/mlp_Repressilator_appendix_diff_arrows.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/mlp_Repressilator_appendix_diff_arrows.pdf}
     \caption{Experimental results for the repressilator system using semiparametric model as model family. \textit{Top row}: forecast prediction task. A method is successful if the forecast predicted points (in red) match the red points in the ground truth figure. \textit{Middle row:} ground truth vector field (left) and reconstructed vector fields with the three methods. \textit{Bottom row:} Difference between reconstructed vector fields and ground truth. For each point of interest on the grid, we represent the difference between the two vectors with an arrow and color it according to the magnitude of the difference (colorbar to the right).}
     \label{fig:repr-appendix-semiparametric}
 \end{figure}
@@ -256,7 +256,7 @@ The quantitative results in \cref{fig:repr-semiparametric-metric-interpol} and t
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{Figs/mlp_Repressilator_interpolationing.png}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/mlp_Repressilator_interpolationing.png}
     
     \caption{Semiparametric interpolation of repressilator system.}
     \label{fig:repr-appendix-semiparametric-interpol}
@@ -265,16 +265,16 @@ The quantitative results in \cref{fig:repr-semiparametric-metric-interpol} and t
 \begin{figure}
     \centering
 
-    \includegraphics[width=\linewidth]{Figs/Repressilator_mlp_interpolation_metric.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/Repressilator_mlp_interpolation_metric.pdf}
     \caption{Metrics for Semiparametric interpolation of repressilator system.}
     \label{fig:repr-semiparametric-metric-interpol}
 \end{figure}
 
 
 
-\input{tables/Repressilator_mlp_MMD}
+\input{Ch4-snapmmd/tables/Repressilator_mlp_MMD}
 
-\input{tables/Repressilator_mlp_EMD}
+\input{Ch4-snapmmd/tables/Repressilator_mlp_EMD}
 
 \clearpage
 
@@ -337,7 +337,7 @@ The lines in \cref{fig:repres-missing-protein-interpol-metric} and the numbers i
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/missingobs_Repressilator_interpolationing}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/missingobs_Repressilator_interpolationing}
 
     \caption{Interpolation of repressilator system with missing protein.}
     \label{fig:repres-missing-protein-interpol}
@@ -345,14 +345,14 @@ The lines in \cref{fig:repres-missing-protein-interpol-metric} and the numbers i
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/Repressilator_missingobs_interpolation_metric.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/Repressilator_missingobs_interpolation_metric.pdf}
     \caption{Metrics for Interpolation of repressilator system with missing protein.}
     \label{fig:repres-missing-protein-interpol-metric}
 \end{figure}
 
-\input{tables/Repressilator_missingobs_MMD}
+\input{Ch4-snapmmd/tables/Repressilator_missingobs_MMD}
 
-\input{tables/Repressilator_missingobs_EMD}
+\input{Ch4-snapmmd/tables/Repressilator_missingobs_EMD}
 
 \clearpage
 
@@ -425,7 +425,7 @@ In the third row of \cref{tab:GoM}, we compare the drift reconstruction error us
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/GoM_appendix_diff_arrows.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/GoM_appendix_diff_arrows.pdf}
     \caption{Experimental results for the Gulf of Mexico experiment.}
     \label{fig:gom-appendix}
 \end{figure}
@@ -442,7 +442,7 @@ This performance difference highlights a key distinction between modeling object
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{Figs/GoM_interpolationing.png}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/GoM_interpolationing.png}
     
     \caption{Interpolation of Gulf of Mexico current.}
     \label{fig:GoM-interpol}
@@ -450,14 +450,14 @@ This performance difference highlights a key distinction between modeling object
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{Figs/GoM_realdata_interpolation_metric.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/GoM_realdata_interpolation_metric.pdf}
     \caption{Metrics for Interpolation of Gulf of Mexico current.}
     \label{fig:GoM-interpol-metric}
 \end{figure}
 
-\input{tables/GoM_realdata_MMD}
+\input{Ch4-snapmmd/tables/GoM_realdata_MMD}
 
-\input{tables/GoM_realdata_EMD}
+\input{Ch4-snapmmd/tables/GoM_realdata_EMD}
 
 \clearpage
 
@@ -483,7 +483,7 @@ We use the 30 biologically annotated programs in \citet{jiang2024d} together wit
 
 \begin{figure}
     \centering
-    \includegraphics[width=.85\linewidth]{Figs/pbmc_forecasting_progression_6x4.pdf}
+    \includegraphics[width=.85\linewidth]{Ch4-snapmmd/Figs/pbmc_forecasting_progression_6x4.pdf}
     \caption{Training data for the PBMC experiment and forecasts with the three methods.}
     \label{fig:pbmc-training-progression}
 \end{figure}
@@ -523,7 +523,7 @@ We now assess interpolation performance on this real-world single-cell dataset. 
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/pbmc_interpolationing.png}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/pbmc_interpolationing.png}
     
     \caption{Interpolation of pbmc dataset. }
     \label{fig:pbmc-interpol}
@@ -531,40 +531,40 @@ We now assess interpolation performance on this real-world single-cell dataset. 
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=.85\linewidth]{Figs/pbmc_interpolation_grid_1.pdf}
+    \includegraphics[width=.85\linewidth]{Ch4-snapmmd/Figs/pbmc_interpolation_grid_1.pdf}
     \caption{PBMC interpolation results for the first 5 validation time points. The axis are the first three principal components as in the forecasting experiment. The first row shows the evolution of cells for ground truth. The other six rows show the predicted cells at the validation time points for the our method and the five baselines.}
     \label{fig:pbmc-interpolation-1-5}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=.85\linewidth]{Figs/pbmc_interpolation_grid_2.pdf}
+    \includegraphics[width=.85\linewidth]{Ch4-snapmmd/Figs/pbmc_interpolation_grid_2.pdf}
     \caption{PBMC interpolation results for validation time points 6 to 10. The axis are the first three principal components as in the forecasting experiment. The first row shows the evolution of cells for ground truth. The other six rows show the predicted cells at the validation time points for the our method and the five baselines.}
     \label{fig:pbmc-interpolation-6-10}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=.85\linewidth]{Figs/pbmc_interpolation_grid_3.pdf}
+    \includegraphics[width=.85\linewidth]{Ch4-snapmmd/Figs/pbmc_interpolation_grid_3.pdf}
     \caption{PBMC interpolation results for validation time points 11 to 15. The axis are the first three principal components as in the forecasting experiment. The first row shows the evolution of cells for ground truth. The other six rows show the predicted cells at the validation time points for the our method and the five baselines.}
     \label{fig:pbmc-interpolation-11-15}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=.85\linewidth]{Figs/pbmc_interpolation_grid_4.pdf}
+    \includegraphics[width=.85\linewidth]{Ch4-snapmmd/Figs/pbmc_interpolation_grid_4.pdf}
     \caption{PBMC interpolation results for validation time points 16 to 20. The axis are the first three principal components as in the forecasting experiment. The first row shows the evolution of cells for ground truth. The other six rows show the predicted cells at the validation time points for the our method and the five baselines.}
     \label{fig:pbmc-interpolation-16-20}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=\linewidth]{Figs/pbmc_realdata_interpolation_metric.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/pbmc_realdata_interpolation_metric.pdf}
     \caption{Metrics for Interpolation of pbmc dataset. }
     \label{fig:pbmc-interpol-metric}
 \end{figure}
 
-\input{tables/pbmc_realdata_MMD}
+\input{Ch4-snapmmd/tables/pbmc_realdata_MMD}
 
 
 

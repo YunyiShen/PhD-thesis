@@ -67,7 +67,7 @@ The overall optimization problem for parameter fitting then becomes:
 \end{align}
 The least squares objective from \cref{eq:leastsquare} naturally extends classical regression to distributional settings by measuring discrepancy in the RKHS defined by kernel mean embeddings. Specifically, this least squares framework reduces to classical Euclidean regression if each predicted distribution is a Dirac measure and the kernel is linear. 
 
-\input{tables/summary_combined_mmd}
+\input{Ch4-snapmmd/tables/summary_combined_mmd}
 
 \textbf{Choosing kernel, optimizer, and SDE model.}
 In practice, we use the radial basis function (RBF) kernel for the state space; we determine the length scale by the median heuristic \citep{garreau2017large} applied to pairwise distances in the data. Additionally, we scale time to lie in  $[0,1]$. For optimization, we compute  gradients with respect to the parameters using the stochastic adjoint method \citep{li2020scalable}. We use the Adam optimizer to perform the parameter updates. 
@@ -111,7 +111,7 @@ The RKHS-based coefficient of determination \(R^2\) is
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=\linewidth]{Figs/LV_forecasting.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/LV_forecasting.pdf}
     \vspace{-0.6cm}
     \caption{Lotka-Volterra results (\protect\cref{sec:lv-main}). We show 200 samples at each of 10 training times and 1 forecast time (red). Forecast points overlap with the training points at time 0 (blue).}
     \vspace{-0.3cm}

@@ -19,8 +19,8 @@ For the i3BP, we consider two sets of values for the hyperparameters $(\alpha_1,
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/i3BP_20fold.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/i3BP_slow_20fold.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//i3BP_20fold.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//i3BP_slow_20fold.png}
     \caption{Prediction when data is sampled from the i3BP. Each row represents a different simulated dataset, as described in Section 8.1. 
     \emph{Left}: The dashed black line shows the observed number of variants as a function of the number of samples. The samples appear in the following order: the pilot from population 1, the pilot from population 2, the follow-up from population 1, the follow-up from population 2. A vertical dashed gray line separates the two populations in the pilot and follow-up, respectively. The gray shading covers the pilot data. All curves agree exactly on the pilot data. In the follow-up region, we plot the mean (lines) and 1 standard deviation intervals (shaded regions) from the three methods: our proposed method (solid red), the dependent version of the single-population 3BP (dash-dot blue), and the independent version of the 3BP (dotted green).  
     \emph{Center and Right}: For each $\vecoccurrence$ with component values up to 10, we plot the relative residual for predictions from our method (right) and the dependent 3BP (center), average over folds. \revision{Note that the color scales in residual plot are different across datasets.} A square is gray when the observed value is strictly less than 2 in at least one fold or $\vecoccurrence = (0,0)$.  
@@ -37,8 +37,8 @@ We sample data from the d3BP by fixing the hyperparameters at $(\alpha,c,\sigma)
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/d3BP_20fold.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/d3BP.1_20fold.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//d3BP_20fold.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//d3BP.1_20fold.png}
     \caption{Prediction when data is sampled from the d3BP. Each row represents a different simulated dataset, as described in Section 8.1. \emph{Left}: The dashed black line shows the observed number of variants as a function of the sample number. The samples appear in the following order: the pilot from population 1, the pilot from population 2, the follow-up from population 1, the follow-up from population 2. A vertical dashed gray line separates the two populations in the pilot and follow-up, respectively. The gray shading covers the pilot data. All curves agree exactly on the pilot data. In the follow-up region, we plot mean (lines) and 1 standard deviation intervals (shaded regions) from three methods: our proposed method (solid red), the dependent version of the single-population 3BP (dash-dot blue), and the independent version of the 3BP (dotted green).  \emph{Center and Right}: For each $\vecoccurrence$ with component values up to 10, we plot the relative residual for predictions from our method (right) and the dependent 3BP (center), average over folds. \revision{Note that the color scales in residual plot are different across datasets.} A square is gray when the observed value is strictly less than 2 in at least one fold or $\vecoccurrence = (0,0)$. }
     \label{fig:d3BP}
 \end{figure}
@@ -63,8 +63,8 @@ We provide a summary of our findings with results on \internal{two largest cance
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.6\textwidth]{Figs/BIDC_LA2_20fold_one_pop.png}
-    \includegraphics[width = 0.6\textwidth]{Figs/BRCA_LUAD_20fold_one_pop.png}
+    \includegraphics[width = 0.6\textwidth]{Ch2-double-trouble/Figs//BIDC_LA2_20fold_one_pop.png}
+    \includegraphics[width = 0.6\textwidth]{Ch2-double-trouble/Figs//BRCA_LUAD_20fold_one_pop.png}
     \caption{Prediction for the variant counts in, breast (left column) and lung cancer (right column) in the MSK-IMPACT dataset (first row) and TCGA dataset (second row) respectively. The dashed black line shows the observed number of variants as a function of the sample number. The samples appear in the following order: the pilot and then followup. The gray shading covers the
     pilot data. All curves agree exactly on the pilot data. In the follow-up region we plot mean (lines) and 1 standard deviation interval (shaded area) from five candidate single population models: 3BP (solid green), fourth order jackknife (dotted orange), GT (purple dot-line), linear programming (dashed cyan) and scaled process (dot dashed gray). The 3BP method outperforms or \revision{is comparable to} alternatives in this dataset. }
 %    \label{fig:bidc_la2_singlepop}
@@ -73,7 +73,7 @@ We provide a summary of our findings with results on \internal{two largest cance
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/Gnomad_one_pop_combined.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//Gnomad_one_pop_combined.png}
     \caption{Prediction for the GnomAD dataset, Left column: Southern European, Middle column: Korean,  Right column: Bulgarian. The dashed black line shows the observed number of variants as a function of the sample number. The samples appear in the following order: the pilot and then followup. The gray shading covers the
     pilot data. All curves agree exactly on the pilot data. In the follow-up region we plot mean (lines) and 1 standard deviation interval (shaded area) from five candidate single population models: 3BP (solid green), fourth order jackknife (dotted orange), GT (purple dot-line), linear programming (dashed cyan) and scaled process (dot dashed gray). The fourth order Jackknife outperforms competing alternatives in this dataset. 
     }
@@ -99,8 +99,8 @@ $(\mass,\rate{1}, \rate{2},\corr{1},\corr{2}, \conc{1}, \conc{2})=(100,0.4,0.6,0
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/n3bp_20fold_kton_res.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/n3BP_fast_20fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//n3bp_20fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//n3BP_fast_20fold_kton_res.png}
     \caption{Ground truth value of $\bm{k}$-tons and model prediction when the data is sampled from the proposed model. 
     Left most:log over average observed $\bm{k}$-tons. A square is gray when it the observed value is 0 in any fold or $\vecoccurrence=(0,0)$. Middle and right: Log average absolute residual in the d3BP and proposed model.  The first row refers to $(\mass,\rate{1}, \rate{2},\corr{1},\corr{2}, \conc{1}, \conc{2})=(100,0.4,0.6,0.5,0.5,1,1)$. The second row refers to $(\mass,\rate{1}, \rate{2},\corr{1},\corr{2}, \conc{1}, \conc{2})=(1,0.8,0.7,0.5,0.5,1,1)$.
     }
@@ -113,8 +113,8 @@ For the i3BP, we simulate two datasets using parameters $(\alpha_1,c_1,\sigma_1,
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/i3BP_20fold_kton_res.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/i3BP_slow_20fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//i3BP_20fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//i3BP_slow_20fold_kton_res.png}
     \caption{Ground truth of $\bm{k}$-tons and model prediction when the data sampled from the i3BP. Left most:log over average observed $\bm{k}$-tons. A darker color corresponds to higher values. A square is gray when it the observed value is 0 in any fold or $\vecoccurrence=(0,0)$. Middle and right: Log average absolute residual in the d3BP and the proposed model.  The first row refers to $(\alpha_1,c_1,\sigma_1,\alpha_2,c_2,\sigma_2) = (20,1,.6,20,1,.3)$. The second row refers to $(\alpha_1,c_1,\sigma_1,\alpha_2,c_2,\sigma_2)=(40,1,.1,40,1,.3)$.
     }
     \label{fig:i3BP_kton}
@@ -126,8 +126,8 @@ For the d3BP, we simulated two datasets using parameters $(\alpha,c,\sigma)=(20,
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/d3BP_20fold_kton_res.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/d3BP.1_20fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//d3BP_20fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//d3BP.1_20fold_kton_res.png}
     \caption{Ground truth of $\bm{k}$-tons and model prediction when the data sampled from the d3BP. Left most:log over average observed $\bm{k}$-tons. A darker color corresponds to higher values. A square is gray when it the observed value is 0 in any fold or $\vecoccurrence=(0,0)$. Middle and right: Log average absolute residual in the d3BP and the proposed model. The first row refers to $(\alpha,c,\sigma)=(20,1,.5)$. The second row refers to $(\alpha,c,\sigma)=(40,1,.1)$.}
     \label{fig:d3BP_kton}
 \end{figure}
@@ -138,8 +138,8 @@ For the d3BP, we simulated two datasets using parameters $(\alpha,c,\sigma)=(20,
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/BIDC_LA2_20fold_kton_res.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/BRCA_LUAD_20fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//BIDC_LA2_20fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//BRCA_LUAD_20fold_kton_res.png}
     \caption{Ground truth of $\bm{k}$-tons and model prediction using cancer genome dataset. Left most:log over average observed $\bm{k}$-tons. A darker color corresponds to higher values. A square is gray when it the observed value is 0 in any fold or $\vecoccurrence=(0,0)$. Middle and right: Log average absolute residual in d3BP and proposed model. }
     %\label{fig:brca_luad_kton}
     \label{fig:brca_luad_kton}
@@ -148,8 +148,8 @@ For the d3BP, we simulated two datasets using parameters $(\alpha,c,\sigma)=(20,
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/kor_bgr_30fold_kton_res.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/seu_bgr_30fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//kor_bgr_30fold_kton_res.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//seu_bgr_30fold_kton_res.png}
     \caption{Ground truth of $\bm{k}$-tons and model prediction using GnomAD dataset. Left most:log over average observed $\bm{k}$-tons. A darker color corresponds to higher values. A square is gray when it the observed value is 0 in all fold or $\vecoccurrence=(0,0)$. Middle and right: Log average absolute residual in d3BP and proposed model. }
     %\label{fig:seu_bgr_kton}
     \label{fig:seu_bgr_kton}
@@ -163,8 +163,8 @@ Our proposed method handles well both cases. Conversely, the i3BP can induce sev
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/n3bp_slow_20fold.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/d3bp.3_20fold.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//n3bp_slow_20fold.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//d3bp.3_20fold.png}
     \caption{Prediction for slow growth correlated models. Top: proposed model $(\mass,\rate{1}, \rate{2}, \corr{1}, \corr{2}, \discount{1}, \discount{2})=(100,0.4,0.6,0.5,0.5,1,1)$. Bottom: d3BP $(\alpha,c,\sigma)=(40,1,.3)$. The dashed black line shows the observed number of variants as a function of the sample number. The samples appear in the following order: the pilot and then followup. The gray shading covers the
     pilot data. All curves agree exactly on the pilot data. In the follow-up region we plot mean (lines) and 1 standard deviation interval (shaded area) from five candidate single population models: 3BP (solid green), fourth order jackknife (dotted orange), GT (purple dot-line), linear programming (dashed cyan) and scaled process (dot dashed gray). }
     \label{fig:slow_growth}
@@ -179,8 +179,8 @@ Our results show that the optimization is relatively insensitive to the trimming
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/kor_bgr_30fold_trim15.png}
-    \includegraphics[width = 0.9\textwidth]{Figs/seu_bgr_30fold_trim15.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//kor_bgr_30fold_trim15.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//seu_bgr_30fold_trim15.png}
     \caption{Prediction for the GnomAD dataset, Korean--Bulgarian and Southern European--Bulgarian respectively. The trimming here is set to 15. The results are the same as trimming at 10 in the main text Figure 5.}
     %\label{fig:seu_bgr_15}
     \label{fig:seu_bgr_15}
@@ -188,14 +188,14 @@ Our results show that the optimization is relatively insensitive to the trimming
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/seu_bgr_30fold_trim20.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//seu_bgr_30fold_trim20.png}
     \caption{Prediction for the GnomAD dataset Southern European--Bulgarian respectively. The trimming here is set to 20. The results are the same as trimming at 10 in the main text Figure 5. The Korean population does not have enough training samples to allow a trimming of 20.}
     \label{fig:seu_bgr_20}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.9\textwidth]{Figs/BIDC_LA2_20fold_trim15.png}
+    \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//BIDC_LA2_20fold_trim15.png}
     \caption{Prediction for the variant counts in, breast and lung cancer. For  MSK-IMPACT dataset. This experiment used trimming of 15 during training. The results are the same as trimming at 10 in the main text Figure 4.}
     \label{fig:bidc_la2_15}
 \end{figure}

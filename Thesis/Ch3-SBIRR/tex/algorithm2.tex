@@ -1,3 +1,5 @@
+\subsection{Our method}
+
 Our method allows the specification of a reference family rather than requiring a single reference drift. And it facilitates sharing of information between time intervals. In what follows, we first describe a general optimization setup allowing a reference family. We then establish theoretical guarantees for an iterative approach to solving the optimization. Finally, we provide a practical algorithm that reflects this approach.
 
 
@@ -84,7 +86,7 @@ However, our framework is in principle compatible with any solver that (i) suppo
 
 \begin{figure*}[!ht]
     \centering
-    \includegraphics[width =.95\textwidth]{Figs/LV50_trajectories.pdf}
+    \includegraphics[width =.95\textwidth]{Ch3-SBIRR/Figs/LV50_trajectories.pdf}
     \caption{Comparison on the Lotka-Volterra synthetic data (\cref{sec:LVmain}) with 5 training times, 4 validation times, and 50 observations per time. Each plot shows 50 simulated trajectories, originating from particles at one time end point (three left plots: first time; right plot: final time); see ``Measuring Accuracy'' in \cref{sec:experiments-main}.  
     }
     \label{fig:LV-main}
@@ -103,3 +105,71 @@ We can approximate the exact objective in \cref{eq:max_likelihood}
 by replacing the expectation $\mathbb{E}_{\bridge_{\drift^{(\iteralgo)}}}$ with an empirical average over the trajectories $\{\simulatedresponseat{0\le \timet\le \timestep{\totsteps}}^{(\timeidx,\sampleidx_{\timeidx})}\}_{\timeidx,\sampleidx_{\timeidx}}$, which are simulated from $\bridge_{\drift^{(\iteralgo)}}$. The resulting optimization problem over this approximate objective can be seen as maximizing the (log) likelihood of the simulated trajectories $\{\simulatedresponseat{0\le \timet\le \timestep{\totsteps}}^{(\timeidx,\sampleidx_{\timeidx})}\}_{\timeidx,\sampleidx_{\timeidx}}$ over the choice of $\refdrift$ in $\refden_{\refdrift}$.
 Since the simulated trajectories are obtained by a standard Euler-Maruyama approach with sampling rate $\Delta t$, they can be represented by a Gaussian autoregressive process.
 We show in \cref{app:inverseproj} that the optimization problem therefore reduces to a least squares scheme, where the square errors arise from the Gaussian log likelihoods. Given the connection to maximum likelihood estimation (MLE), we let \texttt{MLEfit} denote the function that takes in sample trajectories and outputs our resulting estimate $\estimaterefdriftstep{(\iteralgo)}$ of the reference drift $\refdrift^{(\iteralgo)}$.
+
+
+\section{Implementation details}
+\label{sec:implementation}
+
+In this section we discuss the implementation details of our method.
+
+\subsection{First projection at one consecutive pair}
+\label{sec:first_projection_implementation}
+In this step, we are interested in estimating $\totsteps-1$ pairs of forward and backward drifts, $\{\estimatedriftstep{i},\estimatebackwarddriftstep{i}\}_{\timeidx = 1}^{\totsteps-1}$, that are ideally one the time inversion of the other. 
+
+In our implementation, we decided to use the work in \citet{Vargas2021}. In particular, we use Algorithm 2 in the paper\footnote{The code implementation is available at \href{https://github.com/franciscovargas/GP_Sinkhorn}{\text{https://github.com/franciscovargas/GPSinkhorn}}}. We use the available code as it is and stick to the authors' choice for most parameters. The only difference comes from the fact that in \citet{Vargas2021}, the authors have only access to two time steps, $t_0$ and $t_1$, such that $t_1-t_0 = 1$. The authors in the paper pick discretization step $\Delta t = 0.01$, and therefore the total number of steps in their algorithm is $N = 1 / \Delta t = 100$. In our method, we also pick $\Delta t = 0.01$, but we have multiple time intervals, not necessarily all of length 1. Therefore we have a different amount of discretized steps, $N_i=[(\timet_{\timeidx+1}-\timet_{\timeidx})/\Delta\timet]$, for each time interval $\timeidx$. 
+
+Note that in \citet{Vargas2021} the authors suggested 5 iterations are enough for this algorithm to converge \citep[see also Fig.~4 of][]{Vargas2021}, but we decided to run their algorithm for 10 iterations, which is the default in the available code \citep{gpshinkhornrepo}.
+
+\subsection{Additional Discussion on Alternative Methods for the First Projection}
+\label{app:sb-methods-discussion}
+
+In this section, we include a discussion about additional methods that can be used for the first projection in our algorithm.
+
+\paragraph{Iterative Markovian Fitting and Other Schr\"odinger Bridge Approaches.} A number of recent papers propose methods for fitting Markovian processes via iterative algorithms or by formulating SB problems directly in a forward-backward manner \citep{peluchetti2023diffusion, shi2023diffusion, gushchin2024light, Vargas2021, wang2021deep, Caluya2022, gu2024partially}. As discussed in the main text, our method is not restricted to the particular SB solver of \citet{Vargas2021} but can in principle incorporate \emph{any} algorithm that: (1) accepts a non-Brownian reference measure, and (2) outputs forward and backward drifts for each time interval. However, many of the existing SB methods mentioned above focus on Brownian-motion-based references (e.g., in image generation settings) and hard-code assumptions about isotropic diffusion or gradient drifts, making them less straightforward to incorporate directly without extensive modifications. Nonetheless, the underlying mathematical framework in most of these works can be adapted if one can suitably generalize beyond Brownian motion. In particular, the fast approach in \citet{gushchin2024light} emphasizes efficiency in solving Schr\"odinger Bridge problems with Brownian reference. Incorporating non-Brownian references would likely require re-deriving or extending its energy formulation to account for general SDE dynamics or a more flexible potential term. And \citet{de2021diffusion, peluchetti2023diffusion} also focus on bridging with Brownian motion in the context of generative modeling. Their code often encodes Brownian assumptions, so switching to a generic reference might demand non-trivial changes. Theoretically, however, these methods could still fit within our framework as long as one can compute or approximate drifts with respect to the new reference measure. We emphasize that our proposed reference refinement step (Step~2 in the main text) is computationally light, typically involving only a simple least-squares fit. Most of the runtime in our pipeline arises from solving the SB problem for consecutive pairs (Step~1). Therefore, incorporating a faster SB solver (e.g., via \citet{gushchin2024light}) can speed up the entire algorithm, though our iterative multi-marginal approach will necessarily be somewhat slower than a \emph{single} multi-marginal SB approach using the exact same solver.
+
+\paragraph{Action-Matching.} Another interesting alternative for solving the first projection is the action-matching algorithm \citep{neklyudov2023action}.
+This approach typically models particle trajectories via an ODE, with randomness only in the initial conditions, rather than a noisy SDE. By contrast, our setting presumes a genuinely stochastic process (i.e., the noise is part of the system). Nevertheless, both frameworks share a variational flavor: the action-matching objective for an ODE can be seen as minimizing energy consumption along a path, akin to the stochastic control formulation of SB problems. If one wished to extend action-matching to incorporate a non-Brownian reference process, the approach would involve adjusting the relevant energy functional to reflect that reference. In principle, our multi-marginal extension, where the reference is iteratively updated, could integrate with such an approach, subject to the difference that the baseline system is an ODE rather than an SDE.
+
+\paragraph{Entropic Optimal Transport and Other Optimal Transport Solvers.} The Schr\"odinger Bridge (SB) problem with a Brownian reference is closely related to \emph{entropic-regularized} optimal transport. Consequently, algorithms such as SCONES \citep{daniels2021score} and EGNOT \citep{mokrov2023energy} could, in principle, serve as substitutes for the first projection step in our method, provided one can formulate each pairwise SB step as an entropic OT problem. However, these solvers typically assume a Brownian reference by design and become more complex to apply when the reference measure is generalized or only available through a black-box function. In such cases, it would be necessary to re-derive the underlying operator or cost function to account for nontrivial drift and diffusion. We view this as an exciting avenue for future research: if entropic OT solvers can be extended to arbitrary reference measures, then they could seamlessly replace the SB subroutine in our pipeline.
+
+\subsection{Sampling routine}
+\label{sec:sampling-routine}
+Assume that we have access to $\estimatedrift$ and $\estimatebkwdrift$. In practice, as discussed at the end of the ``Multi-marginal Schrödinger bridges" paragraph in \cref{sec:setup}, these two drifts are constructed by concatenating $\totsteps-1$ pairs of forward and backward drifts, denoted as $\{\estimatedriftstep{i},\estimatebackwarddriftstep{i}\}_{\timeidx = 1}^{\totsteps-1}$. Here we are interested in generating trajectories from the underlying distribution. More precisely, we are interested in approximating one trajectory $\simulatedresponseat{\timet}^{ (\timeidx,\sampleidx_{\timeidx}) }$, ${0< \timet\le \timestep{\totsteps}}$, for each observed sample $\obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}}$. 
+
+We can do this by numerically solving the SDEs associated to these drifts using a standard Euler-Maruyama approach \citep[][Chapter 3.4]{sarkka2019applied} with sampling rate $\Delta\timet$. We can obtain $\simulatedresponseat{\timet}^{ (\timeidx,\sampleidx_{\timeidx}) }$ for ${\timestep{\timeidx}< \timet\le \timestep{\totsteps}}$, by starting from $\obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}}$ and simulating forward, with discrete step $\Delta\timet$, the SDEs with drifts $\{\estimatedriftstep{\timeidx}, \estimatedriftstep{\timeidx+1},\ldots,\estimatedriftstep{\totsteps-1}\}$. We start at $\timestep{\timeidx}$ and use $\estimatedriftstep{\timeidx}$ to simulate forward  $\obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}}$ to obtain the trajectory at discrete times $\timet_{\timeidx}+\Delta t, \timet_{\timeidx}+2\Delta t, \ldots$ . We do this for $L_\timeidx$ steps, where $L_\timeidx$ is the smallest integer such that $\timet_{\timeidx}+L_\timeidx \Delta t \ge t_{i + 1}$. That is, we use $\estimatedriftstep{\timeidx}$ as long as we are diffusing over the time interval $[\timestep{\timeidx}, \timestep{\timeidx+1}]$. As soon as our discrete solving routine gives us an observation beyond time $\timestep{\timeidx+1}$, we stop using $\estimatedriftstep{\timeidx}$ and start using $\estimatedriftstep{\timeidx+1}$. In particular, we start using $\estimatedriftstep{\timeidx+1}$ from $\simulatedresponseat{\timet_{\timeidx}+L_\timeidx \Delta t}^{(\timeidx,\sampleidx_{\timeidx})}$, and simulate this forward for $L_{\timeidx+1}$ steps, until $\timet_{\timeidx}+(L_\timeidx + L_{i+1})\Delta t \ge \timet_{\timeidx + 2}$. And we proceed in this way until we have simulated all the way forward until $\timestep{\totsteps}$. With this routine, it might happen that in the very last step we obtain $\simulatedresponseat{\timet_{\timeidx}+\sum_{j=i}^{\totsteps-1} L_j \Delta t}^{(\timeidx,\sampleidx_{\timeidx})}$ with $\timet_{\timeidx}+\sum_{j=i}^{\totsteps-1} L_j \Delta t \ge \timet_{\totsteps}$. Since we are assuming A1 and A2, and the trajectories are continuous, we do not expect the trajectory to vary a lot in the time past $\timet_{\totsteps}$, so we just consider the trajectory up to  $\simulatedresponseat{\timet_{\timeidx}+\sum_{j=i}^{\totsteps-1} L_j \Delta t}^{(\timeidx,\sampleidx_{\timeidx})}$. In a very similar manner, we obtain $\simulatedresponseat{\timet}^{ (\timeidx,\sampleidx_{\timeidx}) }$ for $0\le \timet\le \timestep{\timeidx}$, by starting from $\obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}}$ and simulating backward, with discrete step $\Delta\timet$, the SDEs with drifts $\{\estimatebackwarddriftstep{\timeidx}, \estimatebackwarddriftstep{\timeidx-1},\ldots,\estimatebackwarddriftstep{1}\}$. We can then obtain a full trajectory for $\obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}}$ by concatenating the backward and forward simulated trajectories. We denote this by $\simulatedresponseat{0 \le \timet\le \timestep{\totsteps}}^{(i,\sampleidx_{\timeidx}) }$. If we do this for all the observations, we obtain the set of trajectories $\{\simulatedresponseat{0\le \timet\le \timestep{\totsteps}}^{(\timeidx,\sampleidx_{\timeidx})}\}_{\timeidx,\sampleidx_{\timeidx}}$. 
+
+
+\subsection{Second projection}
+\label{app:inverseproj}
+Here we describe the subroutine we denoted as MLEfit in Algorithm~\ref{algo:sb-irr-algo}. 
+
+We first observe that the inverse projection, \cref{eq:second-proj}, is equivalent to maximizing the cross entropy between $\refden_{\refdrift}$ and $\bridge_{\drift^{(\iteralgo)}}$
+
+\begin{align*}
+    \argmin_{\refdrift: \refden_{\refdrift}\in\modelfamily} \, \KL(\bridge_{\drift^{(\iteralgo)}} \| \refden_{\refdrift}) &= \argmin_{\refdrift: \refden_{\refdrift}\in\modelfamily} \E_{\bridge_{\drift^{(\iteralgo)}}}\log \frac{\bridge_{\drift^{(\iteralgo)}}}{\refden_{\refdrift}} \\
+    &= \argmin_{\refdrift: \refden_{\refdrift}\in\modelfamily}\left[\E_{\bridge_{\drift^{(\iteralgo)}}}\log \bridge_{\drift^{(\iteralgo)}}-\E_{\bridge_{\drift^{(\iteralgo)}}}\log \refden_{\refdrift}\right] = \argmax_{\refdrift: \refden_{\refdrift}\in\modelfamily} \E_{\bridge_{\drift^{(\iteralgo)}}}\log \refden_{\refdrift}
+\end{align*}
+
+That is, the second projection can be viewed as the expected log-likelihood when true data is from $\bridge_{\drift^{(\iteralgo)}}$ and our model is $\refden_{\refdrift}$. We do not have access to the full distribution $\bridge_{\drift^{(\iteralgo)}}$, but only to the time discretized samples obtained from the previous sampling routine, $\{\simulatedresponseat{0\le \timet\le \timestep{\totsteps}}^{(\timeidx,\sampleidx_{\timeidx})}\}_{\timeidx,\sampleidx_{\timeidx}}$. Therefore, we can approximate the expectation with a sample mean.
+
+
+To do so, observe that the likelihood of these time discretized samples under model $\refden_{\refdrift}$ can be calculated by an autoregressive process. Indeed, consider the estimated trajectory at some time $\timet_{\timeidx}$, $\simulatedresponseat{\timet_{\timeidx}}^{ (\timeidx,\sampleidx_{\timeidx}) }$. Under the SDE model $\refden_{\refdrift}$ with drift $\refdrift$ and sampling rate $\Delta\timet$, the next evaluation for the estimated trajectory, $\simulatedresponseat{\timet_{\timeidx} + \Delta\timet}^{ (\timeidx,\sampleidx_{\timeidx}) }$ is obtained by sampling from a Gaussian $\simulatedresponseat{\timet_{\timeidx} + \Delta\timet}^{ (\timeidx,\sampleidx_{\timeidx}) }|\simulatedresponseat{\timet_{\timeidx}}^{ (\timeidx,\sampleidx_{\timeidx}) }\sim \gN(\simulatedresponseat{\timet_{\timeidx}}^{ (\timeidx,\sampleidx_{\timeidx}) }+\refdrift(\simulatedresponseat{\timet_{\timeidx}}^{ (\timeidx,\sampleidx_{\timeidx}) }, \Delta\timet),\volatility \Delta\timet)$. Therefore, each point in the trajectory is dependent only on the immediate previous point, with the next value being a normally distributed variable centered around the previous value adjusted by the drift term 
+$\refdrift$, with variance $\volatility \Delta t$. This process can thus be seen as a Markov chain with Gaussian transition kernel. 
+
+Therefore, we can approximate $\E_{\bridge_{\drift^{(\iteralgo)}}}\log \refden_{\refdrift}$ by the sample mean
+\begin{equation}
+\label{eq:second_proj_L2}
+\begin{aligned}
+    \E_{\bridge_{\drift^{(\iteralgo)}}}\log \refden_{\refdrift} \approx& \frac{1}{\sum_{\timeidx=1}^{\totsteps}N_{\timeidx}}\frac{1}{\sum_{\timeidx} L_{\timeidx}}\sum_{\timeidx=1}^{\totsteps}\sum_{n_{\timeidx}=1}^{N_{\timeidx}} \sum_{\discstep=1}^{\totdiscstep_{\timeidx}-1} -\frac{1}{2\volatility\Delta\timet} ||(\simulatedresponseat{(\ell+1) \Delta \timet}^{ (\timeidx,\sampleidx_{\timeidx}) }-\simulatedresponseat{\ell \Delta \timet}^{ (\timeidx,\sampleidx_{\timeidx}) })-\refdrift(\simulatedresponseat{\ell \Delta \timet}^{ (\timeidx,\sampleidx_{\timeidx}) }, \discstep\Delta\timet)||_2^2 -\frac{1}{2}\log(\volatility \Delta\timet)
+\end{aligned}
+\end{equation}
+
+
+And so to find the new optimal reference drift $\estimaterefdriftstep{}$ it is enough to solve the following minimization problem: 
+
+
+\begin{align*}
+    \estimaterefdriftstep{}=\argmin_{\refdrift: \refden_{\refdrift}\in\modelfamily} \frac{1}{\sum_{\timeidx=1}^{\totsteps}N_{\timeidx}}\frac{1}{\sum_{\timeidx} L_{\timeidx}}\sum_{\timeidx=1}^{\totsteps}\sum_{n_{\timeidx}=1}^{N_{\timeidx}} \sum_{\discstep=0}^{\totdiscstep_{\timeidx}-1} \frac{1}{2\volatility\Delta\timet} ||(\simulatedresponseat{(\ell+1) \Delta \timet}^{ (\timeidx,\sampleidx_{\timeidx}) }-\simulatedresponseat{\ell \Delta \timet}^{ (\timeidx,\sampleidx_{\timeidx}) })-\refdrift(\simulatedresponseat{\ell \Delta \timet}^{ (\timeidx,\sampleidx_{\timeidx}) }, \discstep\Delta\timet)||_2^2
+\end{align*}
+
+

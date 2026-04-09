@@ -21,8 +21,8 @@ Their key limitation is that they rely on a fixed, known volatility; following p
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=\linewidth]{Figs/mlp_Repressilator_forecasting.pdf}
-    \includegraphics[width=\linewidth]{Figs/missingobs_Repressilator_forecasting.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/mlp_Repressilator_forecasting.pdf}
+    \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/missingobs_Repressilator_forecasting.pdf}
     \vspace{-0.6cm}
     \protect\caption{Repressilator results: mRNA-only (upper, \protect\cref{sec:repr-main}) and mRNA and protein (lower, \protect\cref{sec:repr-protein}). We show 200 samples at each of 10 training times and 1 forecast time (red).}
     \vspace{-0.3cm}
@@ -56,7 +56,7 @@ Since \texttt{SBIRR} methods do not have the capacity to handle models with late
 
 \begin{figure}[!t]
     \centering
-\includegraphics[width=\linewidth]{Figs/GoM_forecasting.pdf}
+\includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/GoM_forecasting.pdf}
     \vspace{-0.6cm}
     \caption{Gulf of Mexico results (\protect\cref{sec:gom-main}). We show 200 samples at each of 10 training times and 1 forecast time (red). }
     \vspace{-0.3cm}
@@ -94,7 +94,7 @@ We use the 30-dimensional projection (``gene program'') of the original measurem
 In \cref{fig:pbmc-forecasting} (rightmost four), we see that our method's forecast is closer to ground truth than the baselines are. MMD (PBMC, Forecast in \cref{tab:mmd_main_text}) agrees. We do not use EMD in this experiment as it suffers from the curse of dimensionality and is thus unreliable in our 30-dimensional setting; see the discussion at the end of Section 2.5.2 in \citet{chewi2024statistical}. Our method ties with \texttt{SBIRR} in the interpolation task (PMBC, Interpolation in \cref{tab:mmd_main_text}). See \cref{app:pbmc-interpol} for more results.
 
 
-\begin{figure}[!t] \centering \includegraphics[width=\linewidth]{Figs/pbmc_forecasting_maintext.pdf} 
+\begin{figure}[!t] \centering \includegraphics[width=\linewidth]{Ch4-snapmmd/Figs/pbmc_forecasting_maintext.pdf} 
 \vspace{-0.5cm}
 \caption{PBMC results (\protect\cref{sec:pbmc}). The axes in every plot are the same three principal components, computed over the full data: i.e., 41 time steps of the 30-dimensional gene programs.
 Leftmost four panels: evolution of the training data at time steps 1, 7, 14, and 20. ``Truth'' panel: ground truth snapshot at time step 21. Rightmost three panels: model forecasts at time step 21.

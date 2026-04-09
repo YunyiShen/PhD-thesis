@@ -57,7 +57,7 @@
 \def\ceil#1{\lceil #1 \rceil}
 \def\floor#1{\lfloor #1 \rfloor}
 \def\1{\bm{1}}
-\newcommand{\train}{\mathcal{D}}
+%\newcommand{\train}{\mathcal{D}}
 \newcommand{\valid}{\mathcal{D_{\mathrm{valid}}}}
 \newcommand{\test}{\mathcal{D_{\mathrm{test}}}}
 
@@ -499,10 +499,7 @@
 
 \newcommand{\parents}{Pa} % See usage in notation.tex. Chosen to match Daphne's book.
 
-\newcommand*{\argmax}{\text{arg\,max}}
-\newcommand*{\argmin}{\text{arg\,min}}
 
-\newcommand{\sign}{\text{sign}}
 \newcommand{\Tr}{\text{Tr}}
 \let\ab\allowbreak
 
@@ -512,8 +509,17 @@
 %\newtheorem{myTheorem}{Theorem}[section]
 %\newtheorem{myLemma}{Lemma}[section]
 %\newtheorem{myCorollary}{Corollary}[section]
-%\newtheorem{proposition}{Proposition}[section]
-%\newtheorem{assumption}{Assumption}[section]
-%\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{definition}{Definition}[section]
 
 %\newenvironment{proof}{\textit{Proof. }}{\hfill$\square$}
+
+\newcommand{\statcell}[3]{%  #1=color, #2=mean, #3=std
+  \cellcolor{#1!25}$#2\pm{\scriptstyle#3}$
+}
+\newcommand{\best}[1]{\textbf{\cellcolor{green!25}#1}}
+\newcommand{\greencell}[1]{\cellcolor{green!25}#1}
+%\newcolumntype{L}{>{\raggedright\arraybackslash}p{3.8cm}}
+%\newcolumntype{C}{>{\centering\arraybackslash}p{2.2cm}}
+\newcommand{\ms}[2]{#1\,{$\pm$\,#2}}
+

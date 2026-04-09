@@ -1,0 +1,288 @@
+
+
+
+In this section we provide details on how to prove \cref{prop:iter-kl} in the main text. This result follows using standard theory of iterative projections \citep{csiszar1975divergence, csiszar2004information, benamou2015iterative}. 
+In particular, the convergence results in our setting are derived by adapting Theorem 5.3 from  \citet{csiszar2004information}, originally formulated for families of discrete distributions. We have numbered this as \cref{thm:csiszar5.3}, and modified it to apply to density functions rather than probability mass functions. Once we have stated \cref{thm:csiszar5.3}, to prove \cref{prop:iter-kl} we need to apply this adaptation to the specific case where the divergence of interest is the KL divergence between SDEs. To do so, we need to verify that the theorem's conditions on probability densities are satisfied by our SDEs. To facilitate this, we have established additional lemmas --- \cref{lemma:pyth}, \cref{lemma:rIproj}, and~\cref{lemma:bounded_density_ratio}. Using these lemmas, we can then apply \cref{thm:csiszar5.3} in the specific case of KL divergence between densities defined by SDEs, and establish \cref{prop:iter-kl}. Our proof relies on expressing the probability distribution of trajectories as a density with respect to the Wiener measure. We leave the analysis of finite-sample behavior to future work.
+
+
+
+This appendix is organized as follows:
+\begin{itemize}
+    \item We first briefly discuss the existence and convexity of densities associated to SDEs in our setting --- this will be needed to state and prove the main results in the rest of \cref{app:iter_proj_theory}. We also prove that the family $\measurefamily$ in \cref{eq:measure-family} is always convex.
+    \item We then state and prove \cref{thm:csiszar5.3}, our continuous case adaptation of Theorem 5.3 from \citet{csiszar2004information}.
+    \item Next, we state and prove \cref{lemma:pyth} and \cref{lemma:rIproj}, continuous setting adaptations of Theorem 3.1 and 3.4 in \citet{csiszar2004information}, which will be needed to verify assumptions in \cref{thm:csiszar5.3} for the KL divergence.
+    \item We prove \cref{lemma:bounded_density_ratio}, which is needed to verify the assumptions in \cref{lemma:pyth}, \cref{lemma:rIproj}, and \cref{thm:csiszar5.3} for the KL divergence between densities associated to SDEs.
+    \item And finally, we put everything together and prove \cref{prop:iter-kl}.
+\end{itemize}
+
+We can now define convexity in our setting. 
+
+\subsection{Existence of densities and convexity} 
+\label{app:convex-densities}
+In our work, we assume that all the SDEs share the same diffusion term $\sqrt{\volatility}dW_t$, with fixed $\volatility$. When we consider these SDEs over a finite time horizon, it is well-known that the probability distribution over trajectories admits a density with respect to the Wiener measure defined by a Brownian motion with volatility $\volatility$. This is because of Girsanov's theorem (see, e.g., Theorem 8.6.3 in \citet{oksendal2013stochastic}). This theorem guarantees that the probability distribution over trajectories induced by the solution to an SDE with a drift and a Brownian motion component can be transformed into a probability distribution over trajectories induced by just the Brownian motion (i.e., the Wiener measure) through a change of measure. Note that Girsanov's theorem holds true in this setting since assumptions A1 and A2 imply Novikov's condition, equation (8.6.7) in Theorem 8.6.3 in \citet{oksendal2013stochastic}.
+
+Having established the existence of densities, we can now define convexity for a set densities. In particular, in the rest of our work we say that a set of densities, e.g. $\modelfamily$, is convex if for all densities $p,p'\in \modelfamily$ and all $\omega\in [0,1]$ we have $(1-\omega)\Tilde{p}+\omega \Tilde{p}'\in \modelfamily$. A simple example of a convex set of densities is a single-parameter family of mixtures of two known SDEs with the same volatility. For each particle, we flip a coin with probability $d \in [0,1]$. If the coin lands heads, the particle follows the first SDE; otherwise, it follows the second SDE. Since each SDE has a density, denoted $p_1$ and $p_2$, the mixture density is given by $d p_1 + (1 - d) p_2$. For any $\omega \in [0,1]$ and $d, d' \in [0,1]$, the convex combination of these mixtures is $\omega(d p_1 + (1 - d) p_2) + (1 - \omega)(d' p_1 + (1-d')p_2) = (\omega d + (1 - \omega) d') p_1 + \bigl[1 - (\omega d + (1 - \omega) d')\bigr] p_2$, which also lies in the family because $\omega d + (1 - \omega) d' \in [0,1]$. Hence, this collection of densities is convex.
+
+Now we show that the family $\measurefamily$ in \cref{eq:measure-family} is always convex.
+\begin{myLemma}[Convexity of $\measurefamily$]
+\label{lemma:convexD}
+$\measurefamily$ is convex, i.e.,  for any two $\bridge_{\modeldrift_1},\bridge_{\modeldrift_2}\in \measurefamily$, we have for all $\omega\in [0,1]$, the density $\bridge_{\modeldrift}:=\omega\bridge_{\modeldrift_1} + (1-\omega)\bridge_{\modeldrift_2}\in \measurefamily$.
+\end{myLemma}
+\begin{proof}
+    Consider the marginal distribution induced by $\omega\bridge_{\modeldrift_1} + (1-\omega)\bridge_{\modeldrift_2}$ at $\timestep{\timeidx}, \bridge_{\modeldrift, \timestep{\timeidx}}$. This can be written as
+    $$
+    \bridge_{\modeldrift, \timestep{\timeidx}}=\omega\bridge_{\modeldrift_1,\timestep{\timeidx}} + (1-\omega)\bridge_{\modeldrift_2,\timestep{\timeidx}} = \omega\marginal{\timestep{\timeidx}}+(1-\omega)\marginal{\timestep{\timeidx}} = \marginal{\timestep{\timeidx}}
+    $$
+    where in the last equality we use the fact that $\bridge_{\modeldrift_1}$ and $\bridge_{\modeldrift_2}$ are in $\measurefamily$. Since this holds for all $\timeidx\in[I]$, we have that $\bridge_{\modeldrift}\in \measurefamily$ and therefore $\measurefamily$ is convex.
+\end{proof}
+
+\subsection{Continuous setting adaptation of Theorem 5.3, \texorpdfstring{\citet{csiszar2004information}}{}}
+
+Now that we have clearly defined what we mean when we talk about convex families, we can state and prove \cref{thm:csiszar5.3}.
+
+\begin{myTheorem}[Continuous setting adaptation of Theorem 5.3, \citet{csiszar2004information}]
+\label{thm:csiszar5.3}
+
+Let \( D(q, p) \) be a divergence between densities \( q \) and \( p \) from two convex families of (probability) densities \(\altmeasurefamily\) and \( \altmodelfamily \), respectively. Define \( p^*(q) := \arg\min_{p\in\altmodelfamily} D(q,p) \) and \( q^*(p) := \arg\min_{q\in \altmeasurefamily} D(q,p) \). Consider the iterative scheme given by \( q^{(k)} = q^*(p^{(k-1)}) \) and \( p^{(k)} = p^*(q^{(k)}) \). Assume the existence of a non-negative function \( \delta(q, p) \) such that the following conditions are satisfied:
+\begin{itemize}
+    \item[] \textbf{1. Three-Points Property:} For all \( q\in \altmeasurefamily \) and \( p\in\altmodelfamily \),
+    \begin{equation}
+        \delta(q, q^*(p)) + D(q^*(p), p) \leq D(q, p).
+        \label{eq:three_point_property}
+    \end{equation}
+    
+    \item[] \textbf{2. Four-Points Property:} For all \( q' \in \altmeasurefamily \) and \( p' \in \altmodelfamily \), if \( \min_{p\in\altmodelfamily} D(q, p) < \infty \), then
+    \begin{equation}
+        D(q', p') + \delta(q', q) \geq D(q', p^*(q)).
+        \label{eq:four_point_property}
+    \end{equation}
+    \item[] \textbf{3. Boundedness Property:} For all \( p\in\altmodelfamily \), if \( \min_{q\in \altmeasurefamily} D(q, p) < \infty \), then
+    \begin{equation}
+        \delta(q^*(p), q^{(1)}) < \infty.
+        \label{eq:boundedness}
+    \end{equation}
+\end{itemize}
+Then, if \( \min_{q\in \altmeasurefamily, p\in\altmodelfamily} D(q, p) < \infty \), the iteration converges to the infimum of \( D(q, p) \) over \( \altmeasurefamily \) and \( \altmodelfamily \):
+\[
+\lim_{k \to \infty} D(q^{(k)}, p^{(k)}) = \inf_{q\in \altmeasurefamily, p\in\altmodelfamily} D(q, p).
+\]
+\end{myTheorem}
+
+
+\begin{proof}
+First, from the Three-Points property we have that for all $q \in \altmeasurefamily$:
+\[
+\delta(q, q^{(k+1)}) + D(q^{(k+1)}, p^{(k)}) \leq D(q, p^{(k)}),
+\]
+where $q^{(k+1)} = q^*(p^{(k)})$. Then, using the Four-Points property, we get:
+\[
+D(q, p^{(k)}) \leq D(q, p) + \delta(q, q^{(k)}).
+\]
+for all $q\in\altmeasurefamily$ and $p\in\altmodelfamily$ because $p^{(k)} = p^{*}(q^{(k)})$. Combining these results yields:
+\[
+\delta(q, q^{(k+1)}) \leq D(q, p) - D(q^{(k+1)}, p^{(k)}) + \delta(q, q^{(k)}).
+\]
+This inequality shows the change in the discrepancy measure $\delta$ across iterations. By the definition of the iterative process, the sequence of divergences decreases monotonically:
+\[
+D(q^{(1)}, p^{(0)}) \geq D(q^{(1)}, p^{(1)}) \geq D(q^{(2)}, p^{(1)}) \geq \ldots
+\]
+
+Assume for contradiction that $\lim_{k \to \infty} D(q^{(k)}, p^{(k)}) \neq \inf_{q, p} D(q, p)$. Suppose there exists $p$ and $\epsilon > 0$ such that:
+\[
+D(q^{(k+1)}, p^{(n)}) > D(q^*(p), p) + \epsilon, \quad \text{for all } k.
+\]
+Applying the earlier derived inequality to $q = q^*(p)$, we find that for all $k$:
+\[
+\delta(q^*(p), q^{(k+1)}) \leq \delta(q^*(p), q^{(k)}) - \epsilon.
+\]
+Since $\delta(q^*(p), q^{(1)}) < \infty$, by assumption the Boundedness property, this recursion results in:
+\[
+\delta(q^*(p), q^{(k+1)}) < 0 \text{ for some } k,
+\]
+contradicting the non-negativity of $\delta$. Therefore, our initial assumption must be false, and we conclude:
+\[
+\lim_{k \to \infty} D(q^{(k)}, p^{(k)}) = \inf_{q, p} D(q, p).
+\]
+\end{proof}
+
+\subsection{Continuous setting adaptation of Theorem 3.1, \texorpdfstring{\citet{csiszar2004information}}{}}
+
+In order to apply this theorem to prove \cref{prop:iter-kl}, we need to show that the three properties (\cref{eq:three_point_property,eq:four_point_property,eq:boundedness}) are true when $D(q,p)=\KL(q,p)$, $\delta(q,p)=\KL(q,p)\ge 0$, and $p,q$ are densities.
+
+
+To this end, we first state and prove \cref{lemma:pyth}, which is a continuous setting adaptation of Theorem 3.1 of \citet{csiszar2004information}. This establishes that  --- under one additional assumption on densities --- the three point property, \cref{eq:three_point_property}, is satisfied for $\delta(q,p)=D(q,p)=\KL(q||p)$.
+
+
+\begin{myLemma}[Continuous setting adaptation of Theorem 3.1 of \citet{csiszar2004information}]
+\label{lemma:pyth}
+Let $\altmeasurefamily$ and $\altmodelfamily$ be two convex sets of densities with respect to a base measure $\basemeasure$. For any $q,q'\in \altmeasurefamily$ and $p\in \altmodelfamily$, assume $\E_{q}|\log(q'/p)| < \infty$. Define $q^*(p) := \argmin_{q\in \altmeasurefamily}\KL(q||p)$. Then, for any $q \in \altmeasurefamily$ and $p \in \altmodelfamily$:
+$$\KL(q||p) \ge \KL(q||q^*) + \KL(q^*||p)$$
+\end{myLemma}
+\begin{proof}
+Let $q_{\omega} = (1-\omega)q^* + \omega q \in \altmeasurefamily$ for $\omega \in [0,1]$. By the mean value theorem, $\exists \tilde{\omega} \in (0,1)$ such that:
+$$0 \le \frac{1}{\omega} [\KL(q_{\omega}||p) - \KL(q^*||p)] = \frac{d}{d\omega} \KL(q_{\omega}||p) |_{\omega = \tilde{\omega}}$$
+The lower bound is 0 as $q^*$ minimizes KL divergence. We now examine the derivative:
+$$\frac{d}{d\omega} \KL(q_{\omega}||p) = \frac{d}{d\omega} \int q_{\omega} \log \frac{q_{\omega}}{p}\basediff$$
+$q_{\omega} \log \frac{q_{\omega}}{p}$ is integrable by our initial assumption. To move the derivative inside the integral, we need to show the partial derivative is integrable. The partial derivative is:
+$$\frac{\partial}{\partial \omega} q_{\omega} \log \frac{q_{\omega}}{p} = (q-q^*)(\log \frac{q_{\omega}}{p}+1)$$
+We can bound this expression:
+$$|(q-q^*)(\log \frac{q_{\omega}}{p}+1)| \le (q+q^*)|\log \frac{q_{\omega}}{p}+1|$$
+Now we show this bound is integrable:
+$$\int (q+q^*)|\log \frac{q_{\omega}}{p}+1|\basediff \le \E_{q} |\log \frac{q_{\omega}}{p}| + \E_{q^*} |\log \frac{q_{\omega}}{p}| + 2 < \infty$$
+This integrability allows us to apply the Dominated Convergence Theorem (DCT):
+$$\frac{d}{d\omega} \KL(q_{\omega}||p) = \int (q-q^*)\log \frac{q_{\omega}}{p}\basediff$$
+We can now examine the limit as $\omega$ approaches 0. Again applying DCT:
+$$\lim_{\omega \to 0}\frac{d}{d\omega} \KL(q_{\omega}||p) = \int (q-q^*)\log \frac{q^*}{p}\basediff \ge 0$$
+The inequality holds because $q^*$ minimizes KL divergence. Finally, we expand this expression:
+$$\int (q-q^*)\log \frac{q^*}{p}\basediff = \KL(q||p) - \KL(q||q^*) - \KL(q^*||p) \ge 0$$
+This final step proves the stated inequality, completing our proof.
+\end{proof}
+
+\subsection{Continuous setting adaptation of Theorem 3.4, \texorpdfstring{\citet{csiszar2004information}}{}}
+
+Next we show \cref{lemma:rIproj}, which is a continuous setting version of Theorem 3.4 of \citet{csiszar2004information}. This establishes that --- under the same additional assumption on densities that we have for \cref{lemma:pyth} --- the four-point property, \cref{eq:four_point_property}, is satisfied for $\delta(q,p)=D(q,p)=\KL(q||p)$.
+
+\begin{myLemma}[modified version of theorem 3.4 of \citet{csiszar2004information}]
+\label{lemma:rIproj}
+    Let $\altmeasurefamily$ and $\altmodelfamily$ be two convex sets of densities with respect to some base measure $\basemeasure$. Assume for all $q \in \altmeasurefamily$ and $p, p' \in \altmodelfamily$, we have $\E_{q} [p/p'] < \infty$. Then, $p^* \in \altmodelfamily$ is the minimizer of $\KL(q||p)$ over $p \in \altmodelfamily$ if and only if for all $q' \in \altmeasurefamily$ and $p' \in \altmodelfamily$:
+$$\KL(q'||p') + \KL(q'||q) \ge \KL(q'||p^*)$$
+\end{myLemma}
+\begin{proof}
+
+\textbf{"If" part}: Take $q'=q$. The inequality directly implies $p^*$ is the minimizer.
+
+\textbf{"Only if" part:} We claim that 
+$$\int q(1-\frac{p'}{p^*})\basediff \ge 0$$. 
+If this holds, then $1-\int \frac{qp'}{p^*}\basediff \ge 0$, and 
+$$\int q'(1-\frac{qp'}{q'p^*})\basediff \ge 0$$
+Using the inequality $\log(1/x) \ge 1-x$, we have:
+$$\KL(q'||p') + \KL(q'||q) - \KL(q'||p^*) = \int q'\log\frac{q'p^*}{qp'}\basediff \ge \int q'(1-\frac{qp'}{q'p^*})\basediff \ge 0$$
+This proves the main result. Thus, it suffices to prove $\int q(1-\frac{p'}{p^*})\basediff \ge 0$.
+
+To prove this claim, set $p_{\omega} = (1-\omega)p^* + \omega p' \in \altmodelfamily$ for $\omega \in [0,1]$. Since $p^*$ is a minimizer, by the mean value theorem, $\exists \tilde\omega \in (0,1)$ such that:
+$$0 \le \frac{1}{\omega}(\KL(q||p_\omega) - \KL(q||p^*)) = \frac{d}{d\omega} \KL(q||p_\omega) |_{\omega = \tilde\omega}$$
+To move the derivative inside the integral, we check if it's absolutely integrable:
+$$\frac{d}{d\omega} q\log\frac{q}{(1-\omega)p^* + \omega p'} = q\frac{p^*-p'}{(1-\omega)p^* + \omega p'}$$
+We show it has finite integral:
+$$\int |q\frac{p^*-p'}{(1-\omega)p^* + \omega p'}|\basediff \le \E_{q} \frac{p^*}{(1-\omega)p^* + \omega p'} + \E_{q} \frac{p'}{(1-\omega)p^* + \omega p'} < \infty$$
+This is finite by our assumption, as $(1-\omega)p^* + \omega p' \in \altmodelfamily$.
+
+Taking the limit as $\omega \to 0$:
+$$0 \le \lim_{\omega\to 0} \frac{d}{d\omega} \KL(q||p_\omega) = \lim_{\omega\to 0} \int q\frac{p^*-p'}{(1-\omega)p^* + \omega p'}\basediff$$
+By the Dominated Convergence Theorem, we can move the limit inside the integral:
+$$0 \le \int q\lim_{\omega\to 0} \frac{p^*-p'}{(1-\omega)p^* + \omega p'} \basediff= \int q(1-\frac{p'}{p^*})\basediff$$
+
+This completes the proof of our claim and thus the lemma.
+\end{proof}
+
+\subsection{Expectation of density ratios}
+
+Next, we state and prove \cref{lemma:bounded_density_ratio}. Informally, this lemma says that --- in our specific SDE setting --- the assumption on densities needed in \cref{lemma:pyth} and \cref{lemma:rIproj} is satisfied. The Boundedness Property, \cref{eq:boundedness}, in \cref{thm:csiszar5.3} is also a direct consequence of this lemma.
+
+\begin{myLemma}[Expectation of density ratio]
+\label{lemma:bounded_density_ratio}
+
+Consider three SDEs that share the same diffusion term \(\sqrt{\volatility}\de\brownianm\) and have different drift terms \(\drift_{p}(\cdot,\cdot)\), \(\drift_{q}(\cdot,\cdot)\), and \(\drift_{q'}(\cdot,\cdot)\). Let \(p\), \(q\), and \(q'\) be the corresponding densities over the Wiener measure.
+
+The SDEs are defined as follows:
+\[
+\begin{aligned}
+    &\text{For density } p: &&\de\responseat{\timet} = \drift_{p}(\responseat{\timet},t)\de t + \sqrt{\volatility}\de\brownianm, \\
+    &\text{For density } q: &&\de\responseat{\timet} = \drift_{q}(\responseat{\timet},t)\de t + \sqrt{\volatility}\de\brownianm, \\
+    &\text{For density } q': &&\de\responseat{\timet} = \drift_{q'}(\responseat{\timet},t)\de t + \sqrt{\volatility}\de\brownianm.
+\end{aligned}
+\]
+
+Assume that the time horizon is finite, i.e., \(t \in [0, T]\), and that all drift terms are bounded in the \(L_\infty\) norm. Specifically, there exists a constant \(C\) such that
+\[
+\|\drift_{i}(x,t)\|_{\infty} < C < \infty \quad \text{for } i \in \{p, q, q'\} \text{ and for all } x, t.
+\]
+
+Under these conditions, the density ratio between the processes is bounded. In particular, the following expectations are finite:
+\begin{enumerate}
+    \item The expected log density ratio: \(\mathbb{E}_{q} \left[ \left| \log \frac{q'}{p} \right| \right] < \infty\). (Assumption in \cref{lemma:pyth})
+    \item The expected density ratio: \(\mathbb{E}_{p} \left[ \frac{q}{q'} \right] < \infty\). (Assumption in \cref{lemma:rIproj})
+    \item The KL divergence between q and p: \(\mathbb{E}_{q} \left[ \frac{q}{p} \right] < \infty\) (Boundedness Property, \cref{eq:boundedness})
+\end{enumerate}
+\end{myLemma}
+
+\begin{proof}
+We first show that the expected density ratio is finite. To this end, note first that since the diffusion terms \(\sqrt{\volatility}\de\brownianm\) are shared among the SDEs, the three SDEs define distributions over trajectories that admit densities over a Wiener measure. By direct application of Girsanov's theorem \citep[see e.g.,][]{kailath1971structure}, the density ratio between the two measures on a sample path \(\responseat{\timet}\) is given by:
+\[
+\frac{q}{q'} = \exp\left[\frac{1}{\volatility} \int_0^T (\drift_{q}(\responseat{\timet}, t) - \drift_{q'}(\responseat{\timet}, t))^{\top} \de\brownianm - \frac{1}{2\volatility} \int_0^T \|\drift_{q}(\responseat{\timet}, t) - \drift_{q'}(\responseat{\timet}, t)\|_2^2 \de t \right].
+\]
+
+Next, we consider the expectation of this density ratio when trajectories are from another distribution over trajectories defined by the SDE with density \(p\). This expectation is:
+\[
+\begin{aligned}
+    \E_{p}\left[\frac{q}{q'}\right] &= \E_{p}\left[\exp\left(\frac{1}{\volatility} \int_0^T (\drift_{q}(\responseat{\timet}, t) - \drift_{q'}(\responseat{\timet}, t))^\top \de\brownianm - \frac{1}{2\volatility} \int_0^T \|\drift_{q}(\responseat{\timet}, t) - \drift_{q'}(\responseat{\timet}, t)\|_2^2 \de t\right)\right].
+\end{aligned}
+\]
+
+Using the assumption that the drift terms are bounded, i.e., \(\|\drift_{i}(x, t)\|_\infty < C < \infty\) for \(i = p, q, q'\), we get:
+\[
+\begin{aligned}
+    \E_{p}\left[\frac{q}{q'}\right] &\le \E_{p}\left[\exp\left(\frac{1}{\volatility} \int_0^T 2C \bm{1}^\top \de\brownianm + \frac{1}{2\volatility} \int_0^T 4dC^2 \de t\right)\right] \\
+    &= \exp\left(\frac{2dC^2 T}{\volatility}\right) \E_{p}\left[\exp\left(\frac{2C}{\volatility} \int_0^T \bm{1}^\top \de\brownianm\right)\right].
+\end{aligned}
+\]
+
+The last factor, \(\exp\left(\frac{2C}{\volatility} \int_0^T \bm{1}^\top \de\brownianm\right)\), is a log-normal random variable, which has a finite expectation. Therefore:
+\[
+\E_{p}\left[\frac{q}{q'}\right] < \infty.
+\]
+
+For the first statement regarding the expected log density ratio, we proceed in a similar manner. We need to show:
+\[
+\begin{aligned}
+    \E_{q}\left[\left|\log \frac{q'}{p}\right|\right] &= \E_{q}\left[\left| \int_0^T (\drift_{q'}(\responseat{\timet}, t) - \drift_{p}(\responseat{\timet}, t))^\top \de\brownianm - \frac{1}{2\volatility} \int_0^T \|\drift_{q'}(\responseat{\timet}, t) - \drift_{p}(\responseat{\timet}, t)\|_2^2 \de t \right|\right] < \infty
+\end{aligned}
+\]
+
+Using the boundedness of the drift terms, we get:
+\[
+\begin{aligned}
+    \E_{q}\left[\left|\log \frac{q'}{p}\right|\right] &\le \E_{q}\left[\left|\int_0^T \left|\drift_{q'}(\responseat{\timet}, t) - \drift_{p}(\responseat{\timet}, t)\right|^\top \de\brownianm\right| + \frac{1}{2\volatility} \int_0^T 4dC^2 \de t \right] \\
+    &\le \E_{q}\left[\left|\int_0^T 2C \bm{1}^\top \de\brownianm\right|\right] + \frac{2dC^2 T}{\volatility}.
+\end{aligned}
+\]
+
+The first term is finite since it is a Gaussian random variable, and the second term is finite by assumption that \(C < \infty\). Thus:
+\[
+\E_{q}\left[\left|\log \frac{q'}{p}\right|\right] < \infty.
+\]
+
+Finally, considering the case \(q = q'\), the KL divergence between \(q\) and \(p\) is finite under our assumption:
+\[
+\E_{q}\left[\log \frac{q}{p}\right] \le \E_{q}\left[\left|\log \frac{q}{p}\right|\right] < \infty.
+\]
+
+This completes the proof.
+\end{proof}
+
+\subsection{Proof of \texorpdfstring{\cref{prop:iter-kl}}{}}
+
+We now have all the pieces needed to apply \cref{thm:csiszar5.3} in the specific case where $\delta(q,p)=D(q,p)=\KL(q||p)$, to restate and prove \cref{prop:iter-kl}.
+
+\iterkl*
+
+\begin{proof}
+We show that this result follows directly from \cref{thm:csiszar5.3} by verifying all conditions. The convexity of $\measurefamily$ follows from \cref{lemma:convexD}. Consider $ q = \bridge_{\modeldrift}$, $p = \refden_{\refdrift}$. Then let the D divergence in \cref{thm:csiszar5.3} be the KL divergence, i.e., $D(q,p) = \KL(\bridge_{\modeldrift},\refden_{\refdrift})$ and $\delta(q,p) = \KL(\bridge_{\modeldrift},\refden_{\refdrift}) \ge 0$, where $p$ and $q$ are densities.
+
+To apply \cref{thm:csiszar5.3} in this setting, we need to show that the three properties in \cref{thm:csiszar5.3} hold true:
+
+\begin{enumerate}
+    \item Three-point property (\cref{eq:three_point_property}):
+    This property is established using \cref{lemma:pyth}. The conditions for \cref{lemma:pyth} are satisfied due to our assumption of bounded drift and \cref{lemma:bounded_density_ratio}.
+
+    \item Four-point property (\cref{eq:four_point_property}):
+    This property is established using \cref{lemma:rIproj}. The conditions for \cref{lemma:rIproj} are satisfied due to our assumption of bounded drift and \cref{lemma:bounded_density_ratio}.
+
+
+    \item Boundedness assumption (\cref{eq:boundedness}):
+    This assumption is directly established by \cref{lemma:bounded_density_ratio}.
+\end{enumerate}
+
+Given that all three required properties are satisfied, we can apply \cref{thm:csiszar5.3} to our setting, which completes the proof.
+\end{proof}
+
