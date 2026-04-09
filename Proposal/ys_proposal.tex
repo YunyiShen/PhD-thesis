@@ -1,0 +1,153 @@
+\documentclass{article}
+\usepackage{natbib}
+\usepackage{bm, bbm}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{float, fullpage, graphicx, multirow,parskip, subcaption, setspace}
+\usepackage{comment}
+\usepackage{cleveref}
+
+
+\begin{document}
+
+\pagestyle{empty}
+\markboth{{\sc thesis proposal}}{{\sc thesis proposal}}
+
+\def\abstract{
+To propose a suit of methods prerforming various forecastings in genetics studies.
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Cover Page - Author signs %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+{\Large \bf 
+   Massachusetts Institute of Technology
+\\ Department of Electrical Engineering and Computer Science \\}
+\vspace{.25in}
+{\Large \bf
+   Proposal for Thesis Research in Partial Fulfillment
+\\ of the Requirements for the Degree of
+\\ Doctor of Philosophy \\}
+\end{center}
+
+\vspace{.5in}
+
+\def\sig{{\small \sc (Signature of Author)}}
+
+
+{\small\sc Title}: Forecasting for Variant Discovery and Latent Dynamics in Genomics
+
+
+
+\begin{tabular}{rcl}
+\\ {\small \sc Submitted by:}
+                            & Mr. Yunyi Shen  & \\
+                            & 84 Grant Street, Apt 14 & \\
+                            & Somerville, MA 02145 & \\ 
+\\ {\small \sc Date of Submission:}          & \multicolumn{2}{l}{\today}
+\\ {\small \sc Expected Date of Completion:} & \multicolumn{2}{l}{May 2026}
+\\ {\small \sc Laboratory:}                  & \multicolumn{2}{l}{LIDS}
+\end{tabular}
+
+\vspace{0.4cm}
+
+
+  \begin{tabular}{@{}p{.5in}p{4in}@{}}
+ & \hrulefill \\
+& \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad \sig
+  \end{tabular}
+
+
+
+\vspace{0.5cm}
+
+{\bf \sc Brief Statement of the Problem:}
+
+\abstract
+
+
+\vspace{0.8cm}
+
+Supervision Agreement:
+The program outlined in this proposal is adequate for a doctoral thesis. The supplies and facilities
+required are available, and I am willing to supervise the research and evaluate the thesis report.
+
+\vspace{.5cm}
+
+  \begin{tabular}{@{}p{.5in}p{4in}@{}}
+ & \hrulefill \\
+& \quad\quad\quad Tamara Broderick, Associate Professor of Computer Science
+  \end{tabular}
+
+
+
+
+
+
+  \newpage
+
+\section{Overview of Problem}
+\section{Introduction}
+\input{connecting/opening}
+
+
+
+\section{Existing work}
+%\subsection*{Incorporating domain knowledge into scientific problems in high-noise, ill-posed settings}
+\input{connecting/intro_domainknowledge}
+
+\input{existing_works/doubletrouble}
+
+\input{existing_works/SBSDE}
+
+%\input{existing_works/chain_graphs}
+
+%\input{existing_works/LLM}
+
+%\subsection{Collecting new, informative data}
+%\input{connecting/intro_datacollection}
+
+
+
+
+
+%\input{existing_works/robustranking}
+
+
+
+
+%\input{connecting/summary_existing_work}
+
+
+\section{On-going \& planned future work}
+
+\input{future_works/starting_paragraph}
+
+\input{future_works/collection}
+
+
+\section{Proposed Timeline}
+
+\begin{enumerate}
+\item Majority of the work is already done.
+\item Thesis write up (\emph{Timeline:} By mid April).
+\end{enumerate}
+
+
+\section{Equipment and Facilities Needed}
+
+The computation resources needed can be provided by group server and ORCD. 
+
+
+%\begin{singlespace}
+
+\bibliography{pubs}
+\bibliographystyle{unsrtnat}
+
+
+%\end{singlespace}
+
+
+\end{document}
