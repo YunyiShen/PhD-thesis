@@ -1,0 +1,119 @@
+\documentclass[ba,preprint]{imsart}% use this for supplement article
+%\documentclass[ba]{imsart}
+%
+\pubyear{TBA}
+\volume{TBA}
+\issue{TBA}
+% \doi{0000}
+%\arxiv{2207.07020}
+\firstpage{1}
+\lastpage{1}
+
+\input{ba_header}
+\input{shortcuts.tex}
+%\externaldocument[main-]{double_trouble_submission}
+%\usepackage{xr, xr-hyper}
+
+
+
+\startlocaldefs
+\numberwithin{equation}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+
+\endlocaldefs
+
+\begin{document}
+\newcommand\blind{1}
+
+\begin{frontmatter}
+\title{Supplementary Material for ``Double trouble: Predicting new variant counts across two heterogeneous populations''}
+\runtitle{Double trouble supplement}
+
+\begin{aug}
+\author{\fnms{Yunyi} \snm{Shen}\thanksref{addr1}\ead[label=e1]{yshen99@mit.edu}},
+\author{\fnms{Lorenzo} \snm{Masoero}\thanksref{addr1}\ead[label=e2]{lom@mit.edu}},
+\author{\fnms{Joshua G.} \snm{Schraiber}\thanksref{addr2}\ead[label=e3]{schraibe@usc.edu}},
+\and
+\author{\fnms{Tamara} \snm{Broderick}\thanksref{addr1}\ead[label=e4]
+{tbroderick@mit.edu}}
+
+\runauthor{Y. Shen et al.}
+
+\address[addr1]{Laboratory for Information \& Decision Systems. Massachusetts Institute of Technology.
+    \printead*{e1}, % print email address of "e1"
+    \printead*{e2}, 
+    \printead*{e4}
+}
+
+\address[addr2]{
+    Department of Quantitative and Computational Biology, USC
+    \printead{e3}
+    %\printead{u1}
+}
+
+%\thankstext{t1}{Some comment}
+%\thankstext{t2}{First supporter of the project}
+%\thankstext{t3}{Second supporter of the project}
+
+\end{aug}
+\end{frontmatter}
+
+
+%\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thesection}{S\arabic{section}}  
+\renewcommand{\thefigure}{S\arabic{figure}}  
+\renewcommand{\thetable}{S\arabic{table}} 
+\renewcommand{\themyLemma}{S\arabic{myLemma}} 
+\renewcommand{\themyTheorem}{S\arabic{myTheorem}} 
+\renewcommand{\themyProposition}{S\arabic{myProposition}}
+%\renewcommand{\thesubsection}{S\arabic{subsection}} 
+%\renewcommand{\thesubsubsection}{S\arabic{subsubsection}} 
+\setcounter{equation}{0}
+\setcounter{section}{0}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{myLemma}{0}
+\setcounter{myTheorem}{0}
+
+%\input{outline}
+
+\section{Proofs of results in Section 4}
+\label{sec:product_measure}
+\input{tex/product_measure.tex}
+
+\section{Multi-population BNP models satisfying Desiderata (A) and (B)}
+\label{sec:proper_proof}
+\input{tex/multivariate_poisson_rate.tex}
+
+\section{Conjugacy}
+\label{app:conjugacy}
+\input{tex/conjugacy_bernoulli.tex}
+
+\section{Competing Bayesian nonparametric baselines for prediction in multi-population settings}
+\label{app:method_for_prediction}
+\input{tex/prediction.tex}
+
+\section{Proofs for the posterior predictive quantities in the two-population proposed model}
+\label{app:detail_on_prediction}
+\input{tex/prediction_detail}
+
+\section{Details on simulating data}
+\label{app:taking_sample}
+\input{tex/sampling_detail.tex}
+
+\section{Additional experiments}
+\label{app:additional_experiments}
+\input{tex/additional_experiments}
+
+\section{Power law behavior}
+\label{app:power_law}
+\input{tex/power_law.tex}
+
+\section{\revision{Extending to more populations}}
+\label{app:extension}
+\input{tex/more_population.tex}
+
+\bibliographystyle{ba}
+\bibliography{refs}
+\end{document}

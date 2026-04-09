@@ -1,0 +1,67 @@
+We here describe desired model behaviors and then use these to rule out what
+might at first seem like a natural choice of the rate measure $\levync(\de\btheta)$: a factorized rate measure.
+
+First (\cref{req:finite_mean} below), we know that any real-life sample must exhibit only finitely many variants. Second (\cref{req:inf_mass}), while in reality there exists a fixed, finite upper bound on the number of variants,
+we are considering cases where the number of samples in the pilot and follow-up are small relative to that upper bound.
+Therefore, it is 
+convenient to avoid modeling the upper bound entirely;
+instead, we assume that, if we sequence enough new samples, we will always discover new variants.
+\begin{desideratap}{A}
+	Each sample has finitely many variants. 
+	I.e., $\forall \popidx, \unitidx$, $\sum_{\variantidx = 1}^{\infty} \genericvariantcount < \infty$.
+	\label{req:finite_mean}
+\end{desideratap}
+\begin{desideratap}{B}
+	No matter how many variants we have seen in any population, if we keep sequencing samples (from any population), we will eventually encounter a new variant.
+	\label{req:inf_mass}
+\end{desideratap}
+
+The model of \citet{Masoero2022} satisfies \cref{req:finite_mean,req:inf_mass} (for a single population; i.e., $p \in \{1\}$).
+In particular, \citet{Masoero2022} generate frequencies according to a PPP with rate measure
+$\levytbp(\de\variantfreqplain)= \mass{} \variantfreqplain^{-\discount{}-1}(1-\variantfreqplain)^{\conc{}+\discount{}-1}\de\variantfreqplain$
+and hyperparameter values $\mass>0, \discount{} \in [0,1), \conc{}>-\discount{}$.
+Given a particular variant label, variants appear in samples i.i.d.\ Bernoulli across samples, conditioned
+on the frequency.
+The resulting frequencies are said to be generated according to a \emph{three-parameter
+beta process} (3BP) \citep{teh2009indian,Broderick2012,james2017bayesian}.
+Since $\int \variantfreqplain \levytbp(\de\variantfreqplain)<\infty$, 
+the number of variants in any sample is a.s.\ finite. And since $\int \levytbp(\de\variantfreqplain)=\infty$,
+the number of non-zero frequencies from the PPP is countably infinite.
+
+\revision{This one-population approach has further been shown to perform well empirically \citep{Masoero2022}. 
+Its improper beta-distribution form facilitates exponential family conjugacy \citep{Broderick2018}
+and thereby ease of computation \citep{Masoero2022}.}
+Given the success of this one-population approach,
+it seems natural to choose a two-population PPP rate measure 
+that factorizes into familiar one-population rate measures. 
+\revision{In particular, just as the 3BP is conjugate to its one-population likelihood, 
+we would expect that
+a product measure across 3BP measures would be conjugate to our present
+multi-population likelihood. And we might hope it would retain the other desiderata.
+The following condition is even more general though; it does not assume a particular form
+for the factors in each population.}
+\begin{conditionp}{C} \label{req:product_measure}
+	The rate measure for the frequency-generating PPP in two populations factorizes across populations:
+	\revision{$\levync(\de\btheta) = \levyonepop_{1}(\de\variantfreqperpop{1}) \levyonepop_{2}(\de\variantfreqperpop{2})$}.  
+\end{conditionp}
+
+\revision{However, our next result shows that no two-population model with a factorized rate measure can} simultaneously
+satisfy both \cref{req:finite_mean,req:inf_mass}.
+
+\begin{myTheorem} \label{prop:incomp}
+	Take the two-population model of \cref{eq:generative_model}. If the Poisson point process
+	rate measure in the prior factorizes across populations according to \cref{req:product_measure},
+	the model cannot simultaneously generate samples with finitely many variants (\cref{req:finite_mean})
+	and guarantee that there are always more variants to discover (\cref{req:inf_mass}).
+\end{myTheorem}
+
+See Section S1 in \internal{the} Supplementary Materials \citep{supplement} for a full proof. The rough intuition is as follows. We observe that \cref{req:finite_mean}
+is equivalent to $\forall \popidx \in \{1,2\}, \int_{[0,1]^{2}}\variantfreqperpop{\popidx}\levync(\de\vecvariantfreq{}) < \infty$.
+To derive a contradiction, suppose that \cref{req:inf_mass} and \cref{req:product_measure} hold. By \cref{req:product_measure}, we can factorize
+\[
+	\int_{[0,1]^{2}}\variantfreqperpop{1}\levync(\de\vecvariantfreq{}) = \int_{[0,1]}\variantfreqperpop{1} \levync_{1}(\de\variantfreqperpop{1}) \int_{[0,1]}\levync_{2}(\de\variantfreqperpop{2}).
+\]
+We next show that \cref{req:inf_mass} and \cref{req:product_measure} together imply that at least one of the factors in the product must be infinite and the remaining factor must be
+strictly positive. So the full product must be infinite, a contradiction with \cref{req:finite_mean}.
+
+

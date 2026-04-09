@@ -1,0 +1,171 @@
+\documentclass[twoside,11pt]{article}
+
+\usepackage{blindtext}
+
+% Any additional packages needed should be included after jmlr2e.
+% Note that jmlr2e.sty includes epsfig, amssymb, natbib and graphicx,
+% and defines many common macros, such as 'proof' and 'example'.
+%
+% It also sets the bibliographystyle to plainnat; for more information on
+% natbib citation styles, see the natbib documentation, a copy of which
+% is archived at http://www.jmlr.org/format/natbib.pdf
+
+% Available options for package jmlr2e are:
+%
+%   - abbrvbib : use abbrvnat for the bibliography style
+%   - nohyperref : do not load the hyperref package
+%   - preprint : remove JMLR specific information from the template,
+%         useful for example for posting to preprint servers.
+%
+% Example of using the package with custom options:
+%
+% \usepackage[abbrvbib, preprint]{jmlr2e}
+
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage[table]{xcolor}
+
+\usepackage{jmlr}
+
+\usepackage{hyperref}
+\usepackage[capitalize]{cleveref}
+\usepackage{booktabs}
+\crefname{assumption}{assumption}{assumptions}
+\Crefname{assumption}{Assumption}{Assumptions}
+
+\input{shortcuts}
+\input{mathcommends}
+
+
+% Definitions of handy macros can go here
+
+\newcommand{\dataset}{{\cal D}}
+\newcommand{\fracpartial}[2]{\frac{\partial #1}{\partial  #2}}
+
+% Colors used by hyperref (define before \hypersetup)
+%\definecolor{SkyBlue}{RGB}{14,118,188}
+%\definecolor{BrightRed}{RGB}{223,82,78}
+%\hypersetup{
+%  pdfborder = {0 0 0.5 [3 3]},
+%%  linkcolor = BrightRed,
+%  citecolor = SkyBlue,
+%  urlcolor  = SkyBlue
+%}
+
+% Table helpers (from original file)
+\newcommand{\statcell}[3]{%  #1=color, #2=mean, #3=std
+  \cellcolor{#1!25}$#2\pm{\scriptstyle#3}$
+}
+\newcommand{\best}[1]{\textbf{\cellcolor{green!25}#1}}
+\newcommand{\greencell}[1]{\cellcolor{green!25}#1}
+%\newcolumntype{L}{>{\raggedright\arraybackslash}p{3.8cm}}
+%\newcolumntype{C}{>{\centering\arraybackslash}p{2.2cm}}
+\newcommand{\ms}[2]{#1\,{$\pm$\,#2}}
+
+% Operators (from original file)
+\newcommand{\vect}{vec}
+\newcommand{\GA}{Gamma}
+\newcommand{\BER}{Bernoulli}
+\newcommand{\BA}{Beta}
+\newcommand{\Pois}{Poisson}
+\newcommand{\Multinomial}{Multinomial}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\newcommand{\numbereqn}{\addtocounter{equation}{1}\tag{\theequation}} % use \numberthis to add number in align* mode
+\newcommand{\yunyi}[1]{{\textcolor{blue}{\small [ys]: #1}}}
+\def\bY{\bm{Y}}
+\def\by{\bm{y}} % vector of all observations
+\def\bz{\bm{z}}
+\def\bX{\bm{X}}
+\def\bx{\bm{x}} % vector of single set of covariates
+\def\R{\mathbb{R}}
+\def\N{\mathcal{N}}
+\def\P{\mathbb{P}}
+\def\E{\mathbb{E}}
+\def\Xcal{\mathcal{X}}
+
+% Heading arguments are {volume}{year}{pages}{date submitted}{date published}{paper id}{author-full-names}
+
+\usepackage{lastpage}
+\jmlrheading{}{}{1-\pageref{LastPage}}{4/26}{}{}{Renato Berlinghieri, Yunyi Shen, Jialong Jiang and Tamara Broderick}
+
+% Short headings should be running head and authors last names
+
+\ShortHeadings{SnapMMD for Forecasting Stochastic Dynamics}{Berlinghieri, Shen, Jiang, and Broderick}
+\firstpageno{1}
+
+\begin{document}
+
+\title{Oh SnapMMD! Forecasting Stochastic Dynamics Beyond the Schr\"odinger Bridge's End}
+
+\author{
+  \name Renato Berlinghieri\thanks{These authors contributed equally.} \email \texttt{renb@mit.edu}\\
+  \addr Massachusetts Institute of Technology, Cambridge, MA, USA
+  \AND
+  \name Yunyi Shen$^{*}$ \email \texttt{yshen99@mit.edu}\\
+  \addr Massachusetts Institute of Technology, Cambridge, MA, USA
+  \AND
+  \name Jialong Jiang \email \texttt{jiangjl@rockefeller.edu}\\
+  \addr The Rockefeller University, New York, NY, USA
+  \AND
+  \name Tamara Broderick \email \texttt{tamarab@mit.edu}\\
+  \addr Massachusetts Institute of Technology, Cambridge, MA, USA
+}
+
+\editor{}
+
+\maketitle
+
+\begin{abstract}%   <- trailing '%' for backward compatibility of .sty file
+Scientists often want to make predictions beyond the observed time horizon of “snapshot” data following latent stochastic dynamics. For example, in time course single-cell mRNA profiling, scientists have access to cellular transcriptional state measurements (snapshots) from different biological replicates at different time points, but they cannot access the trajectory of any one cell because  measurement destroys the cell. Researchers want to forecast (e.g.)\ differentiation outcomes from early state measurements of stem cells. Recent Schrödinger-bridge (SB) methods are natural for interpolating between snapshots. But past SB papers have not addressed forecasting. Some natural immediate extensions of existing methods would (1) reduce to following pre-set reference dynamics (chosen without seeing data) or (2) require the user to choose a fixed, state-independent volatility since they minimize a Kullback–Leibler divergence. Either case can lead to poor forecasting quality. In the present work, we propose a new framework, SnapMMD, that learns dynamics by directly fitting the joint distribution of both state measurements and observation time with a maximum mean discrepancy (MMD) loss. Unlike past work, our method allows us to infer unknown and state-dependent volatilities from the observed data. We show in a variety of real and synthetic experiments that our method delivers accurate forecasts. Moreover, our approach allows us to learn in the presence of incomplete state measurements and yields an $R^2$-style statistic that diagnoses fit. We also find that our method's performance at interpolation (and general velocity-field reconstruction) is at least as good as (and often better than) state-of-the-art in almost all of our experiments. 
+\end{abstract}
+
+\begin{keywords}
+  Schrödinger Bridges, Forecasting, Stochastic Dynamics, Trajectory Inference
+\end{keywords}
+
+\section{Introduction}
+\label{sec:intro}
+\input{tex/intro}
+
+\section{Setup and Background}
+\label{sec:setup}
+\input{tex/setup}
+
+\section{Our method}
+\label{sec:method}
+\input{tex/method}
+
+\section{Experiments}
+\label{sec:experiments}
+\input{tex/experiments}
+
+\section{Discussion}
+\label{sec:discussion}
+\input{tex/discussion}
+
+% Acknowledgements and Disclosure of Funding should go at the end, before appendices and references
+
+\acks{We would like to thank David Burt for helpful discussions during early stages of the work. We also thank Lazar Atanackovic and Katarina Petrovic for directing us to resources to implement the flow-matching baselines. This work was supported in part by
+the Office of Naval Research under grant N00014-20-1-
+2023 (MURI ML-SCOPE) and by the NSF TRIPODS
+program (award DMS-2022448).}
+
+% Manual newpage inserted to improve layout of sample file - not
+% needed in general before appendices/bibliography.
+
+\newpage
+
+\appendix
+\label{sec:appendix}
+\crefalias{section}{appendix}
+\crefalias{subsection}{appendix}
+\crefalias{subsubsection}{appendix}
+
+\input{tex/appendix.tex}
+
+\vskip 0.2in
+\bibliography{references}
+
+\end{document}

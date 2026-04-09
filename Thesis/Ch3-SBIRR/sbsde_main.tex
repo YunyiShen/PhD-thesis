@@ -1,0 +1,169 @@
+\documentclass[twoside]{article}
+
+\usepackage[accepted]{aistats2025}
+
+% If your paper is accepted, change the options for the package
+% aistats2025 as follows:
+%
+%\usepackage[accepted]{aistats2025}
+%
+% This option will print headings for the title of your paper and
+% headings for the authors names, plus a copyright note at the end of
+% the first column of the first page.
+
+% If you set papersize explicitly, activate the following three lines:
+%\special{papersize = 8.5in, 11in}
+%\setlength{\pdfpageheight}{11in}
+%\setlength{\pdfpagewidth}{8.5in}
+
+% If you use natbib package, activate the following three lines:
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{xcolor}  % colors
+\usepackage{colortbl}
+\usepackage[round]{natbib}
+\renewcommand{\bibname}{References}
+\renewcommand{\bibsection}{\subsubsection*{\bibname}}
+\usepackage[breaklinks=true, colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue]{hyperref}
+\usepackage{xurl}
+%\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+
+
+
+% If you use BibTeX in apalike style, activate the following line:
+\bibliographystyle{apalike}
+\usepackage{cleveref}
+%\usepackage{natbib}
+\usepackage{algpseudocode}
+\usepackage[noline,ruled,noend]{algorithm2e}
+
+\input{shortcuts}
+\input{math_commands}
+\begin{document}
+
+% If your paper is accepted and the title of your paper is very long,
+% the style will print as headings an error message. Use the following
+% command to supply a shorter title of your paper so that it can be
+% used as headings.
+%
+%\runningtitle{I use this title instead because the last one was very long}
+
+% If your paper is accepted and the number of authors is large, the
+% style will print as headings an error message. Use the following
+% command to supply a shorter version of the authors names so that
+% they can be used as headings (for example, use only the surnames)
+%
+%\runningauthor{Surname 1, Surname 2, Surname 3, ...., Surname n}
+
+\twocolumn[
+
+\aistatstitle{Multi-marginal Schrödinger Bridges with Iterative Reference Refinement}
+
+\aistatsauthor{ Yunyi Shen$^*$ \And Renato Berlinghieri$^*$ \And  Tamara Broderick }
+
+\aistatsaddress{ MIT \And  MIT \And MIT } ]
+
+\begin{abstract}
+  \input{tex/abstract}
+\end{abstract}
+
+\section{INTRODUCTION}
+\label{sec:intro}
+\input{tex/intro.tex}
+
+\section{SETUP AND BACKGROUND}
+\label{sec:setup}
+\input{tex/setup.tex}
+
+\section{OUR METHOD}
+\label{sec:method}
+\input{tex/algorithm2.tex}
+
+\section{EXPERIMENTS}
+\label{sec:experiments-main}
+\input{tex/experiment.tex}
+
+\section{DISCUSSION}
+\label{sec:discussion}
+\input{tex/discussion.tex}
+
+\acknowledgments{The authors are grateful to Gabriele Corso, Vishwak Srinivasan, and Théo Uscidda for useful discussions and comments. This work was supported in part by the Office of Naval Research under
+grant N00014-20-1-2023 (MURI ML-SCOPE) and by the NSF TRIPODS program (award DMS-2022448).}
+%All acknowledgments go at the end of the paper, including thanks to reviewers who gave useful comments, to colleagues who contributed to the ideas, and to funding agencies and corporate sponsors that provided financial support. 
+
+
+%\subsubsection*{References}
+\bibliography{references.bib}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+
+% Define a new conditional flag
+\newboolean{accepted}
+\setboolean{accepted}{false}  % Set this to true if the paper is accepted, false otherwise
+
+% Conditional checklist section
+\ifthenelse{\boolean{accepted}}{}{
+\section*{Checklist}
+
+
+% %%% BEGIN INSTRUCTIONS %%%
+The checklist follows the references. For each question, choose your answer from the three possible options: Yes, No, Not Applicable.  You are encouraged to include a justification to your answer, either by referencing the appropriate section of your paper or providing a brief inline description (1-2 sentences). 
+Please do not modify the questions.  Note that the Checklist section does not count towards the page limit. Not including the checklist in the first submission won't result in desk rejection, although in such case we will ask you to upload it during the author response period and include it in camera ready (if accepted).
+% %%% END INSTRUCTIONS %%%
+
+
+ \begin{enumerate}
+
+
+ \item For all models and algorithms presented, check if you include:
+ \begin{enumerate}
+   \item A clear description of the mathematical setting, assumptions, algorithm, and/or model. [\textbf{Yes} -- See \cref{sec:setup} and \cref{sec:method}.]
+   \item An analysis of the properties and complexity (time, space, sample size) of any algorithm. [\textbf{Yes} -- We discuss our algorithm and baselines runtime for each experiment in the ``Runtime" subparagraphs in \cref{sec:experiments-main}.]
+   \item (Optional) Anonymized source code, with specification of all dependencies, including external libraries. [\textbf{Yes} -- We provide a link to access our code at the start of \cref{app:train-hyperparams-ref}.]
+ \end{enumerate}
+
+
+ \item For any theoretical claim, check if you include:
+ \begin{enumerate}
+   \item Statements of the full set of assumptions of all theoretical results. [\textbf{Yes} -- We state or reference all necessary assumptions in the respective result statement.]
+   \item Complete proofs of all theoretical results. [\textbf{Yes} -- See \cref{app:iter_proj_theory}.]
+   \item Clear explanations of any assumptions. [\textbf{Yes} -- For each assumption through the paper we explain why it is needed and why it is a reasonable assumption to make.]     
+ \end{enumerate}
+
+
+ \item For all figures and tables that present empirical results, check if you include:
+ \begin{enumerate}
+   \item The code, data, and instructions needed to reproduce the main experimental results (either in the supplemental material or as a URL). [\textbf{Yes} -- We provide a link to access our code, data and instructions needed to reproduce the main experimental results in \cref{app:train-hyperparams-ref}.]
+   \item All the training details (e.g., data splits, hyperparameters, how they were chosen). [\textbf{Yes} -- We discuss these experimental details for each experiment in \cref{app:further-experiments}.]
+         \item A clear definition of the specific measure or statistics and error bars (e.g., with respect to the random seed after running experiments multiple times). [\textbf{Yes} -- We discuss metrics in \cref{app:metrics} and error bars in \cref{app:tiebreaking}.]
+         \item A description of the computing infrastructure used. (e.g., type of GPUs, internal cluster, or cloud provider). [\textbf{Yes} -- We discuss computing infrastructure at the start of \cref{app:timing-table}.]
+ \end{enumerate}
+
+ \item If you are using existing assets (e.g., code, data, models) or curating/releasing new assets, check if you include:
+ \begin{enumerate}
+   \item Citations of the creator If your work uses existing assets. [\textbf{Yes}]
+   \item The license information of the assets, if applicable. [\textbf{Yes} -- We provide license information in the appendices where we discuss the detail of the baselines code (\cref{sec:dmsb-app} and \cref{app:trajnetdetails}) and dataset used in each experiment with real data (\cref{app:GoM-app-exp-details}, \cref{app:singlecellsetup}).]
+   \item New assets either in the supplemental material or as a URL, if applicable. [\textbf{Yes} -- We provide a link to our code in \cref{app:train-hyperparams-ref}.]
+   \item Information about consent from data providers/curators. [\textbf{Not Applicable}]
+   \item Discussion of sensible content if applicable, e.g., personally identifiable information or offensive content. [\textbf{Not Applicable}]
+ \end{enumerate}
+
+ \item If you used crowdsourcing or conducted research with human subjects, check if you include:
+ \begin{enumerate}
+   \item The full text of instructions given to participants and screenshots. [\textbf{Not Applicable}]
+   \item Descriptions of potential participant risks, with links to Institutional Review Board (IRB) approvals if applicable. [\textbf{Not Applicable}]
+   \item The estimated hourly wage paid to participants and the total amount spent on participant compensation. [\textbf{Not Applicable}]
+ \end{enumerate}
+
+ \end{enumerate}
+}
+
+\newpage
+\onecolumn
+\section*{Supplemental Material}
+\appendix
+\input{tex/appendix}
+
+\end{document}

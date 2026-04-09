@@ -1,0 +1,99 @@
+% !TEX root = ../double_trouble_supp.tex
+
+In this section we introduce in detail the two alternative Bayesian nonparametric baselines used in our experiments of Section 8.1 and 8.2.
+These alternative approaches are extensively used to benchmark the performance of our novel proposed approach when forming predictions for future variant counts in the presence of multiple populations.
+
+\subsection{Dependent three-parameter beta processes [d3BP]} \label{sec:d3BP}
+
+
+The first competing model we consider is one where, in the presence of data coming from multiple populations, we ignore the population label, and ``pool'' our observations as if they were being generated from the same population. We call this the  ``(fully) dependent 3BP model'' (d3BP) because we can view it as a model in which we first generate variants frequencies for one population, and then form identical, fully dependent frequencies for variants occurring in the other population. We use a three-parameter beta process prior to model the variants' frequencies, and again assume that samples are drawn from Bernoulli processes conditionally given the latent variant frequencies. Formally, 
+\begin{align}
+\begin{split}
+	\Theta &\sim \PPP(\nu_{\mathrm{3BP}}) \\
+	\genericmeasurevariantcount \mid\Theta &\sim \BeP(\randommeas). 
+\end{split} \label{eq:d3BP}
+\end{align}
+
+where 
+\begin{align*}
+    \nu_{\mathrm{3BP}}(\de \theta)=\alpha \frac{\Gamma(1+c)}{\Gamma(1-\sigma)\Gamma(c+\sigma)}\theta^{-1-\sigma}(1-\theta)^{c+\sigma-1}1(\theta\in (0,1))\de\theta,
+\end{align*}
+
+with $X_{p,n}$ i.i.d.\ across $p$ and $n$.
+This is equivalent to adopting the approach of \citet{Masoero2021} after discarding information about the individuals' population. 
+Recall that, given a tuple of integers $\bm{k} = (k_1, k_2)$, we call a ``$\bm{k}$-ton'' any variant appearing exactly $k_\popidx$ times in population $\popidx$.
+
+
+\begin{myProposition}[Predicting the number of future $\bm{k}$-tons under the d3BP]
+	
+    Assume that we have collected $N_1$ samples $X_{1, 1:N_1}$ from population $1$, and $N_2$ samples $X_{2, 1:N_2}$ from population $2$ under the data generating process of \cref{eq:d3BP}. Then the number of new variants that have not been observed in any of the first $N_1+N_2$ samples and appear exactly $\bm{k}$ times in additional $\bm{M} = (M_1, M_2) \in \NN^{2}$ with $M_1+M_2 >0$ samples collected from population $1$ and $2$ respectively is given by:
+    \label{prop:kr_ton_diag}
+    \begin{align*}
+        \news{\bm{N}}{\bm{M}, \bm{k}} \mid X_{1,1:N_1},X_{2,1:N_2} \sim \Poisson\left(\lambda^{(\bm{M},\bm{k})}_{\mathrm{d3BP},\bm{N}}\right),
+    \end{align*} 
+    where, for $(a)_{b\uparrow}:=\Gamma(a+b)/\Gamma(a)$ denoting the rising factorial,
+    \begin{align*}
+        \lambda^{(\bm{M},\bm{k})}_{\mathrm{d3BP},\bm{N}}=&\alpha \binom{M_1}{k_1}\binom{M_2}{k_2} \frac{(c+\sigma)_{(N_1+N_2+M_1+M_2-k_1-k_2)\uparrow }(1-\sigma)_{(k_1+k_2-1)\uparrow}}{(c+1)_{(N_1+N_2+M_1+M_2-1)\uparrow }}.
+            \end{align*}
+\end{myProposition}
+
+The proof presented next largely follows \citet{Masoero2021}, by observing frequencies of yet-to-be-seen variants after $\vecsamplesize$ steps of sampling follow a thinned Poisson point process. 
+\begin{proof}
+    Under the model in \Cref{prop:kr_ton_diag}, variants' frequencies follow a 3BP with rate measure $\nu_{\mathrm{3BP}}(\de\theta)$. Then, the  frequencies of those variants that (i) have not been seen in the first $N_1+N_2$ samples $X_{1,1:N_1}$ and $X_{2,1:N_2}$ and (ii) will be seen exactly $\bm{k}$ times in the subsequent $\bm{M}$ samples, come from a thinned Poisson point process with rate measure $\nu_{\mathrm{3BP}}(\de\theta)\Bernoulli(0|\theta)^{\futuresamplesize{1}}\Bernoulli(0|\theta)^{\futuresamplesize{2}}$. These frequencies are independent of the collection of frequencies that did appear in the first $N_1 + N_2$ samples, and have rate measure
+        \begin{align}
+        \nu_{\mathrm{3BP}}(\de\theta)&\Bernoulli(0 \mid \theta)^{\samplesize{1}}\Bernoulli(0 \mid \theta)^{\samplesize{2}} 
+        \nonumber\\
+        &
+        \binom{\futuresamplesize{1}}{k_1}\Bernoulli(1 \mid \theta)^{k_1}\Bernoulli(0 \mid \theta)^{\futuresamplesize{1}-k_1}
+        \nonumber\\
+        & 
+        \binom{\futuresamplesize{2}}{k_2}\Bernoulli(1 \mid \theta)^{k_2}\Bernoulli(0 \mid \theta)^{\futuresamplesize{2}-k_2}\nonumber\\
+        =&\binom{\futuresamplesize{1}}{k_1}\binom{\futuresamplesize{2}}{k_2}\nu_{\mathrm{3BP}}(d\theta)\Bernoulli(1 \mid \theta)^{k_1+k_2}\Bernoulli(0 \mid \theta)^{\futuresamplesize{1}+\futuresamplesize{2}+\samplesize{1}+\samplesize{2}-k_1-k_2}.
+        \end{align}
+    By the properties of Poisson point processes, the number of $\bm{k}$-tons follows a Poisson distribution with expectation being the integral of the thinned rate measure. Following \citet[Proposition 4]{Masoero2021}, the integral is given by
+    \begin{align*}
+        \lambda^{(\bm{M}, \bm{k})}_{\mathrm{d3BP}, \bm{N}}=&\alpha \binom{\samplesize{1}}{k_1}\binom{\samplesize{2}}{k_2}\frac{(c+\sigma)_{(\futuresamplesize{1}+\futuresamplesize{2}+\samplesize{1}+\samplesize{2}-k_1-k_2)\uparrow }(1-\sigma)_{(k_1+k_2-1)\uparrow}}{(c+1)_{(\futuresamplesize{1}+\futuresamplesize{2}+\samplesize{1}+\samplesize{2}-1)\uparrow }}.
+    \end{align*}
+\end{proof}
+
+We can compute the distribution of the total number of future variants by summing across $\bm{k}$-tons, or, equivalently, by leveraging the fact that the results for the pooled population coincide with those provided in \citet{Masoero2021}.
+
+\revision{
+To fit the hyperparameters we pool the two populations together, and use the method developed in \citet{Masoero2022}. 
+Its implementation can be found at \url{https://github.com/lorenzomasoero/ScaledProcesses}. 
+}
+
+\subsection{i3BP} \label{sec:i3BP}
+
+The alternative baseline method we consider is one in which, in each of the two populations, variants frequencies follow a three-parameter beta process, independent of the other population. In each population, variants occur according to independent Bernoulli processes.  In this case, the two populations are modeled as completely independent, and we therefore call this model the ``independent'' 3BP (i3BP):
+\begin{align}
+\begin{split}
+	\Theta_\popidx &\overset{\text{ind}}{\sim} \PPP(\nu_{\mathrm{3BP}; \mass_\popidx, c_\popidx, \sigma_\popidx}) \\
+	X_{p,n}\mid\Theta_{\popidx} &\sim \BeP(\Theta_\popidx).
+\end{split} \label{eq:i3BP}
+\end{align}
+Here, we overload the notation $\nu_{\mathrm{3BP}; \mass_\popidx, c_\popidx, \sigma_\popidx}$ to emphasize that in each population $\popidx$ variant frequencies are driven by a different three-parameter beta process with its own hyperaprameters.
+Because of independence, and the fact that we use a diffuse measure for locations, the probability that the same variant is observed in both populations under this model is equal to zero. As a consequence, under this model the total number of \emph{shared} variants (past, present, future) is zero. Therefore, we cannot use this model to make any prediction about shared variants, but we still could use it to predict the \emph{total} number of new future variants, by summing the predictions arising from each population and ignoring the fact that in the real data some of the past and future variants are shared across populations. 
+
+
+
+\begin{myProposition}[total number in i3BP]
+    Assume to have collected $N_1$ samples $X_{1, 1:N_1}$ from population $1$, and $N_2$ samples $X_{2, 1:N_2}$ from population $2$ under the data generating process of the i3BP in \cref{eq:i3BP}. 
+
+    The total number of new variants that is going to be observed in $\bm{M} = (M_1, M_2)$ additional samples follows a Poisson distribution with parameter $\lambda^{(\bm{M})}_{\mathrm{i3BP},\bm{N}}$ where 
+    \begin{align*}
+        \lambda^{(\bm{M})}_{\mathrm{i3BP},\bm{N}} = \alpha_1 \sum_{k_1=1}^{\futuresamplesize{1}} \frac{(c_1+\sigma_1)_{(\samplesize{1}+k_1-1)\uparrow}}{(c_1+1)_{(\samplesize{1}+k_1-1)\uparrow}}+ \alpha_2 \sum_{k_2=1}^{\futuresamplesize{2}} \frac{(c_2+\sigma_2)_{(\samplesize{2}+k_2-1)\uparrow}}{(c_2+1)_{(\samplesize{2}+k_2-1)\uparrow}}.
+    \end{align*}
+\end{myProposition}
+
+\begin{proof}
+    The result is a trivial application of \citet[Proposition 1]{Masoero2021}. Indeed, by \citet[Proposition 1]{Masoero2021},  the number of new variants in population $\popidx$ is  Poisson distributed with mean $\alpha_\popidx \sum_{m=1}^{\futuresamplesize{\popidx}} \frac{(c_\popidx+\sigma_\popidx)_{(\samplesize{\popidx}+m-1)\uparrow}}{(c_\popidx+1)_{(\samplesize{\popidx}+m-1)\uparrow}}$. Moreover, because the two populations are independent and the sum of two independent Poisson random variables is a Poisson random variable with parameter given by the sum of the two parameters, the thesis follows.
+\end{proof}
+
+
+\revision{
+Similar to \cref{sec:d3BP}, to fit the hyperparameters we adopt the method developed in \citet{Masoero2022}.
+Its implementation can be found at \url{https://github.com/lorenzomasoero/ScaledProcesses}. 
+Specifically, we separately fit two distinct sets of hyperparameters, each set on one of the two populations. 
+We then obtain our final predictions by summing the numbers obtained from the two individual populations.
+ }

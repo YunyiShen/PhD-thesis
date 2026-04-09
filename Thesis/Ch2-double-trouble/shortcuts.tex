@@ -1,0 +1,136 @@
+\newcommand{\lom}[1]{{\textcolor{red}{\small [lom]: #1}}}
+
+
+%%% SHORTCUTS %%%
+\newcommand{\Levy}{{L\'evy}} % NUMBER OF POPULATIONS
+\newcommand{\levytbp}{\mu_{\tbp}}
+\newcommand{\tbp}{\mathrm{3BP}}
+\newcommand{\ptbp}{\mathrm{P3BP}}
+\newcommand{\levyptbp}{\nu_{\ptbp}}
+%\newcommand{\levync}{\nu^\star}
+\newcommand{\levync}{\nu}
+\newcommand{\levyonepop}{\mu}
+\newcommand{\ratemeasproposed}{\nu_{\mathrm{prop}}}
+
+\newcommand{\allhyper}{\bm{\zeta}} % vector of all hyperparameters
+\newcommand{\allopfdhyper}{\bm{\xi}}
+
+\newcommand{\concinternal}{c}
+\newcommand{\discountinternal}{\sigma}
+\newcommand{\rateinternal}{\sigma}
+\newcommand{\corrinternal}{\gamma}
+
+\newcommand{\mass}{\alpha}
+\newcommand{\conc}[1]{\concinternal_{#1}}
+\newcommand{\discount}[1]{\discountinternal_{#1}}
+\newcommand{\rate}[1]{\rateinternal_{#1}}
+\newcommand{\corr}[1]{\corrinternal_{#1}}
+\newcommand{\fixlocparam}[1]{a_{#1}}
+\newcommand{\fixlocconc}[1]{b_{#1}}
+
+\newcommand{\hmass}{\hat{\mass}}
+\newcommand{\hconc}[1]{\hat{\concinternal}_{#1}}
+\newcommand{\hrate}[1]{\hat{\rateinternal}_{#1}}
+\newcommand{\hcorr}[1]{\hat{\corrinternal}_{#1}}
+
+
+%%% POPULATIONS %%%
+\newcommand{\numpops}{P} % NUMBER OF POPULATIONS
+\newcommand{\popidx}{p} % INDEX TO BE USED FOR POPULATIONS
+\newcommand{\notpopidx}{\neg \popidx} % the other index; if p = 1, not p = 2 and vice versa
+\newcommand{\samplesize}[1]{N_{#1}}
+\newcommand{\genericsamplesize}{\samplesize{\popidx}}
+\newcommand{\samplesizenosubscript}{N}
+\newcommand{\occurrence}[1]{k_{#1}}
+
+\newcommand{\followupidx}[1]{m_{#1}}
+
+
+\newcommand{\vecoccurrence}{\bm{k}}
+\newcommand{\zerovec}{\bm{0}}
+
+
+\newcommand{\unitidx}{n}
+\newcommand{\futureunitidx}{m}
+\newcommand{\priorrandommeas}{\mathcal{H}}
+\newcommand{\vecsamplesize}{\bm{N}}
+\newcommand{\futuresamplesize}[1]{M_{#1}}
+\newcommand{\genericfuturesamplesize}{\futuresamplesize{\popidx}}
+\newcommand{\vecfuturesamplesize}{\bm{M}}
+
+
+
+%%% VARIANTS %%%
+\newcommand{\variantfreqplain}{\theta} % plain variant frequency, no vectors or subscripts
+\newcommand{\numvariants}[1]{J_{#1}}
+\newcommand{\genericnumvariants}{\numvariants{\vecsamplesize}}
+\newcommand{\variantidx}{\ell}
+\newcommand{\variantlabel}[1]{\psi_{#1}}
+\newcommand{\genericvariantlabel}{\variantlabel{\variantidx}}
+\newcommand{\variantcount}[3]{x_{#1,#2,#3}}
+\newcommand{\genericvariantcount}{\variantcount{\popidx}{\unitidx}{\variantidx}}
+\newcommand{\genericfuturevariantcount}{\variantcount{\popidx}{\genericsamplesize+\futureunitidx}{\variantidx}}
+\newcommand{\measurevariantcount}[2]{X_{#1,#2}}
+\newcommand{\measurevariantcountlower}[2]{x_{#1,#2}}
+\newcommand{\genericmeasurevariantcount}{\measurevariantcount{\popidx}{\unitidx}}
+\newcommand{\genericmeasurevariantcountlower}{\measurevariantcount{\popidx}{\unitidx}}
+\newcommand{\pilotdata}{\measurevariantcount{1:2}{\vecone:\vecsamplesize}}
+\newcommand{\vecvariantfreq}[1]{\bm{\variantfreqplain}_{#1}}
+\newcommand{\genericvecvariantfreq}{\vecvariantfreq{\variantidx}}
+\newcommand{\variantfreq}[2]{\variantfreqplain_{#1, #2}}
+\newcommand{\variantfreqperpop}[1]{\variantfreqplain_{#1}} % single-population density. takes population as arg
+\newcommand{\genericvariantfreq}{\variantfreq{\popidx}{\variantidx}}
+
+
+
+%%% PREDICTIVE STATISTICS %%%
+\newcommand{\news}[2]{U_{ #1}^{(#2)}}
+\newcommand{\obsnewsNoargs}{u}
+\newcommand{\obsnews}[2]{\obsnewsNoargs_{ #1}^{(#2)}}
+
+\newcommand{\genericnews}{\news{\vecsamplesize}{\vecfuturesamplesize}}
+\newcommand{\genericobsnews}{\obsnews{\vecsamplesize}{\vecfuturesamplesize}}
+\newcommand{\genericfreqnews}{\news{\vecsamplesize}{\vecfuturesamplesize, \vecoccurrence}}
+\newcommand{\newsparam}[2]{\lambda_{#1}^{(#2)}}
+\newcommand{\genericnewsparam}{\newsparam{\vecsamplesize}{\vecfuturesamplesize}}
+\newcommand{\genericfreqnewsparam}{\newsparam{\vecsamplesize}{\vecfuturesamplesize, \vecoccurrence}}
+
+%%% GENERIC STATS MACROS %%%
+
+\newcommand{\vecone}{\textbf{1}} % vector of ones
+\newcommand{\dirac}[1]{\delta_{#1}}
+\newcommand{\bernoullirv}[1]{\textrm{Bernoulli}(#1)}
+\newcommand{\pois}{\mathrm{Poisson}}
+%\newcommand{\pois}{P_\mathrm{Poisson}}
+\newcommand{\unifrv}{\mathrm{Uniform}}
+\newcommand{\randommeas}{\Theta}
+\newcommand{\de}{\mathrm{d}}
+\newcommand{\BeP}{\mathrm{BeP}}
+\newcommand{\mBeP}{\mathrm{mBeP}} %multiple population bernoulli process
+\newcommand{\PPP}{\mathrm{PPP}}
+\newcommand{\iidsim}{\overset{\mathrm{i.i.d.}}{\sim}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\train}{\text{train}}
+
+%%% POWERLAWS %%%
+% scheme
+\newcommand{\propt}{\rho}
+% bounds
+\newcommand{\boundsgeneric}{\Phi}
+\newcommand{\poissonize}{\boundsgeneric}
+\newcommand{\lowerbound}{\boundsgeneric_{\mathrm{lower}}}
+\newcommand{\altlowerbound}{\boundsgeneric_{\mathrm{lower}}'} 
+\newcommand{\upperbound}{\boundsgeneric_{\mathrm{upper}}}
+\newcommand{\lowerboundproject}{\boundsgeneric_{\mathrm{lower}}^{\mathrm{project}}}
+\newcommand{\upperboundproject}{\boundsgeneric_{\mathrm{upper}}^{\mathrm{project}}}
+\newcommand{\lowerboundproport}{\boundsgeneric_{\mathrm{lower}}^{\mathrm{proport}}}
+\newcommand{\upperboundproport}{\boundsgeneric_{\mathrm{upper}}^{\mathrm{proport}}}
+% constants
+\newcommand{\smallpositive}{\delta}
+\newcommand{\constantgeneric}{C}
+\newcommand{\constantupper}[1]{\constantgeneric_{\mathrm{upper},#1,\smallpositive}}
+\newcommand{\constantlower}[1]{\constantgeneric_{\mathrm{lower},#1}}
+
+\newcommand{\constantlowerwithotherrate}[1]{\constantlower{#1}'}
+
+\newcommand{\constantlowerwithrateprime}[1]{\constantlower{#1}''}

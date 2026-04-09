@@ -1,0 +1,19 @@
+\begin{table}[ht]
+\centering
+\makebox[0pt][c]{
+\newcolumntype{L}{>{\raggedright\arraybackslash}p{3.4cm}}
+\newcolumntype{C}{>{\centering\arraybackslash}p{2.8cm}}
+\begin{tabular}{LCCC}
+\toprule
+\textbf{Experiment} & \textbf{Ours} & \texttt{SBIRR-ref} & \texttt{SB-forward} \\ \midrule
+Lotka–Volterra                          & \best{0.012 $\pm$ 0.0067} & 0.140 $\pm$ 0.023 & 0.710 $\pm$ 0.490 \\ \midrule
+Repress.\ Parametric                    & \best{0.016 $\pm$ 0.016}  & 0.470 $\pm$ 0.340 & 0.420 $\pm$ 0.160 \\
+Repress.\ Semiparam.             & \best{0.077 $\pm$ 0.031}  & 0.290 $\pm$ 0.110 & 1.150 $\pm$ 0.330 \\
+Repress.\ Incomplete              & \best{0.0075 $\pm$ 0.0047}& 1.260 $\pm$ 0.060 & 1.220 $\pm$ 0.090 \\ \midrule
+Gulf of Mexico                          & 0.660 $\pm$ 0.031 & \best{0.350 $\pm$ 0.032} & 0.620 $\pm$ 0.054 \\ \midrule
+PBMC                                    & \best{0.0042 $\pm$ 0.0017} & 0.097 $\pm$ 0.060 & 0.510 $\pm$ 0.160 \\
+\bottomrule
+\end{tabular}}
+\caption{MMD on the forecasting task (lower is better). Bold green cells denote the best performance in each row.}
+\label{tab:mmd_forecast}
+\end{table}

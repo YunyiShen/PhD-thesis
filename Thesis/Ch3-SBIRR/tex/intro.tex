@@ -1,0 +1,33 @@
+Practitioners are often interested in the possible paths taken by a population of particles moving from one location to another in a given space. For example, biologists want to understand how gene expression, as measured by mRNA levels, changes when normal cells transform into cancer cells. A deeper understanding might aid development of methods to prevent or treat cancer. One can model the dynamics of mRNA concentration in each cell using a stochastic differential equation (SDE), and there is extensive theory on SDEs from trajectories densely sampled in time. However, scientists cannot measure mRNA concentration continuously in time, but rather only at certain time snapshots. Moreover, since measuring mRNA concentration requires destroying the cell, scientists cannot track the trajectory of one cell across multiple times. 
+
+Recent work has demonstrated the potential of using Schr\"odinger bridges (SBs) to infer possible trajectories connecting two time snapshots \citep*{pavon2021data,de2021diffusion, Vargas2021,koshizuka2022neural, Wang2023}. This approach learns a pair of forward-backward SDEs that can transport particles between two time points (forward or backward, respectively). One can then use the learned SDEs to numerically sample from the latent population of trajectories. 
+To extend these methods to data with multiple time snapshots, 
+one can apply vanilla SBs separately over each pair of consecutive time points.  
+%\revised{But then the connected bridges exhibit kinks in the form of sharp turns in trajectories at connection time points}, 
+But the learned dynamics may fail to capture long-term dependencies, seasonal patterns, and cyclic behaviors.
+\citet{lavenant2024toward} show that other natural extensions to multiple time steps \citep{chen2019multi, lavenant2024toward} still decompose into vanilla SBs between adjacent time steps. 
+
+To overcome these issues, \citet{chen2024deep} proposed to instead use the SDEs in SBs to govern particles' velocity, instead of location. As with the methods above, their method allows the dynamics to pass through multiple time snapshots.
+In addition, since their method generates smooth trajectories, trajectory information can be shared across time intervals. 
+
+A practical issue with all methods above, including \citet{chen2024deep}, though, is that they require a single pre-defined reference measure. In particular, these methods minimize relative entropy between the process and the reference. 
+Ideally, the reference dynamics should be close to the true, latent dynamics. While scientists often have some prior knowledge of how their system works \citep[e.g., the parametric form of the underlying dynamical model, as in][]{pratapa2020benchmarking}, it is rare that they can access all parameter values. Consequently, practitioners often default to using Brownian motion as the reference dynamic. In fact, \citet{schrodinger1932theorie} originally used Brownian motion to model particles moving under thermal fluctuations in a closed system; for a historical review, see \citet{leonard2013survey}. In this context, solving the SB problem is equivalent to solving an entropy-regularized optimal transport problem \citep{cuturi2013sinkhorn}. However, this approach may not be ideal for many open systems with energy intake. For instance, biological systems are such systems and do not necessarily adhere to the same entropy laws as gas molecules under thermal fluctuations. \citet[][Chapter 6]{schrodinger1946life} himself  famously remarked ``What organisms feed upon is \textit{negative} entropy.''
+
+Methods beyond the SB literature face similar (and additional) limitations. 
+For instance, TrajectoryNet \citep{tong2020trajectorynet} combines continuous normalizing flows with a soft constraint based on dynamic optimal transport. But it can be interpreted as an SB method with a single reference;
+see \citet[sections 3.2 and 4.1]{tong2020trajectorynet}. See \cref{app:related-work} for more related work. 
+
+
+Due to the limitations of existing methods, we propose a new approach that (1) infers the distribution of trajectories from sample snapshots at multiple time points and (2) requires the user to specify only a parametric family of reference dynamics rather than a single one. Our method iterates between two steps. (i) Given our current best guess of the latent dynamics, we learn a piecewise SB and sample the resulting trajectories. (ii) We use the learned SB to refine our best guess of the latent dynamics within the reference family. 
+Since the estimate of latent dynamics uses information from all times, we expect our method to share information across time intervals.
+In our experiments (\cref{sec:experiments-main}), we find that our method is more accurate than both vanilla SBs and alternatives that nontrivially handle multiple time points. %Moreover, our method is substantially faster than the latter methods in all experiments, sometimes over 40 times faster. 
+Moreover, our method is faster than the latter methods in all experiments.\footnote{Code to reproduce the experiments is available at \href{https://github.com/YunyiShen/SB-Iterative-Reference-Refinement}{https://github.com/YunyiShen/SB-Iterative-Reference-Refinement}.} %, sometimes over 40 times faster. 
+
+
+
+In concurrent work, \citet{zhang2024joint} independently proposes an iterative procedure that allows for a family of reference dynamics. While in our work we use SBs to recover continuous-time evolution of the underlying dynamics, \citet{zhang2024joint} uses an entropic optimal transport framework and aims to recover the underlying dynamics solely at points with observations. And while we allow a general reference family, \citet{zhang2024joint} uses a linear (Ornstein-Uhlenbeck) reference family. We share the same  motivation though: moving away from a fixed reference dynamic to improve trajectory inference.
+
+
+
+
+

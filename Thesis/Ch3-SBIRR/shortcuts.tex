@@ -1,0 +1,121 @@
+
+%% marginal stuff
+\newcommand{\marginalplain}{\pi}
+\newcommand{\measurefamily}{\mathcal{D}}
+\newcommand{\marginal}[1]{\marginalplain_{#1}}
+\newcommand{\empmarginal}[1]{\hat{\marginalplain}_{#1}}
+\newcommand{\timet}{t}
+\newcommand{\timeidx}{i}
+\newcommand{\sampleidx}{n}
+\newcommand{\varisampleidx}{m}
+\newcommand{\totvarisample}{M}
+\newcommand{\totalnumparticles}{N}
+\newcommand{\totsteps}{I}
+\newcommand{\timestep}[1]{\timet_{#1}}
+\newcommand{\forecast}{\tilde{\marginalplain}}
+\newcommand{\discstep}{\ell}
+\newcommand{\totdiscstep}{L}
+\newcommand{\marginalmeasureplain}{\mathbb{Q}}
+\newcommand{\bridgeplain}{q}
+\newcommand{\bridge}{\bridgeplain}
+\newcommand{\popmarginalat}[1]{\tilde{\bridgeplain}_{#1}}
+
+
+\newcommand{\drift}{{\bm{b}}}
+\newcommand{\modeldriftbackward}{\drift_{\text{back}}}
+\newcommand{\forwarddrift}[1]{\drift^{\text{forward}}_{#1}}
+\newcommand{\backwarddrift}[1]{\drift^{\text{back}}_{#1}}
+\newcommand{\refdrift}{\drift_{\text{ref}}}
+
+\newcommand{\estimatedriftstep}[1]{\hat{\drift}^{#1}}
+\newcommand{\estimaterefdriftstep}[1]{\hat{\drift}_{\text{ref}}^{#1}}
+\newcommand{\estimatebackwarddriftstep}[1]{\hat{\drift}_{\text{back}}^{#1}}
+
+\newcommand{\truebkwdrift}{\truedrift_{\text{back}}}
+
+\newcommand{\estimatedrift}{\hat{\drift}}
+\newcommand{\estimatebkwdrift}{\hat{\drift}_{\text{back}}}
+
+
+\newcommand{\marginalmeasure}[1]{\marginalmeasureplain_{#1}}
+\newcommand{\iter}{\ell}
+
+\newcommand{\modelfamily}{\mathcal{F}}
+
+%% SDE stuff
+\newcommand{\de}{\text{d}}
+\newcommand{\responseplain}{X}
+\newcommand{\obsplain}{Y}
+\newcommand{\altrespplain}{Z}
+
+\newcommand{\response}{\bm{\responseplain}_{\timet}}
+\newcommand{\responseat}[1]{\bm{\responseplain}_{#1}}
+\newcommand{\simulatedresponseat}[1]{\bm{\hat{\responseplain}}_{#1}}
+
+
+\newcommand{\altresponseat}[1]{\bm{\altrespplain}_{#1}}
+
+\newcommand{\obs}{\bm{\obsplain}_{\timet}}
+\newcommand{\obsat}[1]{\bm{\obsplain}_{#1}}
+\newcommand{\obsatall}[1]{\bm{\obsplain}_{#1}^{\text{all}}}
+
+\newcommand{\tottrajec}{N}
+\newcommand{\permutation}[1]{\sigma_{#1}}
+\newcommand{\conttime}{\tau}
+\newcommand{\noise}{\epsilon}
+
+
+\newcommand{\driftfun}{\drift(\response, \timet)}
+\newcommand{\volatilityfun}{\volatility(\timet)}
+\newcommand{\truedriftfun}{\truedrift(\response, \timet)}
+\newcommand{\truedriftfunest}{\truedrift(\cdot, \cdot)}
+
+\newcommand{\brownianm}{\bm{W}_{\timet}}
+
+
+
+\newcommand{\volatility}{\gamma}
+\newcommand{\sdeprior}{\marginalmeasureplain_{\drift}^\volatility}
+\newcommand{\truedrift}{\drift^{*}}
+\newcommand{\modeldrift}{\drift}
+\newcommand{\sdetrue}{\marginalmeasureplain_{\truedrift}^\volatility}
+\newcommand{\sdeprioriter}[1]{\marginalmeasureplain_{\drift_{#1}}^\volatility}
+\newcommand{\drifthat}{\hat{\drift}}
+\newcommand{\sdehat}{\marginalmeasureplain_{\drifthat}^\volatility}
+
+\newcommand{\altmeasurefamily}{\mathcal{G}}
+\newcommand{\altmodelfamily}{\mathcal{H}}
+
+
+\newcommand{\SBsolution}{\hat{\marginalmeasureplain}}
+\newcommand{\SBobj}{\marginalmeasureplain}
+
+\newcommand{\refden}{p}
+
+%% control stuff 
+\newcommand{\ctrlfun}{u(\response, \timet)}
+\newcommand{\basemeasure}{\mu}
+\newcommand{\basediff}{\de\mu}
+\crefname{assumption}{assumption}{assumptions}
+
+%% comment stuff
+%\newcommand{\RB}[1]{\textcolor{blue}{RB: #1}}
+%\newcommand{\YS}[1]{\textcolor{green}{YS: #1}}
+%\newcommand{\TB}[1]{\textcolor{red}{TB: #1}}
+%\newcommand{\FIXME}[1]{\textcolor{red}{TODO: #1}}
+
+\newcommand{\vanilla}{Vanilla-SB}
+\newcommand{\dmsbname}{DM-SB}
+
+\newcommand{\vanillaonetime}{Vanilla-SB: one time}
+\newcommand{\oursonetime}{Ours: one time}
+\newcommand{\oursalltime}{Ours: all times}
+\newcommand{\vanillaalltime}{Vanilla-SB: all times}
+
+\newcommand{\dmsb}{DM-SB: one time}
+\newcommand{\trajnet}{TrajectoryNet: one time}
+
+\newcommand{\fpm}{$\pm$}
+
+
+\newcommand{\revised}[1]{\textcolor{orange}{#1}}

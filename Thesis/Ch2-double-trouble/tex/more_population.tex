@@ -1,0 +1,16 @@
+\revision{Our first observation is that an extension to more than two populations should retain conjugacy. 
+Analogous to our response to AE Comment 4, we can accomplish the conjugacy goal by including a series of proper beta distribution factors while also allowing a leading term  in front of two beta distributions:
+\begin{equation}
+    \nu(\mathrm{d}\btheta)= f(\btheta) \left[ \prod_{p=1}^{P} \theta_p^{\gamma_p-1}(1-\theta_p)^{c_p-1} \right] \mathrm{d}\btheta.
+\end{equation}
+}
+
+\revision{We want to satisfy Desiderata (A) and (B) while also making sure $f(\btheta)$ does not factorize in to separate functions of the elements of $\btheta$.
+To that end, we first recall the $P=2$ case in which $\sigma_1=\sigma_2=\sigma$. 
+In that special two-population case, the leading term we chose becomes $(\theta_1+\theta_2)^{-\sigma-\gamma_1-\gamma_2}$. It is straightforward to extend this term to $P$ populations by choosing $(\sum_{p=1}^{P}\theta_p)^{-\sigma-\sum_{p=1}^P \gamma_p}$.
+Importantly, this construction satisfies BNP desiderata (A) and (B); we observe that the same machinery we employ for the 2-dimensional proofs should also hold for the $P$-dimensional generalization.
+In particular, we can bound $\max_p\{\theta_p\}\le \sum_{p=1}^{P}\theta_p\le P\max_p\{\theta_p\}$.}
+
+\revision{The remaining issue then is how to allow potentially different power law growth rates in each population.
+To see how to proceed, first recall $P=2$ but now where $\sigma_1$ need not equal $\sigma_2$. In this general case with $P=2$, our leading term $f(\btheta)$ was $(\theta_1+\theta_2^{\sigma_2/\sigma_1})^{\sigma_1}(\theta_1+\theta_2)^{-\gamma_1-\gamma_2}$. We can extend this leading term to a general number of populations $P$ by choosing $f(\btheta) = (\theta_1+\sum_{p=2}^P \theta_p^{\sigma_p/\sigma_1})^{\sigma_1}(\sum_{p=1}^P \theta_p)^{-\sum_{p=1}^P \gamma_p}$. We expect the resulting rate measure to retain all of: conjugacy, Desiderata (A) and (B), and the potential for separate power law growth rates across populations.}
+

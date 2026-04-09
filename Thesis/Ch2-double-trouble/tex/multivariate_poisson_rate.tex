@@ -1,0 +1,223 @@
+% !TEX root = ../double_trouble_supplement.tex
+
+In this section, in light of the incompatibility result stated in Theorem 1 and proved in \Cref{prop:incomp_general}, we provide details on proving our proposed BNP model satisfies Desideratum (A) and~Desideratum (B).
+
+In Equation (5.1), we proposed a prior distribution that is \emph{not} a product measure factorizing across multiple populations, i.e.\ it does not satisfy Condition (C).
+We now prove in \cref{prop:near_conjugate_proper} that our proposed prior of Equation (5.1)  satisfies Desideratum (A) and~Desideratum (B). 
+
+\begin{myProposition}
+    \label{prop:near_conjugate_proper}
+    Consider data generated from Equation (3.1), where we replace the generic rate measure $\levync$ with the following rate measure defined on the unit square $[0,1]^2$:
+\begin{equation}
+    	\ratemeasproposed(\de\vecvariantfreq{})=\frac{\mass}{B(\corr{1},\conc{1})B(\corr{2},\conc{2})}\frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{\corr{2}-1}(1-\variantfreqperpop{1})^{\conc{1}-1}(1-\variantfreqperpop{2})^{\conc{2}-1} \de \variantfreqperpop{1} \de \variantfreqperpop{2}. \label{eq:proposed_levy}
+    \end{equation}
+    When $\mass,\conc{1},\conc{2}, \corr{1},\corr{2}>0$ and $\rate{1},\rate{2}\in (0,1)$, Desiderata (A) and (B) hold, i.e., by virtue of \Cref{lemma:integral_requirements},
+    \begin{itemize}
+    	\item[(i)] $\iint_{[0,1]^2}\variantfreqperpop{\popidx}\ratemeasproposed(\de\btheta)<\infty$ for $\popidx=1,2$, and
+    	\item[(ii)] $\iint_{(0,1]^2}\ratemeasproposed(\de \vecvariantfreq{})=\infty$.
+	\end{itemize} 
+\end{myProposition}
+
+Note that in~\cref{remark:inf_mass} we discussed that condition (ii) is not equivalent to~\cref{eq:infinite_mass}, rather that (ii) is a sufficient for~\cref{eq:infinite_mass} to hold.
+
+\begin{proof} \label{proof:proper}
+    To show that the desiderata (A) and (B) for our data hold, we equivalently prove the integral requirements provided in \Cref{lemma:integral_requirements} are verified when using $\ratemeasproposed$, with hyperparameters $\mass,\conc{1},\conc{2}, \corr{1},\corr{2}>0$ and $\rate{1},\rate{2}\in (0,1)$.
+    The crux of the proof relies on the analysis of the behavior of the integral requirements in a neighborhood of the origin  $A:=[0,\epsilon]^2$ and $D:=(0,\epsilon]^2$ for an arbitrarily small scalar $\epsilon > 0$. 
+    In what follows, we use the notation $I_A(x) = \mathbbm{1}(x \in A)$, $I_{D}(x)=\mathbbm{1}(x \in D)$ and
+    \[
+    	\phi:=\frac{\mass}{B(\corr{1},\conc{1})B(\corr{2},\conc{2})}<\infty.
+    \]
+    We start with showing the integral requirement (i).
+    \paragraph{Proof of the integral requirement (i) (\Cref{eq:finite_first_moment} in \Cref{lemma:integral_requirements}).}
+    Notice that for an arbitrary $\popidx \in \{1,2\}$, we can rewrite \Cref{eq:finite_first_moment} as follows:
+    	\begin{equation*}
+    		\iint_{[0,1]^2}\variantfreqperpop{\popidx}\ratemeasproposed(\de \vecvariantfreq{} )= \int_{A^C}\variantfreqperpop{\popidx}\ratemeasproposed(\de\vecvariantfreq{}) + \int_A \variantfreqperpop{\popidx}\ratemeasproposed(\de\vecvariantfreq{}).
+	\end{equation*}
+	We will now show that for our proposed $\ratemeasproposed$ both integrals above are finite.
+
+    First, consider the integral over $A^C$ above. For $\popidx\in\{1,2\}$,
+    	\begin{equation}
+    		\int_{A^C}\variantfreqperpop{\popidx}\ratemeasproposed(\de\vecvariantfreq{}) =  \phi \int I_{A^C}(\vecvariantfreq{})\frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{\popidx}\variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{\corr{2}-1}(1-\variantfreqperpop{1})^{\conc{1}-1}(1-\variantfreqperpop{2})^{\conc{2}-1}  \de\vecvariantfreq{}. \label{eq:int_AC}
+    	\end{equation}
+    Notice that  we can bound the first part of the integrand as follows:
+   	\begin{equation}
+   		I_{A^C}( \vecvariantfreq{})\frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}
+		\le \min\{\epsilon,\epsilon^{\rate{2}/\rate{1}}\}^{-\rate{1}-\corr{1}-\corr{2}}<\infty. \label{eq:bound_betas}
+	\end{equation}
+	Indeed, if $\vecvariantfreq{}\notin A^C$, then the inequality holds trivially. If instead $\vecvariantfreq{}\in A^C$, then $ \variantfreqperpop{1} + \variantfreqperpop{2} >\epsilon$. In turn, 
+	\[
+		(\variantfreqperpop{1}+\variantfreqperpop{2})^{-\corr{1}-\corr{2}}< \epsilon^{-\corr{1}-\corr{2}} \le \min\{\epsilon, \epsilon^{\rate{2}/\rate{1}}  \}^{-\corr{1}-\corr{2}},
+	\] 
+	since $\epsilon < 1$. 
+	Similarly, 
+	$
+		(\variantfreqperpop{1} + \variantfreqperpop{2}^{\rate{2}/\rate{1}})> \min \{ \epsilon, \epsilon^{\rate{2}/\rate{1}} \}
+	$
+	thus 
+	\[
+		(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}} < \min \{ \epsilon, \epsilon^{\rate{2}/\rate{1}} \}^{-\rate{1}}.
+	\]
+	 The two bounds combined yield \Cref{eq:bound_betas}. Recognizing that the remaining part of the integrand in \Cref{eq:int_AC} is the kernel of a beta random variable for either value of $\popidx$, it holds
+	 \begin{align}
+%	 \begin{split}
+	 	\int_{A^C}  \variantfreqperpop{\popidx}\ratemeasproposed(\de\vecvariantfreq{}) &= \phi \int I_{A^C}(\btheta)\frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{\popidx}\variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{\corr{2}-1}(1-\variantfreqperpop{1})^{\conc{1}-1}(1-\variantfreqperpop{2})^{\conc{2}-1}\de\vecvariantfreq{}  \nonumber \\
+		&<\phi \min\{\epsilon,\epsilon^{\rate{2}/\rate{1}}\}^{-\rate{1}-\corr{1}-\corr{2}} \int_{A^C}  \variantfreqperpop{\popidx} \variantfreqperpop{1}^{\corr{1}-1} \variantfreqperpop{2}^{\corr{2}-1}(1-\variantfreqperpop{1})^{\conc{1}-1}(1-\variantfreqperpop{2})^{\conc{2}-1}\de\vecvariantfreq{} \nonumber \\
+		&<\infty. \label{eq:req_p0}
+%	\end{split}
+   	 \end{align}
+    Thus, it remains for us to check that also on the set $A$, around the origin, the integral is finite, i.e.\ $\int_A \variantfreqperpop{\popidx}\ratemeasproposed(\de\vecvariantfreq{})<\infty$.
+
+    First, notice that on the set $A$, we can obtain a pointwise upper bound for the L\'{e}vy rate $\ratemeasproposed$ of Equation (5.1) as follows:
+    \[
+    	\ratemeasproposed(\de \btheta) I_A(\btheta) \le  \eta \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{\corr{2}-1} I_A(\btheta) \de \variantfreqperpop{1} \de \variantfreqperpop{2},
+    \]
+    with 
+    \[
+    	\eta := \phi \max\{1, (1-\epsilon)^{\conc{1}-1}\} \max\{ 1, (1-\epsilon)^{\conc{2}-1}\}.
+    \]
+    We here consider two separate cases. 
+    
+    First, for $p=1$,
+    \begin{align*}
+    \int_A \variantfreqperpop{1}\ratemeasproposed(\de\vecvariantfreq{}) & \le \eta \int_A \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{1}^{(1+\corr{1})-1}\variantfreqperpop{2}^{\corr{2}-1}\de\btheta.
+        \end{align*} 
+    Now notice that $(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{\rate{1}}>\variantfreqperpop{1}^{\rate{1}}$, and for $0<\delta<\corr{2}$
+    \begin{align*}
+    	(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}} &= (\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}+\delta-\delta} 
+												=(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\delta} (\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{2}-\delta}
+												>(\variantfreqperpop{1})^{\corr{1} + \delta } (\variantfreqperpop{2})^{\corr{2} - \delta},
+	\end{align*}
+	so we can further obtain the upper bound
+    \begin{align}
+     \int_A \variantfreqperpop{1}\ratemeasproposed(\de\vecvariantfreq{}) & < \eta \int_A (\variantfreqperpop{1})^{-\rate{1}} \variantfreqperpop{1}^{-\corr{1}-\delta} \variantfreqperpop{2}^{-\corr{2}+\delta} \variantfreqperpop{1}^{(1+\corr{1})-1}\variantfreqperpop{2}^{\corr{2}-1}\de\btheta \nonumber \\
+     &< \eta \int_0^1 \variantfreqperpop{1}^{(1-\rate{1}-\delta) -1} \de \variantfreqperpop{1} \int_0^1 \variantfreqperpop{2}^{\delta-1}\de\variantfreqperpop{2} < \infty, \label{eq:req_p1}
+    \end{align}    
+	where the last inequality holds as long as $1-\rate{1}-\delta > 0$, i.e.\ $\delta \in (0,1-\rate{1})$.
+
+    
+    For $\popidx = 2$, 
+     \begin{align*}
+    \int_A \variantfreqperpop{2}\ratemeasproposed(\de\vecvariantfreq{}) & \le \eta \int_A \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{(1+\corr{2})-1}\de\btheta.
+        \end{align*} 
+	We use symmetric bounds as the derivation above for $\popidx=1$ now for the case $\popidx=2$, i.e.\ $(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{\rate{1}}>(\variantfreqperpop{2})^{\rate{1}}$, and, for $0<\delta < \corr{1}$, $(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}>(\variantfreqperpop{1})^{\corr{1} - \delta } (\variantfreqperpop{2})^{\corr{2} + \delta}$, and plugging them in we get
+     \begin{align}
+    \int_A \variantfreqperpop{2}\ratemeasproposed(\de\vecvariantfreq{}) & \le \eta \int_A (\variantfreqperpop{1})^{\delta-1}\variantfreqperpop{2}^{(1-\rate{2}-\delta)-1}\de\btheta
+    <\eta \int_0^1 (\variantfreqperpop{1})^{\delta-1} \de \variantfreqperpop{1} \int_0^1 \variantfreqperpop{2}^{(1-\rate{2}-\delta)-1}\de \variantfreqperpop{2} < \infty,  \label{eq:req_p2}
+        \end{align} 	
+        where the last inequality holds as long as $1-\rate{1}-\delta > 0$, i.e.\ $\delta \in (0,1-\rate{1})$. Thus, \Cref{eq:req_p0,eq:req_p1,eq:req_p2} combined yield requirement (i) (\Cref{eq:finite_first_moment}).
+        
+        This concludes the proof of integral requirement (i) (see \Cref{eq:finite_first_moment} in \Cref{lemma:integral_requirements}).
+
+
+    \paragraph{Proof of the integral requirement (ii)  which implies \Cref{eq:infinite_mass}.}
+    Recall $D=(0,\epsilon]^2$. We here recur to a decomposition similar to the first part of the proof, and rewrite the integral as
+	\[
+		\iint_{(0,1]^2} \ratemeasproposed(\de \vecvariantfreq{} )= \int_{(0,1]^2\setminus D} \ratemeasproposed(\de\vecvariantfreq{}) + \int_D \ratemeasproposed(\de\vecvariantfreq{}) >  \int_D \ratemeasproposed(\de\vecvariantfreq{}).
+	\]
+
+    We now show that in any neighborhood $D$ of the origin, the integral above diverges.  First, notice that on the set $D$, we can pointwise (lower) bound the L\'{e}vy rate of our proposed prior (Equation (5.1)) as follows:
+    \[
+    	\ratemeasproposed(\de \btheta) I_{D}(\btheta) \ge  \kappa \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{\corr{2}-1} I_D(\btheta) \de \variantfreqperpop{1} \de \variantfreqperpop{2},
+    \]
+    with 
+    \[
+    	\kappa := \frac{\mass}{B(\corr{1},\conc{1})B(\corr{2},\conc{2})} \min\{1, (1-\epsilon)^{\conc{1}-1}\} \min\{ 1, (1-\epsilon)^{\conc{2}-1}\},
+    \]
+    since on $D$, $\variantfreqperpop{p} < \epsilon < 1$. Hence,
+    \begin{align*}
+       \int_D \ratemeasproposed(\de\vecvariantfreq{}) \ge \int_{D \cap \{\variantfreqperpop{1} \ge \variantfreqperpop{2} \}} \ratemeasproposed(\de\vecvariantfreq{})  
+        \ge \kappa \int_0^{\epsilon} \int_0^{\variantfreqperpop{1}} \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{\corr{2}-1} \de \variantfreqperpop{2} \de \variantfreqperpop{1}.
+    \end{align*}
+
+    In the case in which $\rate{1} \le \rate{2}$  when $0\le\variantfreqperpop{2} \le \variantfreqperpop{1}\le1$ it is also the case that $\variantfreqperpop{2}^{\rate{2}/\rate{1}}\le \variantfreqperpop{1} $ (since $\rate{2}/\rate{1}\ge 1$). In turn,
+    	$\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}} \le 2 \variantfreqperpop{1}$ which implies $\left( \variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}}  \right)^{-\rate{1}} \ge \left( 2 \variantfreqperpop{1} \right)^{-\rate{1}}$. Similarly, $\variantfreqperpop{1} + \variantfreqperpop{2} \le 2 \variantfreqperpop{1}$ which implies $(\variantfreqperpop{1} + \variantfreqperpop{2})^{-\corr{1}-\corr{2}} \ge (2\variantfreqperpop{1})^{-\corr{1}-\corr{2}}$. The two observations together allow us to further bound the integral above:
+	\begin{align*}
+        \int_{(0,1]^2} \ratemeasproposed(\de\vecvariantfreq{}) \ge \int_D \ratemeasproposed(\de\vecvariantfreq{})&\ge \kappa \int_0^{\epsilon}\int_0^{\variantfreqperpop{1}} (2\variantfreqperpop{1})^{-\rate{1}-\corr{1}-\corr{2}}\variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{\corr{2}-1} \de \variantfreqperpop{2} \de \variantfreqperpop{1} \\
+        &= \kappa 2^{-\rate{1}-\corr{1}-\corr{2}} \int_0^{\epsilon} \variantfreqperpop{1}^{-\rate{1}-\corr{2}-1} \left[ \int_0^{\variantfreqperpop{1}} \variantfreqperpop{2}^{\corr{2}-1}\de \variantfreqperpop{2} \right] \de \variantfreqperpop{1} \\
+        &=  \frac{\kappa 2^{-\rate{1}-\corr{1}-\corr{2}} }{\corr{2}} \int_0^{\epsilon}\variantfreqperpop{1}^{-\rate{1}-1} \de \variantfreqperpop{1} \\
+        &= + \infty,
+\end{align*}
+where the last equality holds whenever $\rate{1} \ge 0$.
+
+In the case in which $\rate{1} > \rate{2}$, when $0 \le \variantfreqperpop{1}\le\variantfreqperpop{2}\le1$ it is also the case that $\variantfreqperpop{2}^{\rate{2}/\rate{1}}\ge \variantfreqperpop{1} $ (since $\rate{2}/\rate{1}\le 1$). In turn,
+$\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}} \le 2 \variantfreqperpop{2}^{\rate{2}/\rate{1}}$ which implies $\left( \variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}}  \right)^{-\rate{1}} \ge \left( 2 \variantfreqperpop{2}^{\rate{2}/\rate{1}} \right)^{-\rate{1}}$. Similarly, $\variantfreqperpop{1} + \variantfreqperpop{2} \le 2 \variantfreqperpop{2}$ which implies $(\variantfreqperpop{1} + \variantfreqperpop{2})^{-\corr{1}-\corr{2}} \ge (2\variantfreqperpop{2})^{-\corr{1}-\corr{2}}$. 
+
+The two observations together allow us to further bound the integral above:
+	\begin{align*}
+        \int_{(0,1]^2} \ratemeasproposed(\de\vecvariantfreq{}) \ge \int_D \ratemeasproposed(\de\vecvariantfreq{}) &\ge \kappa \int_0^{\epsilon}\int_0^{\variantfreqperpop{2}} (2\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}(2\variantfreqperpop{2})^{-\corr{1}-\corr{2}}\variantfreqperpop{2}^{\corr{2}-1}\variantfreqperpop{1}^{\corr{1}-1} \de \variantfreqperpop{1} \de \variantfreqperpop{2} \\
+        &= \kappa 2^{-\rate{1}-\corr{1}-\corr{2}} \int_0^{\epsilon} \variantfreqperpop{2}^{-\rate{2}-\corr{1}-1} \left[ \int_0^{\variantfreqperpop{2}} \variantfreqperpop{1}^{\corr{1}-1}\de \variantfreqperpop{1} \right] \de \variantfreqperpop{2} \\
+        &=  \frac{\kappa 2^{-\rate{1}-\corr{1}-\corr{2}} }{\corr{1}} \int_0^{\epsilon}\variantfreqperpop{2}^{-\rate{2}-1} \de \variantfreqperpop{2} \\
+        &= + \infty,
+\end{align*}
+where the last equality holds whenever $\rate{2} \ge 0$.
+
+This concludes the proof of integral requirement (ii), in turn yielding the thesis.
+\end{proof}
+
+
+\subsection{\revision{Additional discussion on Poisson point process approach and hierarchical models}}
+\revision{In our work we adopt a multivariate Poisson point process (PPP) to model the distribution of the variants' frequencies. 
+The formalism (i) facilitates theoretical analysis on asymptotic behavior \citep{Broderick2012, Gnedin2007} and (ii) can be leveraged to devise efficient inference algorithms via (exponential family) conjugacy \citep{Broderick2018}. 
+For these reasons, PPPs have been widely adopted in the context of BNP inference \citep[e.g.][]{lo1982bayesian, james2009posterior, hjort1990nonparametric, james2009posterior} and more recently also in the context of single-population genetic variant prediction problems \citep{Masoero2021, camerlenghi2024scaled}. We also note that traditionally many works have treated feature allocations as a latent variable and thus necessitated the computational expense of approximate Bayesian inference in the form of Markov chain Monte Carlo (MCMC) or variational inference (VI) \citep{ghahramani2005infinite,doshi2009variational,wang2011online,campbell2015streaming,griffiths2011indian,williamson2010dependent}. However, in the (single-population or multi-population) genetic variant prediction problem, the genetic variants (features in the feature allocation) are observed directly, so one might hope to avoid MCMC or VI altogether, thereby saving both computation time and the additional overhead of understanding whether such an approximation has succeeded in being sufficiently accurate. 
+Using PPP conjugacy has allowed exactly this avoidance of MCMC or VI approximation schemes in the single-population case \citep{Masoero2021, camerlenghi2024scaled}.
+We here aim to use it similarly in the multi-population case.}
+
+\revision{A particular challenge of the multi-population case that is not present in the single-population case is identification of variants. That is, our goal is to simultaneously consider a countable infinity of variants across multiple populations while maintaining the ability to link variants across populations (so that we can know the number of individuals in each population exhibiting the same variant) while ideally avoiding undue computational expense. PPPs seem to offer a way to thread this needle. In the multi-population setting, PPPs provide a practical way to express the joint distribution of variants frequencies across multiple populations via the multivariate rate measure $\nu(\mathrm{d}\bm{\theta})$ --- cf.\ Eq. (4).}
+
+\revision{At least in principle, $\nu$ has the appealing property that it allows us to capture the multivariate distribution of variants across the populations, capturing e.g.\ correlations in a particular variant's frequency across populations while allowing heterogeneity. We observe that if we were to just model the multiple populations completely independently via separate univariate point processes, we would instead fail to adequately represent the multivariate distribution of the variants.}
+
+\revision{We note that our proposal is not the only viable one. Indeed, a natural alternative could be to consider a hierarchical modeling approach. In fact our initial attempts when working on this problem were to try and develop an extension to \citet{thibaux2007hierarchical} with the desired properties.
+Some attempts in this direction can be found in \citet{masoero2018posterior} and \citet[Appendix D]{Masoero2021}, which include posterior characterizations and simulation studies a hierarchical 3BP. While appealing in principle, we were unable to make substantial progress due to practical obstacles that we describe in what follows. We here restrict our attention to the main two issues we encountered in our initial attempts during this project, but we emphasize that it is possible that other issues might be present with the suggested construction.}
+
+\revision{First, it is not clear how a hierarchical model could be used to reason in a principled and visual way about the joint distribution of the frequencies $(\theta_{1,i}, \theta_{2,i})$.
+By contrast, directly constructing a rate measure directly on unit square (as we do in the present work, rather than taking a hierarchical modeling approach) has a mechanism for engendering some desirable properties of the joint behavior of the frequencies' distribution; e.g., how the ``correlation'' parameters $\corr{1},\corr{2}$ drive what variants are more prevalent.
+Being able to control correlation between the variant frequencies is desirable since biologists studying population genetics are often interested in models able to capture the (joint) allele frequency spectrum (AFS), i.e., the joint distribution of variant frequencies across multiple populations \citep[e.g.,][]{gutenkunst2009inferring, caicedo2007genome,adams2004maximum,marth2004allele,keinan2007measurement,chen2012joint,martin2021signatures}. 
+By instantiating specific hyperparameters ($\corr{1}, \corr{2}$) responsible for controlling this joint behavior, $\nu_{\mathrm{prop}}(\mathrm{d}\theta)$ can be helpful in communicating properties of the model to biologists.
+In the two-population setting we consider, the ASF can be represented by a two dimensional histogram; our rate measure (Figure~1) can be directly compared with this representation.}
+
+\revision{Second, and relatedly, it is not clear how to reason about how to characterize the posterior predictive distribution of new, yet-to-be-seen variants that are also shared in a model like the one in \citet{thibaux2007hierarchical}. And while it is possible to come up with hierarchical models similar to the one proposed where this quantity is better defined (see, e.g., \citet[Equation 16]{Masoero2021}) we were not able to come up with a hierarchical model in which these posterior characterizations are easy to work with in practice. The benefit of $\nu_{\mathrm{prop}}$ is that the posterior characterization needed is still manageable: e.g., our Proposition 2 provides the distribution of the quantity of interest in closed form up to a low dimensional, easy-to-solve integral.}
+
+\revision{We do not exclude the possibility that a hierarchical construction like that of \citet{thibaux2007hierarchical} can also be practical and effective for the prediction problem we consider, but we were not able to find one. Meanwhile, we were able to efficiently achieve our desiderata with the present construction.}
+
+
+
+
+\subsection{\revision{Additional details on the construction of our proposed rate measure $\ratemeasproposed$}} \label{sec:prior_construction_details}
+
+\revision{Because the construction of our rate measure $\ratemeasproposed$ is somewhat non-standard, we further unpack in detail the construction of our proposed measure here. }
+
+\revision{We start from the single-population case as in \citet{Masoero2022}, in which a PPP approach was adopted. 
+In particular, the rate measure for the PPP over variant frequencies is a 3BP rate measure parameterized by $(\mass, \rate{}, c)$:
+\begin{equation}
+    \mu(\mathrm{d}\theta)=\mass\theta^{-\rate{}-1}(1-\theta)^{c+\rate{}-1} \mathrm{d}\theta.
+\end{equation}
+This rate measure enjoys the property of exponential family conjugacy \citep{Broderick2018} since the likelihood is a Bernoulli process; in particular, for organism $n$ and variant $\ell$, the likelihood is
+\begin{equation}
+    p(X_{n,\ell} \mid \theta_{\ell})=\theta_{\ell}^{X_{n,\ell}}(1-\theta_{\ell})^{1-X_{n,\ell}}, \quad \text{independently across $n$ and $\ell$}.
+\end{equation}
+Exponential family conjugacy tells us that (i) conditionally on the observed data, the posterior process will again be a PPP whose ordinary component has a rate measure in the same form as the prior, though with  different values of $(\mass', \rate{}', c')$ and (ii) both computation and theoretical study are facilitated by having closed-form posterior predictive distributions for quantities of interest. Essentially, this work relies on the PPP rate measure taking the form of an improper beta distribution.}
+
+\revision{We would like to develop a model enjoying similar properties (ease of computation and theoretical analysis) but able to jointly handle multiple populations. Our first observation is that, analogous to the single population case, it is natural to treat data as arising from a multi-population Bernoulli process; in particular, now we have that, for organism $n$ of population $p$ and focusing on variant $\ell$,
+\begin{equation}
+    p(X_{p,n,\ell} \mid \bm{\theta}_{p,\ell})=\theta_{p,\ell}^{X_{p,n,\ell}}(1-\theta_{p,\ell})^{1-X_{p,n,\ell}}, \quad \text{independently across $p$, $n$, and $\ell$}.
+\end{equation}
+Since we are just adding another index to the likelihood, a first attempt could be to let the PPP rate measure in two populations be the product of the rate measure from each one-population case. While the formal mechanics of multiplying an unnormalized beta prior by a Bernoulli likelihood look much the same, we show in Theorem 1 that we lose the basic desiderata of Bayesian nonparametrics if we pursue this path.}
+
+\revision{Since the problem we identify in Theorem 1 is the strict factorization of the rate measure across populations, we now have an additional desideratum (D): the rate measure should not strictly factorize into disjoint functions of $\theta_1$ and $\theta_2$. To see how we might satisfy conjugacy, desiderata (A) and (B) from our original paper, and also desideratum (D) specified here, we consider again the one-population case. In particular, we can write the 3BP rate measure as a first term times a normalized beta distribution:
+\begin{equation}
+    \mu(\mathrm{d}\theta)=(\mass\theta^{-\rate{}-\corr{}}) \theta^{\corr{}-1}(1-\theta)^{c-1} \mathrm{d}\theta.
+\end{equation}
+Essentially the leading term does the work of satisfying Desiderata (A) and (B), and the part proportional to a proper beta density does the work of satisfying conjugacy.}
+
+\revision{So our next attempt was to use a product of two proper beta distributions in the two-population case in order to guarantee conjugacy, but to use a new leading term to satisfy Desiderata (A), (B), and (D). Namely, we want to use the following
+\begin{equation}
+    \nu(\mathrm{d}\btheta)=f(\btheta)\theta_1^{\corr{1}-1}(1-\theta_1)^{c_1-1}\theta_2^{\corr{2}-1}(1-\theta_2)^{c_2-1} \mathrm{d}\btheta.
+\end{equation}
+(Technically, we also include the normalizing constants for the beta distributions in our construction as well, but we elide them here to ease the notation.)
+By Desideratum (D), $f(\btheta)$ should not factorize into disjoint functions of $\theta_1$ and $\theta_2$. So we first might consider using $f(\btheta)=\mass(\theta_1+\theta_2)^{-\rate{}-\corr{1}-\corr{2}}$. This term resembles the one-population 3BP leading term of $\mass\theta^{-\rate{}-\corr{}}$, but we changed the single-population $\theta$ to the sum $\theta_1+\theta_2$ across populations. While this proposal does successfully satisfy Desiderata (A), (B), and (D), it cannot account for different power law growth rates (for the number of variants as a function of the number of observations) in each of the two populations. By inspecting our power-law derivations, we identified a way to allow different power-law growth rates and thereby made our proposal $f(\btheta)=\mass(\theta_1+\theta_1^{\rate{2}/\rate{1}})^{-\rate{1}}(\theta_1+\theta_2)^{-\corr{1}-\corr{2}}$ (up to a constant absorbed into $\mass$).}
+
+\revision{The rate measure is not symmetric to parameter swap. In an early stage of this work we considered a symmetric version of the rate measure that exhibited power corrections in both $\theta_1$ and $\theta_2$ (as opposed to $\theta_2$ alone); in particular, we considered a rate measure with density of the form
+$$
+\alpha\frac{(\theta_1^{\rate{1}/\rate{}}+\theta_2^{\rate{2}/\rate{}})^{-\rate{}}}{(\theta_1+\theta_2)^{\corr{1}+\corr{2}}}\theta_1^{\corr{1}-1}(1-\theta_1)^{c_1-1}\theta_2^{\corr{2}-1}(1-\theta_2)^{c_2-1}.
+$$
+We anticipate that this rate measure would be capable of achieving different power law growth rates across the two populations. However, we had to introduce an additional hyperparameter $\rate{}$. Based on our understanding of our current proof, the hyperparameters $\rate{1},\rate{2}, \rate{}$ should jointly control the power law growth rates in the two populations. Using three hyperparameters to describe essentially two growth rates seems likely to cause identifiability issues. It is an interesting question to ask if this extension (or another variation) could be beneficial. }

@@ -1,0 +1,29 @@
+\begin{myCorollary}
+\label{cor:delta_time_kernel}
+Assume that the time kernel is chosen as a Dirac delta function, $K_t(\bm{t}, \bm{t}') = \delta(\bm{t} - \bm{t}')$, and that the time domain is discretized into $\totsteps$ time steps $t_1, t_2, \dots, t_{\totsteps}$. Then, the MMD squared between $\predjointmeasure$ and $\empjointmeasure$ is given by
+\begin{align*}
+    \MMD^2\big(\predjointmeasure, \empjointmeasure\big)
+=\sum_{\timeidx=1}^{\totsteps} \left(\frac{\tottrajec_{\timestep{\timeidx}}}{\sum_{\timeidx=1}^{\totsteps}\tottrajec_{\timestep{\timeidx}}}\right)^2\,\MMD^2\Big(\predmarginalshort{t_{\timeidx}}, \empmarginalshort{t_{\timeidx}}\Big)
+\end{align*}
+\end{myCorollary}
+
+\begin{proof}[Proof of Corollary \ref{cor:delta_time_kernel}]
+Starting from Proposition~\ref{prop:MMDdecomposition}, we have
+\[
+\MMD^2\big(\predjointmeasure, \empjointmeasure\big)
+=\mathbb{E}_{t, t' \sim \hat{h}_{t'}}\!\left[K_t(t, t')\,\MMD^2\Big(\predmarginalshort{t}, \empmarginalshort{t'}\Big)\right].
+\]
+With the choice \(K_t(t,t') = \delta(t-t')\), the kernel enforces \(t = t'\) so that the expectation simplifies to a sum over matching time indices. In a discrete-time setting, this becomes
+\[
+\MMD^2\big(\predjointmeasure, \empjointmeasure\big)
+=\sum_{\timeidx=1}^{\totsteps} \hat{h}_{t_{\timeidx}}^2\,\MMD^2\Big(\predmarginalshort{t_{\timeidx}}, \empmarginalshort{t_{\timeidx}}\Big).
+\]
+Substituting the assumed time distributions, $\hat{h}_{t_{\timeidx}} = \frac{\tottrajec_{\timestep{\timeidx}}}{\sum_{\timeidx=1}^{\totsteps}\tottrajec_{\timestep{\timeidx}}}$
+we obtain
+\begin{align*}
+   \MMD^2\big(\predjointmeasure, \empjointmeasure\big)
+=\sum_{\timeidx=1}^{\totsteps} \left(\frac{\tottrajec_{\timestep{\timeidx}}}{\sum_{\timeidx=1}^{\totsteps}\tottrajec_{\timestep{\timeidx}}}\right)^2\,\MMD^2\Big(\predmarginalshort{t_{\timeidx}}, \empmarginalshort{t_{\timeidx}}\Big). 
+\end{align*}
+
+This completes the proof.
+\end{proof}

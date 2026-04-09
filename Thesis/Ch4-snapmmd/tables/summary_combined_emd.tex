@@ -1,0 +1,33 @@
+\begin{table}[!ht]
+\caption{EMD for forecast and interpolation tasks.  Bold green = best method; plain green = method whose mean lies within one standard deviation of the best method. }
+\centering
+\makebox[0pt][c]{
+\small
+\begin{tabular}{lcccccc}
+\toprule
+      & \multicolumn{3}{c}{\textbf{Forecast}} & \multicolumn{3}{c}{\textbf{Interpolation}} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+\textbf{Task}
+      & \textbf{Ours} & \texttt{SBIRR-ref} & \texttt{SB-forward}
+      & \textbf{Ours} & \texttt{SBIRR} & \texttt{DMSB} \\ \midrule
+LV
+      & \best{\ms{0.21}{0.04}} & \ms{0.79}{0.05} & \ms{1.82}{0.9}
+      & \best{\ms{0.06}{0.03}} & \ms{0.10}{0.08} & \ms{0.82}{0.6} \\ \midrule
+ReprParam
+      & \best{\ms{0.19}{0.08}} & \ms{1.55}{0.8} & \ms{1.39}{0.6}
+      & \best{\ms{0.10}{0.04}} & \ms{0.17}{0.06} & \ms{1.89}{0.9} \\
+ReprSemiparam
+      & \best{\ms{0.35}{0.09}} & \ms{1.18}{0.4} & \ms{1.16}{0.3}
+      & \best{\ms{0.21}{0.11}} & \ms{0.39}{0.1} & \ms{1.89}{0.9} \\
+ReprProtein
+      & \best{\ms{0.26}{0.04}} & \ms{6.36}{0.5} & \ms{7.24}{0.5}
+      & \best{\ms{0.08}{0.03}} & \ms{0.59}{0.8} & \ms{1.48}{1.0} \\ \midrule
+GoM
+      & \best{\ms{0.71}{0.01}} & \ms{0.89}{0.03} & \ms{0.94}{0.08}
+      & \ms{0.10}{0.04} & \best{\ms{0.04}{0.01}} & \ms{0.08}{0.04} \\ \midrule
+PBMC
+      & -- & -- & --  & -- & -- & -- \\
+\bottomrule
+\end{tabular}}
+\label{tab:emd_combined}
+\end{table}

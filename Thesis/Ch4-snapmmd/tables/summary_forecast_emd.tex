@@ -1,0 +1,18 @@
+\begin{table}[ht]
+\centering
+\makebox[0pt][c]{
+\newcolumntype{L}{>{\raggedright\arraybackslash}p{3.4cm}}
+\newcolumntype{C}{>{\centering\arraybackslash}p{2.8cm}}
+\begin{tabular}{LCCC}
+\toprule
+\textbf{Experiment} & \textbf{Ours} & \texttt{SBIRR-ref} & \texttt{SB-forward} \\ \midrule
+Lotka–Volterra                          & \best{0.21 ± 0.035} & 0.79 ± 0.053 & 1.82 ± 0.94 \\ \midrule
+Repress.\ Parametric                    & \best{0.19 ± 0.075} & 1.55 ± 0.79  & 1.39 ± 0.62 \\
+Repress.\ Semiparam.           & \best{0.35 ± 0.091} & 1.18 ± 0.44  & 1.16 ± 0.33 \\
+Repress.\ Incomplete             & \best{0.26 ± 0.042} & 6.36 ± 0.51  & 7.24 ± 0.48 \\ \midrule
+Gulf of Mexico                          & \best{0.71 ± 0.014} & 0.89 ± 0.034 & 0.94 ± 0.081 \\
+\bottomrule
+\end{tabular}}
+\caption{EMD on the forecasting task (mean ± sd, lower is better). Bold green cells mark the row-best result.}
+\label{tab:emd_forecast}
+\end{table}

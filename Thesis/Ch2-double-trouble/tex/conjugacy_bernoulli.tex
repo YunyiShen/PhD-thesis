@@ -1,0 +1,90 @@
+% !TEX root = ../double_trouble_supplement.tex
+
+
+We now show that our proposed prior introduced in Equation (5.1) when paired with the two-population Bernoulli process model yields a posterior that is conjugate.
+
+To that end, we first describe an extension of our proposed process that includes fixed-location atoms. To define that extension, we start by defining \emph{our proposed finite distribution} (OPFD) as a distribution over $\vecvariantfreq{} \in [0,1]^2$ with density $f_{OPFD}(\vecvariantfreq{} | \allopfdhyper)$, where $\allopfdhyper := (\rate{1}, \rate{2}, \corr{1}, \corr{2}, \conc{1}, \conc{2}, \fixlocparam{1}, \fixlocparam{2})$ and $f_{OPFD}$ satisfies
+\begin{align}
+	& f_{OPFD}(\vecvariantfreq{} | \allhyper) \propto \bm{1}_{[0,1]^2}(\vecvariantfreq{}) \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{1}^{\corr{1}+\fixlocparam{1}-1}\variantfreqperpop{2}^{\corr{2}+\fixlocparam{2} -1} 
+		(1-\variantfreqperpop{1})^{\conc{1}-1}(1-\variantfreqperpop{2})^{\conc{2}-1}.
+        \label{eq:OPFD}
+\end{align}
+
+We next verify that this density corresponds to a proper distribution for certain parameter ranges. Our ranges in the following result are sufficient; it remains for future work to establish necessary ranges.
+\begin{myLemma} \label{lem:opfd_params}
+The righthand side of $f_{OPFD}(\vecvariantfreq{} | \allopfdhyper)$ in \cref{eq:OPFD} has a finite integral if all of the following are true: for all $\popidx\in \{1,2\}$, $\rate{\popidx}\in(0,1)$; for all $\popidx\in \{1,2\}$, $\corr{\popidx},\conc{\popidx}>0$; for all $\popidx\in \{1,2\}$, $\fixlocparam{\popidx}\ge 0$; and $\max_{\popidx}\{ \fixlocparam{\popidx}\}\ge 1$.
+\end{myLemma}
+\begin{proof}
+If all of the conditions are satisfied, $f_{OPFD}(\vecvariantfreq{} | \allopfdhyper) d \vecvariantfreq{}$ is upper bounded by $\variantfreqperpop{\popidx} \ratemeasproposed(d \vecvariantfreq{})$ for at least one value of $\popidx$. Therefore, by~\cref{prop:near_conjugate_proper}, it is normalizable.
+\end{proof}
+
+Note that our proposed measure in Equation (5.1) is a (scaled and) degenerated version with $\fixlocparam{\popidx}=0$ for all $\popidx$. 
+
+We next define \emph{our proposed distribution} over measures. The prior that we use for our model in the main text is the special case with zero fixed atoms. 
+
+\begin{myDefinition}[our proposed distribution (OPD)]
+    Using the notation of Equation (3.1) and Equation (5.1), let
+    $\randommeas_{\mathrm{PPP}} \sim \PPP(\ratemeasproposed)$ with hyperparameters $\allhyper := (\mass, \rate{1}, \rate{2}, \corr{1}, \corr{2}, \conc{1}, \conc{2})$
+    satisfying the constraints in Equation (5.1).
+    Also, for a chosen $L \ge 0$, collect $L$ fixed location atoms into a measure $\randommeas_{\mathrm{FL}}$ as follows. Suppose the $\variantidx$-th such atom has (fixed) location $\genericvariantlabel$ and (random) size $\genericvecvariantfreq \sim f_{OPFD}(\vecvariantfreq{} | \allopfdhyper_{\variantidx})$ independent, where the hyperparameters satisfy the constraints of \cref{lem:opfd_params}.
+    Let
+    $\randommeas_{\mathrm{FL}} := \sum_{\variantidx = 0}^{L} \genericvecvariantfreq \dirac{\genericvariantlabel}$.
+    Then we say that $\randommeas := \randommeas_{\mathrm{PPP}} + \randommeas_{\mathrm{FL}}$ has \emph{our proposed distribution} (OPD) with parameters
+    $\allhyper, (\genericvariantlabel)_{\variantidx=0}^{L}, (\allopfdhyper_{\variantidx})_{\variantidx=0}^{L}$. And we write
+    \begin{equation}
+        \randommeas \sim \mathrm{OPD}(\allhyper, (\genericvariantlabel)_{\variantidx=0}^{L}, (\allopfdhyper_{\variantidx})_{\variantidx=0}^{L}).
+    \end{equation}
+\end{myDefinition}
+
+
+Now we can state our conjugacy result.
+\begin{myLemma}
+Suppose that $\randommeas \sim \mathrm{OPD}(\allhyper, (\genericvariantlabel)_{\variantidx=0}^{L}, (\allopfdhyper_{\variantidx})_{\variantidx=0}^{L})$.
+And suppose we observe data $\pilotdata \mid \randommeas \sim \mBeP(\randommeas, \vecsamplesize)$ as in Equation (3.1).
+Then there exist parameters $\allhyper', (\genericvariantlabel')_{\variantidx=0}^{L'}, (\allopfdhyper'_{\variantidx})_{\variantidx=0}^{L'}$ such that the posterior distribution of $\randommeas$ given the observed $\pilotdata$ is distributed as 
+\begin{equation} 
+	\randommeas | \pilotdata \sim \mathrm{OPD}(\allhyper', (\genericvariantlabel')_{\variantidx=0}^{L'}, (\allopfdhyper'_{\variantidx})_{\variantidx=0}^{L'}).
+\end{equation}
+\end{myLemma}
+
+\begin{proof}
+After collecting data,  variants can fit into exactly one of three different categories:
+\begin{enumerate} 
+	\item[(i)] the variant has a fix location in the prior (it is irrelevant whether it has been observed or not in the data) 
+	\item[(ii)] the variant does not have fix location in prior, but has been observed in the data 
+	\item[(iii)] the variant does not have a fixed location in prior, and has not been observed in the data
+\end{enumerate}
+The first two categories will have fixed location in the posterior, and we check they have the same (finite) distribution in the family of OPFD and the last category is from a PPP the same form of our proposed measure. 
+    
+    For those variants $\variantlabel{\variantidx}$ $\variantidx=1,\dots, L$ having fixed locations in prior, they still have fixed location in posterior and their frequencies distribution can be calculated using the usual Bayesian theorem, i.e., for a variant $\variantidx$ its frequency distribution is proportional to the prior times the likelihood
+    \begin{align*}
+        f_{\variantidx}(\vecvariantfreq{}| \pilotdata)&\propto \cdot f_{OPFD}(\vecvariantfreq{} | \allopfdhyper_{\variantidx}) \prod_{\popidx=1,2} \prod_{\unitidx=1}^{\samplesize{\popidx}} \BER(x_{\popidx, \unitidx, \variantidx} \mid \variantfreqperpop{\popidx})\\
+        &\propto 1_{[0,1]^2}(\vecvariantfreq{}) \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2, \variantidx}/\rate{1, \variantidx}})^{-\rate{1, \variantidx}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1, \variantidx}+\corr{2, \variantidx}}}\variantfreqperpop{1}^{\corr{1, \variantidx}+\fixlocparam{1, \variantidx} + \sum_{\unitidx=1}^{\samplesize{1}} x_{1,\variantidx, \unitidx} -1}\variantfreqperpop{2}^{\corr{2, \variantidx}+\fixlocparam{2, \variantidx} +\sum_{\unitidx=2}^{\samplesize{2}} x_{1,\variantidx, \unitidx} -1} \times \\
+		&~~~~(1-\variantfreqperpop{1})^{\conc{1, \variantidx}+\sum_{\unitidx=1}^{\samplesize{1}} (1-x_{1,\variantidx, \unitidx})-1}(1-\variantfreqperpop{2})^{\conc{2, \variantidx}+\sum_{\unitidx=1}^{\samplesize{2}} (1-x_{2,\variantidx, \unitidx})-1}. 
+    \end{align*}
+    $f_{\variantidx}(\vecvariantfreq{}| \pilotdata)$ is within the family of OPFD with new parameters $\fixlocparam{1,\variantidx}'=\fixlocparam{1, \variantidx} + \sum_{\unitidx=1}^{\samplesize{1}} x_{1,\variantidx, \unitidx}$, $\fixlocparam{2, \variantidx}'=\fixlocparam{2} + \sum_{\unitidx=1}^{\samplesize{2}} x_{2,\variantidx, \unitidx}$ and $\conc{1,\variantidx}' = \conc{1,\variantidx}+\sum_{\unitidx=1}^{\samplesize{1}} (1-x_{1,\variantidx, \unitidx})$, $\conc{2,\variantidx}' = \conc{2,\variantidx}+\sum_{\unitidx=1}^{\samplesize{2}} (1-x_{2,\variantidx, \unitidx})$ while other hyperparameters unchanged -- note that since we have $\fixlocparam{1,\variantidx},\fixlocparam{2,\variantidx}\ge 0$ and $\max{\fixlocparam{1,\variantidx},\fixlocparam{2,\variantidx}}\ge 1$, this posterior is a proper density as both $x_{\popidx,\variantidx, \unitidx}, 1-x_{\popidx,\variantidx, \unitidx}\ge 0$.
+
+
+    For those variants not having fixed location in prior, our proof technique relies on the fact that, if we condition on an observed sample of $\samplesize{1}$ units from population $1$ and $\samplesize{2}$ units from population $2$, the \emph{posterior} distribution of the variants frequencies in our Bayesian hierarchical model can be obtained by thinning the Poisson point process underlying the model. 
+
+    Recall that our proposed prior for variants frequencies $\ratemeasproposed$ that are never observed was defined as a PPP with rate measure \cref{eq:proposed_levy}.
+
+    Then for variants $\psi_{\variantidx}$, $\variantidx=L+1,L+2,\ldots,L'$ that are newly observed in data, there are finitely many of them by Desideratum~(A). In posterior they have fixed location and the corresponding frequency (posterior) law $f_{\variantidx}(\vecvariantfreq{}| \pilotdata)$ can be obtained by thinning the rate measure $\ratemeasproposed$  by the probability of the realized sample induced by the likelihood component of our model
+    \begin{align*}
+        f_{\variantidx}(\vecvariantfreq{}| \pilotdata)&\propto\ratemeasproposed(\de\vecvariantfreq{})\cdot \prod_{\popidx=1,2} \prod_{\unitidx=1}^{\samplesize{\popidx}} \BER(x_{\popidx, \unitidx, \variantidx} \mid \variantfreqperpop{\popidx})\\
+        &\propto \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\variantfreqperpop{1}^{\corr{1}+\sum_{\unitidx=1}^{\samplesize{1}} x_{1,\variantidx, \unitidx}-1}\variantfreqperpop{2}^{\corr{2} +\sum_{\unitidx=1}^{\samplesize{2}} x_{2,\variantidx, \unitidx} -1}\\
+        &  \qquad \qquad \qquad \qquad  \times(1-\variantfreqperpop{1})^{\conc{1}+\sum_{\unitidx=1}^{\samplesize{1}} (1-x_{1,\variantidx, \unitidx})-1}(1-\variantfreqperpop{2})^{\conc{2}+\sum_{\unitidx=1}^{\samplesize{2}} (1-x_{2,\variantidx, \unitidx})-1}.
+    \end{align*}
+
+    This distribution is within the same form as~\cref{eq:OPFD}, with $\fixlocparam{1,\variantidx}'=\sum_{\unitidx=1}^{\samplesize{1}} x_{1,\variantidx, \unitidx}$, $\fixlocparam{2,\variantidx}'=\sum_{\unitidx=1}^{\samplesize{2}} x_{2,\variantidx, \unitidx}$ and $\conc{1,\variantidx}'=\conc{1}+\sum_{\unitidx=1}^{\samplesize{1}} (1-x_{1,\variantidx, \unitidx})$ and $\conc{2,\variantidx}'=\conc{2}+\sum_{\unitidx=1}^{\samplesize{2}} (1-x_{2,\variantidx, \unitidx})$ and other hyperparameters unchanged. Since in this category we have the variants observed at least once, thus there exist at least one $(\popidx,\unitidx)$ such that $x_{\popidx,\variantidx, \unitidx}=1$, and since all $1\ge x_{\popidx,\variantidx, \unitidx}\ge 0$, we have $\fixlocparam{\popidx,\variantidx}'\ge 0$ for all $\popidx=1,2$, $\max_\popidx\{\fixlocparam{\popidx,\variantidx}'\}\ge 1$ and $ \conc{\popidx,\variantidx}'\ge 0$ for all $\popidx=1,2$ thus it is within our family of~\cref{eq:OPFD} that are normalizable.
+    
+    
+    In the last case (variant not yet observed and not in fix location of prior), the frequencies are from a (thinned) Poisson point process with rate measure
+    \begin{align*}
+        \levync(\vecvariantfreq{}| \pilotdata)&\propto\ratemeasproposed(\de\vecvariantfreq{}) \prod_{\popidx=1,2} \prod_{\unitidx=1}^{\samplesize{\popidx}} \BER(0 \mid \variantfreqperpop{\popidx})\\
+        &=\frac{\mass}{B(\corr{1}, \conc{1})B(\corr{2}, \conc{2})}
+        \frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}
+        \variantfreqperpop{1}^{\corr{1}-1}\variantfreqperpop{2}^{\corr{2}-1}(1-\variantfreqperpop{1})^{\conc{1}+\samplesize{1}-1}(1-\variantfreqperpop{2})^{\conc{2}+\samplesize{2}-1} \de\btheta.
+    \end{align*}
+    This is within the same family of our PPP rate in Equation (5.1), with only parameter changing be $\conc{\popidx}'=\conc{\popidx}+\samplesize{\popidx}$ for all $\popidx=1,2$, and other hyperparameters unchanged, and still satisfying our desiderata since $\samplesize{\popidx}\ge 0$. 
+\end{proof}

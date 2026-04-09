@@ -1,0 +1,172 @@
+% \documentclass[ba,preprint]{imsart}% use this for supplement article
+\documentclass[ba]{imsart}
+%
+\pubyear{TBA}
+\volume{TBA}
+\issue{TBA}
+% \doi{0000}
+%\arxiv{2207.07020}
+\firstpage{1}
+\lastpage{1}
+
+\input{ba_header}
+\input{shortcuts.tex}
+%\externaldocument[supp-]{double_trouble_supplement}
+%\usepackage{xr, xr-hyper}
+
+
+
+\startlocaldefs
+\numberwithin{equation}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+
+\endlocaldefs
+
+\begin{document}
+\newcommand\blind{1}
+
+\begin{frontmatter}
+\title{Double trouble: Predicting new variant counts across two heterogeneous populations}
+\runtitle{Double trouble}
+
+\begin{aug}
+\author{\fnms{Yunyi} \snm{Shen}\thanksref{addr1}\ead[label=e1]{yshen99@mit.edu}},
+\author{\fnms{Lorenzo} \snm{Masoero}\thanksref{addr1}\ead[label=e2]{lom@mit.edu}},
+\author{\fnms{Joshua G.} \snm{Schraiber}\thanksref{addr2}\ead[label=e3]{schraibe@usc.edu}},
+\and
+\author{\fnms{Tamara} \snm{Broderick}\thanksref{addr1}\ead[label=e4]
+{tbroderick@mit.edu}}
+
+\runauthor{Y. Shen et al.}
+
+\address[addr1]{Laboratory for Information \& Decision Systems. Massachusetts Institute of Technology.
+    \printead*{e1}, % print email address of "e1"
+    \printead*{e2}, 
+    \printead*{e4}
+}
+
+\address[addr2]{
+    Department of Quantitative and Computational Biology, USC
+    \printead{e3}
+    %\printead{u1}
+}
+
+%\thankstext{t1}{Some comment}
+%\thankstext{t2}{First supporter of the project}
+%\thankstext{t3}{Second supporter of the project}
+
+\end{aug}
+
+\begin{abstract}
+\input{tex/abstract}
+\end{abstract}
+
+\begin{keyword}[class=MSC]
+\kwd[Primary ]{62F15}
+\kwd[; secondary ]{64G05}
+\end{keyword}
+
+\begin{keyword}
+\kwd{Bayesian nonparametrics}
+\kwd{feature sampling models}
+\kwd{beta process}
+\kwd{genomic variants} 
+\kwd{genomic diversity}
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}
+\label{sec:introduction}
+\input{tex/intro}
+
+\section{Problem setup}
+\label{sec:setup}
+\input{tex/setup.tex}
+
+\section{A Bayesian framework for two populations}
+\label{sec:bnp_two_pops}
+\input{tex/bnp_two_pops.tex}
+
+\section{A natural extension from one population fails}
+\label{sec:cant_have_it_all}
+\input{tex/cant_have_it_all.tex}
+
+\section{Our model}
+\label{sec:our_model} %\label{sec:dependent_prior}
+\input{tex/our_model.tex} 
+
+\section{Prediction} 
+\label{sec:prediction_all}
+\input{tex/prediction_all.tex}
+
+	\subsection{Predicting variant numbers for fixed hyperparameters}
+	\label{sec:prediction_fixed}
+	\input{tex/prediction_fixed.tex}
+	
+	\subsection{Empirics for hyperparameters}
+	\label{sec:hyperparameter_empirics}
+	\input{tex/hyperparameter_empirics.tex}
+
+\section{Power law asymptotics for the number of new variants}
+\label{sec:powerlaw}
+\input{tex/power_law_main}
+
+\section{Experiments}
+\label{sec:experiments}
+\input{tex/experiments.tex}
+
+\section{Discussion}
+\label{sec:discussion}
+\input{tex/discussion}
+
+\begin{acks}[Acknowledgments]
+    \input{tex/funding.tex}
+    \input{tex/acknowledgements.tex}
+\end{acks}
+    
+%\begin{funding}[Funding]
+%    \input{tex/funding.tex}
+%\end{funding}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Supplementary Material, if any, should   %%
+%% be provided in {supplement} environment  %%
+%% with title and short description.        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{supplement}
+\stitle{We here describe the content of supplementary Material for ``Double trouble: Predicting new variant counts across two heterogeneous populations''}
+\sdescription{
+\internal{
+The supplement contains mathematical proofs of the theorems presented in the main text and additional experiments. 
+In particular: 
+Section S1 contains the proof for our impossibility result (\cref{prop:incomp} in \cref{sec:cant_have_it_all}).
+Section S2 contains the proof that our proposed prior satisfies \cref{req:finite_mean,req:inf_mass}.
+Section S3 contains the proof that our proposed prior forms a conjugate family to the Bernoulli likelihood process.
+Section S4 contains a full derivation of the inference procedure we adopt for single population methods.
+Section S5 contains details on the inference procedure we adopt to implement our proposed method.
+Section S6 contains details on the setup we adopt for our simulation studies.
+Section S7 contains additional results for both simulated and real data.
+Section S8 contains proofs of the asymptotic results presented in \cref{sec:powerlaw}.
+}}
+\end{supplement}
+%\begin{supplement}
+%\stitle{Title of Supplement B}
+%\sdescription{Short description of Supplement B.}
+%\end{supplement}
+
+%The following are some other citations to check that the bibliographc style
+%file is working correctly: \citet{akaike}, \citet*{akivarsq}, \citet{dyke},
+%\citet{greene}, \citet*{kstuart}, \citet{hilbetech}, \citet{hilbe},
+%\citet{hilbeglm}, \citet{maddalacntrsq}, and \citet*{companion}.  
+
+
+\bibliographystyle{ba}
+\bibliography{refs}
+
+
+
+
+\end{document}
+

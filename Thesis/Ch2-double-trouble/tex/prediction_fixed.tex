@@ -1,0 +1,52 @@
+First, suppose the model hyperparameters are fixed and known.
+
+\begin{myProposition}
+	
+	\label{prop:predict_kr_tons}
+	Take a two-population model (\cref{eq:generative_model}) with our proposed PPP rate measure (\cref{eq:proposed_prior}).
+	
+	Consider pilot data $\pilotdata$ for two populations, with pilot size $\vecsamplesize$. Consider a follow-up study with $\vecfuturesamplesize$ additional samples.
+	Take any $\vecoccurrence$ such that, for each $\popidx \in \{1,2\}$, $\occurrence{\popidx} \le \futuresamplesize{\popidx}$.
+	Then the number of new variants appearing exactly $\vecoccurrence$ times in the follow-up study satisfies 
+	\begin{align*}
+		\genericfreqnews \mid \pilotdata \sim \Poisson\left(\genericfreqnewsparam\right), \quad \textrm{where}
+	\end{align*}  
+	%
+	\begin{align}
+		\genericfreqnewsparam := {} &\mass \binom{\futuresamplesize{1}}{\occurrence{1}} \binom{\futuresamplesize{2}}{\occurrence{2}}\frac{B(\corr{1}+\occurrence{1},\conc{1}+\samplesize{1}+\futuresamplesize{1}-\occurrence{1})B(\corr{2}+\occurrence{2},\conc{2}+\samplesize{2}+\futuresamplesize{2}-\occurrence{2})}{B(\corr{1},\conc{1})B(\corr{2},\conc{2})} \nonumber \\
+    				& {} \cdot \E_{Z,W}\left[\frac{(Z+W^{\rate{2}/\rate{1}})^{-\rate{1}}}{(Z+W)^{\corr{1}+\corr{2}}}\right].
+    		 		\label{eqn:kr_tons}
+	\end{align}
+$\E_{Z,W}$ denotes the expectation with respect to independent random variables $Z$ and $W$:
+\begin{equation*}
+    Z\sim \Beta(\corr{1}+\occurrence{1},\conc{1}+\samplesize{1}+\futuresamplesize{1}-\occurrence{1}), \quad \text{and} \quad
+    W\sim \Beta(\corr{2}+\occurrence{2},\conc{2}+\samplesize{2}+\futuresamplesize{2}-\occurrence{2}).
+\end{equation*}
+\revision{Further, $\genericfreqnews$ are independent across unique values of the vector $\vecoccurrence$, conditionally on the data $\pilotdata$.}
+\end{myProposition}
+The proof appears in Section S5.1 of the Supplementary Material \citep{supplement}. Like the one-population case \citep{Masoero2022},
+the predictive distribution is Poisson. Unlike the one-population case,
+the Poisson parameter here is not available in closed form (\cref{eqn:kr_tons}).
+
+\minorrevision{Observe that, as long as $k_\popidx\le M_\popidx$ for $\popidx=1,2$, the total number of variants $\genericfreqnews$ is unbounded; this unboundedness is natural since we allow an organism's genetic sequence to exhibit arbitrarily many variants. This behavior contrasts feature allocations (our present setting) with species sampling; in species sampling, the total number of new variants in a follow-up study would be bounded above by the number of samples in the follow-up.}
+
+In practice, we approximate the expectation in the prediction using the double exponential quadrature method \citep{takahasi1974double} using the Python package \texttt{mpmath} \citep{mpmath}.\minorrevision{We opted for quadrature since naive Monte Carlo struggles with the divisor in the integrand for $Z$ and $W$ near 0.}
+
+As per \cref{sec:setup}, the total number of new variants in the follow-up study can be recovered from the number
+of new variants occurring $\vecoccurrence$ times. Relative to the proposal after \cref{eq:news_freq}, 
+the following result provides a more computationally efficient way to 
+recover the total number of new variants after computing the distributions in \cref{prop:predict_kr_tons}.
+\begin{myProposition}
+%[Predicting number of new variants] 
+\label{coro:new_vars}
+	Take the same assumptions as in \Cref{prop:predict_kr_tons}. Then the total number of new variants in a follow-up study satisfies
+\begin{align} \label{eqn:faster_total_count}
+     \genericnews \mid \pilotdata \sim \Pois\left(\sum_{\followupidx{1}=1}^{\futuresamplesize{1}}\newsparam{(\samplesize{1}+\followupidx{1}-1,\samplesize{2})}{(1,0),(1,0)}+\sum_{\followupidx{2}=1}^{\futuresamplesize{2}} \newsparam{(\samplesize{1}+\futuresamplesize{1},\samplesize{2}+\followupidx{2}-1)}{(0,1),(0,1)} \right),
+\end{align} 
+where $\genericfreqnewsparam$ is defined in \Cref{eqn:kr_tons}.
+\end{myProposition}
+
+
+See Section S5.2 of the Supplementary Material \citep{supplement} for the proof. Intuitively, we first imagine taking a single new draw at a time from population 1 ($\vecfuturesamplesize = (1,0)$) and then a single new draw at a time from population 2 ($\vecfuturesamplesize = (0,1)$). Any variant that is new in the follow-up relative to the pilot must be new at exactly one step of this scheme.
+
+The naive proposal in \cref{sec:setup} would require summing over all possible $\vecoccurrence$ such that $\occurrence{1} + \occurrence{2} \ge 1$. We know that, for each population, $\occurrence{\popidx} \le \futuresamplesize{\popidx}$. If we sum up to this bound, we would require $\futuresamplesize{1} * \futuresamplesize{2} - 1$ evaluations of \cref{eqn:kr_tons}. By contrast, \cref{eqn:faster_total_count} requires just $\futuresamplesize{1} + \futuresamplesize{2}$ total evaluations of \cref{eqn:kr_tons}. In practice, we expect that $\genericfreqnewsparam$ becomes negligible for larger $\occurrence{\popidx}$, so one might employ a truncation to speed up the naive scheme. But figuring out an appropriate truncation level would require some work and involve a tradeoff between computation and accuracy.

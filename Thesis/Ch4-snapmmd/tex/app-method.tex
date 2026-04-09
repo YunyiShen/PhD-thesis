@@ -1,0 +1,143 @@
+\section{Proofs and additional results}
+\label{app:proofs}
+
+\subsection{A natural extension of Schr\"odinger bridges to forecasting}
+\label{app:sb-forecasting}
+In this section, we analyze one natural extension of the Schrödinger bridge formulation to forecasting. This is not the only possible setup, but it illustrates the limitations that arise when the reference process is fixed a priori.
+
+\textbf{The Schrödinger bridge problem.} Schr\"odinger bridges provide a framework for modeling stochastic processes conditioned on observed marginals. Formally, they solve the following constrained optimization problem: given a reference process $p$ (typically Brownian motion), we seek a trajectory distribution $q$ that is closest to $p$ in Kullback--Leibler divergence while matching observed marginals $\{\pi_1, \dots, \pi_T\}$:
+\begin{equation}
+    \argmin_{q \in \mathcal{Q}} \KL(q \mid\mid p), \quad \mathcal{Q} = \{q : q_{t_i} = \pi_i, \; i = 1, \dots, T\}.
+    \label{eq:sb-problem}
+\end{equation}
+Typically, both $p$ and $q$ are defined via SDEs sharing the same volatility, and are supported over a finite time horizon.
+
+\textbf{A natural forecasting extension.} To reason about forecasting, one can extend this setup by introducing an unknown future marginal $\pi_{T+1}$ and solving:
+\begin{equation}
+    \pi_{T+1} = \argmin_{\pi} \min_{q \in \mathcal{Q}} \KL(q \mid\mid p), \quad \mathcal{Q} = \{q : q_{t_i} = \pi_i, \; i = 1, \dots, T, \; q_{t_{T+1}} = \pi\}.
+    \label{eq:sbforecastinggoal}
+\end{equation}
+We emphasize that \eqref{eq:sbforecastinggoal} is not the only possible formulation of SB forecasting, but it illustrates the limitations of setups that rely on fixed reference dynamics. In this setting, forecasting amounts to evolving particles forward from the last known marginal $\pi_T$ under the reference process $p$. To make this precise, we adopt notation from \citet{Lavenant2021}. Let $p_{t_i, t_{i+1}}$ and $q_{t_i, t_{i+1}}$ denote the transition densities of $p$ and $q$ over $[t_i, t_{i+1}]$. Let $q_{t_i} p_{t_i, t_{i+1}}$ denote the joint trajectory distribution that begins with marginal $q_{t_i}$ and evolves forward using the dynamics of $p$ until time $t_{i+1}$.
+
+\begin{proposition}[Forecasting limitation of fixed-reference SB methods]
+\label{prop:sb-forecasting}
+Assume that $p$ and $q$ are SDEs with the same volatility, finite time horizon and satisfying \cref{assumption-lipschitz} and \cref{assumption-bddsecondmoments}. The solution to \eqref{eq:sbforecastinggoal} is the marginal at $t_{T+1}$ of $\pi_T p_{t_T, t_{T+1}}$; that is, forecasting at $t_{T+1}$ reduces to evolving $\pi_T$ forward using the reference dynamics $p$ until $t_{T+1}$.
+\end{proposition}
+
+\begin{proof}
+When $p$ and $q$ share volatility and finite horizon, the processes are Markovian. Using Proposition D.1 and Remark D.2 of \citet{Lavenant2021}, we decompose the KL objective:
+\begin{align}
+    \KL(q \mid\mid p) &= \KL(q_{t_1, t_2} \mid\mid p_{t_1, t_2})
+    + \sum_{i=2}^{T} \KL(q_{t_i, t_{i+1}} \mid\mid q_{t_i} p_{t_i, t_{i+1}})
+    + \KL(q_{t_T, t_{T+1}} \mid\mid q_{t_T} p_{t_T, t_{T+1}})
+\end{align}
+The first $T$ terms are fixed by the constraints on $\{\pi_1, \dots, \pi_T\}$ and do not depend on $\pi_{T+1}$, so the final term governs the choice of $\pi_{T+1}$. This term is minimized by setting:
+\begin{equation}
+    q_{t_T, t_{T+1}} = \pi_T p_{t_T, t_{T+1}}
+\end{equation}
+which yields $q_{t_{T+1}} = \pi_{T+1}$ as the marginal of $\pi_T$ evolved forward under $p$. Thus, the optimal forecast is the marginal of $\pi_T p_{t_T, t_{T+1}}$.
+\end{proof}
+
+This result shows that in standard SB setups with fixed reference dynamics $p$, one formulation of the forecasting problem reduces to propagating the last observed marginal forward under $p$. Consequently, the quality of SB-based forecasts in this extension is determined entirely by the choice of reference and does not adapt to earlier snapshots, unless additional structure is introduced \citep[e.g.,][]{shen2024multi}. One alternative approach by \citet{chen2024deep} augments the dynamics with momentum terms that allow for better extrapolation. However, this approach still relies on a fixed reference process, and furthermore the released codebase does not provide a forecasting mode (which would require substantial re-engineering). Thus we benchmark this method only on interpolation tasks in our experiments.
+
+\subsection{Regularity assumptions}
+\label{app:assumptions}
+
+For completeness, we state the standard SDE regularity assumptions used in the main text.
+
+\begin{assumption}
+\label{assumption-lipschitz}
+The drifts and volatility are $L$ and $L'$-Lipschitz respectively; i.e., for all $t\in [0,\timet_{\totsteps}]$, $\bm{x_1}, \bm{x_2} \in \R^d$, $\|\truedrift(\bm{x_1}, t)-\truedrift(\bm{x_2}, t)\| \le L \| \bm{x_1}-\bm{x_2} \|$ and $|\truevolatility(\bm{x_1}, t)-\truevolatility(\bm{x_2}, t)|\le L' \| \bm{x_1}-\bm{x_2} \|$, where $\|\cdot \|$ denotes the usual Euclidean norm of a vector. And we have at most linear growth; i.e., there exist $K, K'<\infty$ and constant $c$ such that $\| \truedrift(\bm{x_1}, t)\| <K \| \bm{x_1} \|+c$ and $\| \truevolatility(\bm{x_1}, t)\| <K' \| \bm{x_1} \|+c'$ for all $t\in [0,\timet_{\totsteps}]$. 
+\end{assumption} 
+\begin{assumption}
+\label{assumption-bddsecondmoments}
+At each time step $\timestep{\timeidx}$, the distribution
+of the $\tottrajec_{\timeidx}$ particles has bounded second moments. Moreover, the initial distribution $\marginal{0}$ also has bounded second moments.
+\end{assumption}
+
+
+
+\subsection{Proof of \cref{prop:MMDdecomposition}}
+\label{app:proof-main-prop}
+In this section, we prove our main proposition from the main text, \cref{prop:MMDdecomposition}.
+\begin{proof}[Proof of \cref{prop:MMDdecomposition}]
+We start with the definition of the MMD squared between the joint distributions:
+\begin{equation}
+\begin{aligned}
+    \MMD^2_{K}(f(\statevar,t),g(\statevar,t))&=\E_{(\statevar,t)\sim f, (\statevar',t')\sim f}\left[K((\statevar,t), (\statevar',t'))\right]\\
+    &~~-2\E_{(\statevar,t)\sim f, (\statevar',t')\sim g}\left[K((\statevar,t), (\statevar',t'))\right]\\
+    &~~+\E_{(\statevar,t)\sim g, (\statevar',t')\sim g}\left[K((\statevar,t), (\statevar',t'))\right]
+\end{aligned}
+\end{equation}
+
+The boundedness assumptions ensure that all these kernel expectations are finite, so that the MMD and the decomposition above are well-defined. Next we can rewrite the first term in right-hand side as follows:
+
+\begin{equation}
+\begin{aligned}
+\E_{(\statevar,t)\sim f, (\statevar',t')\sim f}\left[K((\statevar,t), (\statevar',t'))\right]&=\mathbb{E}_{(\statevar,t)\sim f,\; (\statevar',t')\sim f}\!\left[K_{\statevar}(\statevar,\statevar')\,\delta(t-t')\right]\\
+&=\mathbb{E}_{t\sim h(t),\; t'\sim h(t')}\!\left[\delta(t-t')\,\mathbb{E}_{\substack{\statevar\sim f(\statevar\mid t) \\ \statevar'\sim f(\statevar\mid t')}}\!\left[K_{\statevar}(\statevar,\statevar')\right]\right]\\
+&=\sum_{t,t'\in \timerange}\left[\delta(t-t')\,\mathbb{E}_{\substack{\statevar\sim f(\statevar\mid t) \\ \statevar'\sim f(\statevar\mid t')}}\!\left[K_{\statevar}(\statevar,\statevar')\right]\right]h(t)h(t')\\
+&=\sum_{t\in \timerange} \mathbb{E}_{\substack{\statevar, \statevar'\sim f(\statevar\mid t)}}\!\left[K_{\statevar}(\statevar,\statevar')\right]h^2(t)
+\end{aligned}
+\end{equation}
+where the first equality uses the factorized form of the kernel, the second equality is by the the law of iterated expectation conditioning on the time components.
+
+Similarly the second term:
+\begin{equation}
+\begin{aligned}
+    -2\E_{(\statevar,t)\sim f, (\statevar',t')\sim g}\left[K((\statevar,t), (\statevar',t'))\right] &= \mathbb{E}_{(\statevar,t)\sim f,\; (\statevar',t')\sim g}\!\left[K_{\statevar}(\statevar,\statevar')\,\delta(t-t')\right]\\
+    &=\mathbb{E}_{t\sim h(t),\; t'\sim h(t')}\!\left[\delta(t-t')\,(-2\mathbb{E}_{\substack{\statevar\sim f(\statevar\mid t) \\ \statevar'\sim g(\statevar\mid t')}}\!\left[K_{\statevar}(\statevar,\statevar')\right])\right]\\
+    &=\sum_{t,t'\in \timerange}\left[\delta(t-t')\,(-2\mathbb{E}_{\substack{\statevar\sim f(\statevar\mid t) \\ \statevar'\sim g(\statevar\mid t')}}\!\left[K_{\statevar}(\statevar,\statevar')\right])\right]h(t)h(t')\\
+    &=\sum_{t\in \timerange} -2\mathbb{E}_{\substack{\statevar\sim f(\statevar\mid t) \\ \statevar'\sim g(\statevar\mid t)}}\!\left[K_{\statevar}(\statevar,\statevar')\right]h^2(t)
+\end{aligned}
+\end{equation}
+
+The third term
+\begin{equation}
+\begin{aligned}
+\E_{(\statevar,t)\sim g, (\statevar',t')\sim f}\left[K((\statevar,t), (\statevar',t'))\right]&=\mathbb{E}_{(\statevar,t)\sim g,\; (\statevar',t')\sim g}\!\left[K_{\statevar}(\statevar,\statevar')\,\delta(t-t')\right]\\
+&=\mathbb{E}_{t\sim h(t),\; t'\sim h(t')}\!\left[\delta(t-t')\,\mathbb{E}_{\substack{\statevar\sim g(\statevar\mid t) \\ \statevar'\sim g(\statevar\mid t')}}\!\left[K_{\statevar}(\statevar,\statevar')\right]\right]\\
+&=\sum_{t,t'\in \timerange}\left[\delta(t-t')\,\mathbb{E}_{\substack{\statevar\sim g(\statevar\mid t) \\ \statevar'\sim g(\statevar\mid t')}}\!\left[K_{\statevar}(\statevar,\statevar')\right]\right]h(t)h(t')\\
+&=\sum_{t\in \timerange} \mathbb{E}_{\substack{\statevar, \statevar'\sim g(\statevar\mid t)}}\!\left[K_{\statevar}(\statevar,\statevar')\right]h^2(t)
+\end{aligned}
+\end{equation}
+Collecting terms, we have 
+\begin{align*}
+     &~~\MMD^2_{K}(f(\statevar,t),g(\statevar,t))\\
+     &=\sum_{t\in \timerange} h^2(t)\left[ \mathbb{E}_{\substack{\statevar, \statevar'\sim f(\statevar\mid t)}}\!\left[K_{\statevar}(\statevar,\statevar')\right] -2\mathbb{E}_{\substack{\statevar\sim f(\statevar\mid t) \\ \statevar'\sim g(\statevar\mid t)}}\!\left[K_{\statevar}(\statevar,\statevar')\right]+\mathbb{E}_{\substack{\statevar, \statevar'\sim g(\statevar\mid t)}}\!\left[K_{\statevar}(\statevar,\statevar')\right]\right]\\
+     &=\sum_{t\in \timerange} h^2(t)\MMD_{K_{\statevar}}^2(f(\cdot\mid t),g(\cdot\mid t))
+\end{align*}
+
+\end{proof}
+
+In our application, we used the empirical distribution for time, i.e., $\emptimemeasure(\timestep{})$ from \cref{eq:empirical_dists}. By doing so, the two distributions of interest to apply \cref{prop:MMDdecomposition} are $\predjoint{y}{\timestep{}}$ and $\empjoint{y}{\timestep{}}$, and we can rewrite the squared MMD as
+\begin{align*}
+   \MMD_K^2(\predjointnoarg, \empjointnoarg)
+=\sum_{\timeidx=1}^{\totsteps} \left(\frac{\tottrajec_{\timeidx}}{\sum_{j=1}^{\totsteps}\tottrajec_{j}}\right)^2\,\MMD_{K_{\statevar}}^2 ( \predconditional{\cdot}{\timestep{\timeidx}}, \empconditional{\cdot}{\timestep{\timeidx}} ).
+\end{align*}
+as noted in the main text.
+
+\section{On i.i.d.\ assumptions across timepoints}
+\label{app:iid-assumptions}
+
+Our use of MMD on the joint distribution $p(Y, t)$ assumes that the dataset of pairs $(Y^n_{t_i}, t_i)$ can be treated as i.i.d.\ samples. 
+Within each timepoint $t_i$, the measurements $Y^n_{t_i}$ are modeled as i.i.d.\ from the conditional distribution $p(Y \mid t_i)$. 
+Across timepoints $t_i \neq t_j$, the conditional distributions may differ, but by treating the time variable itself as a discrete random variable drawn from a distribution $\timemeasure(t)$, the joint pairs $(Y^n_{t_i}, t_i)$ become i.i.d.\ from $p(Y, t) = p(Y \mid t)\timemeasure(t)$. 
+
+This modeling assumption is a tractable approximation. In practice, dependencies may arise: for example, if multiple cells derive from a shared lineage, or if experimental design enforces balanced sample counts per timepoint. Similarly, in particle simulations with deterministic observation times, samples may be structured rather than independent. Real-world datasets (e.g., single-cell RNA-seq) also exhibit technical artifacts such as batch effects. While these considerations mean that the i.i.d.\ assumption is not exact, it is widely adopted in the literature and provides a practical working model. 
+
+\section{On the computational aspects of MMD}
+\label{app:mmd-computation}
+In this appendix, we briefly discuss the computational reasons for adopting MMD as the discrepancy measure in our framework.
+
+\textbf{Computational form of the loss.} The MMD loss in \cref{eq:leastsquare} reduces to a closed-form, quadratic expression over sample pairs. For a batch of $N$ samples, the cost scales as $O(N^2)$, and this can be reduced to $O(N)$ using low-rank kernel approximations or random Fourier features. The resulting gradients are straightforward to compute through the SDE solver, either via the stochastic adjoint method or standard automatic differentiation.
+
+\textbf{Scaling with dimensionality.} MMD remains computationally and statistically robust in moderately high dimensions. The kernel can be applied component-wise or over lower-dimensional embeddings, and the U-statistic estimator used for MMD achieves a standard convergence rate independent of dimension. In contrast, Wasserstein distances exhibit poor sample complexity in high-dimensional spaces, making them less practical for datasets such as PBMC, which have embeddings of dimension $30$.
+
+\textbf{Implementation.} One more reason to use MMD is that --- from a practical standpoint --- MMD is simple to implement and widely supported in standard ML libraries. In our code, we use a simple implementation in \texttt{PyTorch} \citep{paszke2019pytorch}.
+
+
+
+\section{Alternative view of $R^2$}
+\label{app:alternativeR2}
+An alternative way to view this metric is through the lens of comparing joint distributions to the product of their marginals. In information theory, mutual information quantifies the dependence between two random variables by measuring the divergence (typically via the Kullback–Leibler divergence) between the joint distribution and the product of the marginal distributions. Analogously, by reapplying \cref{prop:MMDdecomposition}, we can interpret our $R^2$ metric as comparing the joint distribution of state and time as predicted by the model with the distribution obtained by taking the product of the marginal (state and time) distributions. In this view, the denominator in \cref{eq:R2_metric} (which uses the barycenter) reflects the total variation or “spread” in the observed data. And the numerator captures the remaining error when the model-predicted joint distribution is compared to the empirical joint distribution. Thus, a higher $R^2$ indicates that the model captures more of the dependence structure between state and time—just as in regression a higher $R^2$ means the model explains a larger fraction of the variability in the data. This analogy to mutual information provides an intuitive understanding of how our metric not only assesses goodness-of-fit but also the degree to which the model captures the temporal structure of the data.

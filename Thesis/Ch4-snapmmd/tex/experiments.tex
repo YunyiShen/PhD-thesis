@@ -1,0 +1,126 @@
+In synthetic and real-data experiments,
+we find that our SnapMMD method consistently provides better forecasts than competitors. We also find that, in almost all experiments, SnapMMD provides better or matching interpolation performance relative to competitors. In \cref{app:vector-field-reconstruction}, we further demonstrate that our method outperforms competitors on vector field reconstruction.
+
+\textbf{Beyond cell states.} Though we use cell-state terminology above for concreteness, our experiments also include applications beyond cellular dynamics. E.g., states can instead represent predator and prey counts (\cref{sec:lv-main}) or spatial locations of particles following ocean currents (\cref{sec:gom-main}).
+
+\textbf{Metrics of success.} To evaluate forecasting performance, we reserve a validation snapshot at a future time point beyond the training horizon.
+For interpolation, we retain intermediate validation snapshots between training time points.
+In both forecasting and interpolation tasks, we measure discrepancy between the validation data and predictions with two metrics: (1) the MMD and (2) the earth mover's distance (EMD)\footnote{For EMD, we use the implementation provided by \citet{trajnet}.} between the forecast distribution and the held-out empirical distribution at the validation time. We also provide visual comparisons.
+
+%\textbf{Forecasting (and vector field reconstruction) baselines.} We compare SnapMMD against two baselines: (1) Schrödinger bridge with iterative reference refinement (\texttt{SBIRR}) \citep{shen2024multi, zhang2024joint, guan2024identifying}, and (2) multimarginal Schrödinger bridge with shared forward drift (\texttt{SB-forward}) \citep{shen2024learning}. While these methods were originally designed for interpolation (\texttt{SBIRR}) and vector field reconstruction (\texttt{SB-forward}), they can be adapted for forecasting by extrapolating with their fitted dynamics. Specifically, we use (1) the best fitted reference of \texttt{SBIRR} (henceforth \texttt{SBIRR-ref}), and (2) the best fitted forward drift of \texttt{SB-forward}. Reference fitting is also used by \citet{zhang2024joint} and \citet{guan2024identifying}, but those works focused exclusively on linear models, whereas \texttt{SBIRR} and \texttt{SBIRR-ref} accommodate general model families. Both baselines are provided with the same drift structure as SnapMMD, ensuring comparable use of inductive bias. Their main limitation is that they require a fixed, known volatility; following prior work \citep{Vargas2021, wang2021deep, shen2024multi}, we set this value to 0.1. Thus, unlike SnapMMD, they cannot learn state-dependent diffusion.
+
+\textbf{Forecasting (and vector field reconstruction) baselines.} 
+We compare SnapMMD against two baselines: (1) Schrödinger bridge with iterative reference refinement (\texttt{SBIRR}) \citep{shen2024multi, zhang2024joint, guan2024identifying}, and (2) multimarginal Schrödinger bridge with shared forward drift (\texttt{SB-forward}) \citep{shen2024learning}. 
+Although designed for interpolation (\texttt{SBIRR}) and vector field reconstruction (\texttt{SB-forward}), they can be adapted for forecasting by extrapolating with their fitted dynamics. 
+Specifically, we use (1) the best fitted reference of \texttt{SBIRR} (\texttt{SBIRR-ref}) and (2) the best fitted forward drift of \texttt{SB-forward}. 
+Reference fitting has also been used in prior work with linear SDE models \citep{zhang2024joint, guan2024identifying}, whereas \texttt{SBIRR} and \texttt{SBIRR-ref} allow general model families. 
+To ensure fairness, both baselines are provided with the same drift structure as SnapMMD. 
+Their key limitation is that they rely on a fixed, known volatility; following prior work \citep{Vargas2021, wang2021deep, shen2024multi}, we set it to 0.1. Unlike SnapMMD, they cannot learn state-dependent diffusion.
+
+
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\linewidth]{Figs/mlp_Repressilator_forecasting.pdf}
+    \includegraphics[width=\linewidth]{Figs/missingobs_Repressilator_forecasting.pdf}
+    \vspace{-0.6cm}
+    \protect\caption{Repressilator results: mRNA-only (upper, \protect\cref{sec:repr-main}) and mRNA and protein (lower, \protect\cref{sec:repr-protein}). We show 200 samples at each of 10 training times and 1 forecast time (red).}
+    \vspace{-0.3cm}
+    \label{fig:repr-main}
+\end{figure}
+
+\textbf{Interpolation baselines.} For interpolation, we compare SnapMMD against five methods: optimal transport–conditional flow matching (\texttt{OT-CFM}) and Schrödinger bridge–conditional flow matching (\texttt{SB-CFM}) \citep{tong2023improving}, simulation-free Schrödinger bridge (\texttt{SF2M}) \citep{tong2024simulation}, deep momentum multimarginal Schrödinger bridge (\texttt{DMSB}) \citep{chen2024deep}, and again Schrödinger bridge with iterative reference refinement (\texttt{SBIRR}) \citep{shen2024multi}, where here we use the main algorithm output (rather than the fitted reference as in \texttt{SBIRR-ref}). Among these, only \texttt{SBIRR} supports incorporating the same drift structure as SnapMMD. The other methods cannot accept such inductive bias by design, but we nevertheless include them, since contrasting structure-free approaches with structured ones highlights the contribution of domain knowledge. For all methods, we use default code settings. 
+
+\subsection{Lotka--Volterra system}
+\label{sec:lv-main}
+
+\textbf{Setup.} We simulated data from a two-dimensional Lotka–Volterra predator–prey system, where each coordinate’s volatility scales proportionally with its state variable. E.g., we set the volatility for the prey population $X$ to be $\sigma X$, with the same constant $\sigma$ across predator and prey. We train on 10 time points, each with 200 samples. For methods that take a model choice (ours and \texttt{SBIRR} variants), we use a parametric Lotka--Volterra model. See \cref{app:lv-app} for full details.
+
+
+\textbf{Results.} In \cref{fig:LV}, we see that our method's forecast (red dots) is closer to ground truth than the baselines are. MMD (LV, Forecast in \cref{tab:mmd_main_text}) and EMD (LV, Forecast in \cref{tab:emd_combined}) agree that our method performs best. Our method is also best in the interpolation task (LV, Interpolation in \cref{tab:mmd_main_text}). See \cref{app:lv-app} for further results.
+
+
+\subsection{Repressilator: mRNA only}
+\label{sec:repr-main}
+\textbf{Setup.} We simulated mRNA concentration data from a repressilator system, a biological clock composed of three genes that inhibit each other in a cyclic manner. As for Lotka--Volterra, we let each coordinate’s volatility scale proportionally with its state variable. We train on 10 time points, each with 200 samples. For methods that take a model choice, we consider two options. (1) We use the same parametric model as the data-generating process; see \cref{app:repr-app-parametric} for full results. (2) We use a semiparametric model with a multilayer perceptron; see \cref{app:repr_implementation-semiparametric} for details.
+
+
+\textbf{Results.}
+In \cref{fig:repr-main} (upper row), we see that, when using the semiparametric model, our method's forecast (red dots) is closer to ground truth than the baselines are. MMD (ReprSemiparam, Forecast in \cref{tab:mmd_main_text}) and EMD (ReprSemiparam, Forecast in \cref{tab:emd_combined}) agree that our method performs best. Our method is also tied for best in the interpolation task (ReprSemiparam, Interpolation in \cref{tab:mmd_main_text}). We find similar results when using the parametric model (\cref{tab:mmd_main_text,tab:emd_combined}, \cref{fig:repr-parametric-forecast}). See \cref{app:repr-app-parametric} and \cref{app:repr-app-semiparametric} for further results. 
+
+\subsection{Repressilator: mRNA and protein}
+\label{sec:repr-protein}
+\textbf{Setup.}
+A more-complete biochemical model of the repressilator includes both mRNA and protein (\cref{eq:repr-family-protein}) even though only mRNA concentration is actually observed in practice. We next generate simulated data using the more-complete model and keep only the mRNA concentrations in our observations. We again train on 10 time points, each with 200 samples. Since our method has the capacity to handle incomplete state observations, we can use the full mRNA-protein model with our method.
+Since \texttt{SBIRR} methods do not have the capacity to handle models with latent variables, we use the mRNA-only model in these methods. 
+
+\begin{figure}[!t]
+    \centering
+\includegraphics[width=\linewidth]{Figs/GoM_forecasting.pdf}
+    \vspace{-0.6cm}
+    \caption{Gulf of Mexico results (\protect\cref{sec:gom-main}). We show 200 samples at each of 10 training times and 1 forecast time (red). }
+    \vspace{-0.3cm}
+    \label{fig:GoMforecast}
+\end{figure}
+
+\textbf{Results.} In \cref{fig:repr-main} (lower row), we see that our method's forecast (red dots) is closer to ground truth than the baselines are. MMD (ReprProtein, Forecast in \cref{tab:mmd_main_text}) and EMD (ReprProtein, Forecast in \cref{tab:emd_combined}) agree that our method performs best. We emphasize that none of the methods directly observe protein levels. But since our method is aware that protein levels are also driving the underlying dynamics, it is able to better forecast mRNA concentration. Our method is also best in the interpolation task (ReprProtein, Interpolation in \cref{tab:mmd_main_text}). See \cref{app:repr-app-missing} for further results.
+
+
+\subsection{Ocean currents in the Gulf of Mexico}
+\label{sec:gom-main}
+\textbf{Setup.}
+We use real ocean-current data from the Gulf of Mexico: namely, high-resolution (1 km) bathymetry data from the HYbrid Coordinate Ocean Model (HYCOM) reanalysis.\footnote{Dataset available at \url{https://www.hycom.org/data/gomb0pt01/gom-reanalysis}.} 
+We extract a velocity field centered on a region that appears to exhibit a vortex. We then simulate the motion of particles --- representing buoys or ocean debris --- evolving under this field. The training data consist of 10 time points with 400 particles each. Since the data are real in this experiment, the models used by any method must be misspecified. For methods that take a model choice, we use a physically motivated model for the vortex, where the velocity field is the sum of a Lamb-Oseen vortex and a constant divergence field. The first term accounts for swirling, rotational dynamics typical of a vortex in low viscosity fluid like water, while the divergence field accounts for vertical motion or non-conservative forces that may cause a net expansion or contraction of the flow. See \cref{app:gom_implementation} for more details. Note that physical drifters deployed in the ocean can be tracked continuously over time. By contrast, in many remote sensing applications each observation is an image that provides only a distributional snapshot at that time, without tracking the same particles across times. For example, in oil-spill monitoring from satellite imagery, each image shows the surface oil distribution but not individual particle paths. See \cref{app:gom_assumptions} for discussion.
+
+
+
+
+\textbf{Results.} In \cref{fig:GoMforecast}, we see that our method's forecast (red dots) more closely aligns with ground truth than the baselines do. EMD (GoM, Forecast in \cref{tab:emd_combined}) agrees that our method performs best. However, MMD (GoM, Forecast in \cref{tab:mmd_main_text}) prefers \texttt{SBIRR-ref} to our method (SnapMMD); 
+we suspect we see this behavior because MMD using an RBF kernel can prefer a diffuse, but less accurate, cloud over a concentrated, geometrically correct one.
+Recall that the MMD with RBF mixes two ingredients: (i) how tightly the forecast particles cluster among themselves and (ii) how far the forecast and ground truth particles are. Our forecast points sit on a lower-dimensional curve than the baselines' points, so the ``self-similarity'' part of the MMD score is higher. 
+All methods perform well visually at the interpolation task (\cref{fig:GoM-interpol}), but \texttt{SBIRR} yields the best MMD (GoM, Interpolation in \cref{tab:mmd_main_text}) and EMD (GoM, Interpolation in \cref{tab:emd_combined}). \texttt{SBIRR} is built to interpolate every observed snapshot and then smooth between them, so with densely sampled times, it almost inevitably lands near the held-out validation points. Our method's aim to recover a smooth velocity field (rather than enforce exact interpolation) can be an advantage for forecasting, but less so for interpolation. See \cref{app:gom-interpol} for further results.
+
+
+\subsection{T cell-mediated immune activation}
+\label{sec:pbmc}
+
+\textbf{Setup.}
+We use a real single-cell RNA-sequencing dataset that tracks T cell–mediated immune activation in peripheral blood mononuclear cells (PBMCs) \citep{jiang2024d}. Scientists recorded gene-expression profiles every 30 minutes for 30 hours. 
+We use the 41 snapshots collected between 0 h and 20 h --- prior to the onset of steady state; we take 20 alternating snapshots (at integer hours) for training and the remaining 21 for validation.
+We use the 30-dimensional projection (``gene program'') of the original measurements released by \citet{jiang2024d} as our data. In \cref{fig:pbmc-forecasting} (leftmost four), we show the training snapshots at four time steps. \cref{fig:pbmc-training-progression} shows the full progression of the training points over  20 time steps. Since the data is real in this experiment, the model used by any method must be misspecified. For methods that use a model, we use the same model as in the semiparametric repressilator experiment (\cref{app:repr-setup-semiparametric}). Full details are in \cref{app:pbmc-biology}. 
+
+
+\textbf{Results.}
+In \cref{fig:pbmc-forecasting} (rightmost four), we see that our method's forecast is closer to ground truth than the baselines are. MMD (PBMC, Forecast in \cref{tab:mmd_main_text}) agrees. We do not use EMD in this experiment as it suffers from the curse of dimensionality and is thus unreliable in our 30-dimensional setting; see the discussion at the end of Section 2.5.2 in \citet{chewi2024statistical}. Our method ties with \texttt{SBIRR} in the interpolation task (PMBC, Interpolation in \cref{tab:mmd_main_text}). See \cref{app:pbmc-interpol} for more results.
+
+
+\begin{figure}[!t] \centering \includegraphics[width=\linewidth]{Figs/pbmc_forecasting_maintext.pdf} 
+\vspace{-0.5cm}
+\caption{PBMC results (\protect\cref{sec:pbmc}). The axes in every plot are the same three principal components, computed over the full data: i.e., 41 time steps of the 30-dimensional gene programs.
+Leftmost four panels: evolution of the training data at time steps 1, 7, 14, and 20. ``Truth'' panel: ground truth snapshot at time step 21. Rightmost three panels: model forecasts at time step 21.
+} 
+\vspace{-0.3cm}
+\label{fig:pbmc-forecasting} 
+\end{figure}
+
+\subsection{Ablations: fixed volatility and fully neural SDE model}
+\label{sec:ablations}
+
+One of the proposed benefits of SnapMMD is the ability to learn the volatility and allow it to be state-dependent. We test the importance of this flexibility by comparing to a variant of SnapMMD with volatility fixed to the same constant as in other methods. In almost every forecasting or interpolation task, errors from the fixed-volatility variant increase by at least a factor of two and often by more than an order of magnitude, relative to SnapMMD. See \cref{app:ablation-fixed} for full details.
+
+Another proposed benefit of SnapMMD is the ability to incorporate domain knowledge, which is widely available in scientific applications. We test the role of domain knowledge by replacing the (parametric or semiparametric with neural residual) SDE families in the experiments above with fully neural drift and diffusion. Again, in almost every task, performance drops sharply when the domain knowledge is not incorporated. See \cref{app:ablations-neural}. 
+
+%All of our main experiments incorporate prior knowledge through parametric structure: sometimes fully parametric, sometimes combined with a neural residual in a semiparametric form. A central strength of SnapMMD is its ability to leverage this information. 
+%Here, we test what happens when this structure is removed or restricted. First, we fix volatility to a constant across all states and times, as in many SB-based methods. This consistently degrades performance: in most forecasting and all interpolation tasks, errors increase by at least a factor of two and often by more than an order of magnitude, with the sole exception of Gulf of Mexico forecasting, where the MMD metric favors more diffuse forecasts. We include the full results for this experiment in \cref{app:ablation-fixed}. Second, we replace the structured SDE families with fully neural drift and diffusion. Without using prior knowledge, performance again drops sharply in every task except Gulf of Mexico forecasting, where the same kernel effect appears. We provide full results in \cref{app:ablations-neural}. These results highlight that domain-informed structure is essential: SnapMMD can incorporate it when available, and doing so yields large and consistent gains. 
+
+%Ablation studies help us isolate the contributions of key modeling choices. Here, we report results on two ablations: (i) setting the volatility term to a fixed constant instead of learning it and allowing state-dependence, and (ii) replacing a structured SDE model with a fully neural one.
+
+%\textbf{Effect of learning volatility and allowing state dependence.} 
+%To assess the importance of learning the volatility and allowing it to be state dependent, we compare SnapMMD against a simplified variant where the volatility is fixed and constant across all states and times (as is standard in many SB-based methods). In most forecasting and every interpolation task, SnapMMD reduces error by at least a factor of two --- and often by more than an order of magnitude. In PBMC, fixing volatility also leads to high variance and instability across seeds. 
+%The sole exception is Gulf of Mexico forecasting, where fixed volatility produces more diffuse forecasts that align better with the MMD metric, but even here SnapMMD performs better in interpolation. We refer to \cref{app:ablation-fixed} for detailed results.
+
+
+%\textbf{Structured vs.\ fully neural SDEs.} To test the role of domain-informed parameterizations, we trained SnapMMD with a fully neural drift and diffusion instead of structured forms. In every task except Gulf of Mexico forecasting, SnapMMD achieves errors at least twice as low --- and in many cases over an order of magnitude lower --- than the fully neural variant. As with the fixed-volatility study, the GoM forecasting case is an exception where the more diffuse forecasts of the unstructured model yield lower MMD, but SnapMMD still performs better on GoM interpolation. These results confirm that inductive structure provides crucial guidance, enabling accurate dynamics where fully neural SDEs trained only on snapshot distributions struggle. 
+%We show full results in \cref{app:ablations-neural}.
+
+%mitigates identifiability issues inherent in fitting general SDEs from snapshot data. 

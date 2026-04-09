@@ -1,0 +1,77 @@
+In practice, the hyperparameter values are unknown, and we must learn them from the observed data.
+We take an empirical-Bayes approach analogous to \citet{Masoero2022}. 
+\revision{
+While one could in principle adopt a fully Bayesian approach, by imposing a prior distribution on the hyperparameters, doing so would require a more expensive posterior approximation procedure, such as Markov chain Monte Carlo.
+}
+
+In particular, we start by splitting the pilot data into a training set and a test set. Uniformly at random among the
+pilot data, we choose $\vecsamplesize_\train =(\samplesize{1,\train}, \samplesize{2,\train})$ samples to form the training set.
+Here $\samplesize{\popidx,\train}$ must satisfy $0 < \samplesize{\popidx,\train} < \samplesize{\popidx}$.
+The remaining $\vecsamplesize - \vecsamplesize_\train$ samples form the test set. 
+%
+We now treat our training set as a miniature pilot and our test set as a miniature follow-up. 
+For the vector of appearance counts $\vecoccurrence$, let $\newsparam{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}$ 
+be the Poisson parameter from \cref{prop:predict_kr_tons}. And let $\obsnews{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}$
+be the observed number of new variants appearing $\vecoccurrence$ times in the two populations; we use the lower
+case character $\obsnewsNoargs$ to distinguish from the predictive random variable above.
+
+\minorrevision{Our ultimate aim is to predict the number of $\vecoccurrence$-tons in the follow-up (and the sum across $\vecoccurrence$-tons) for a follow-up of size
+$\vecfuturesamplesize$: $\{\genericfreqnews\}_{\vecoccurrence}$.
+With that end in mind, we will aim to choose the hyperparameters that maximize the probability of observing $\{\obsnews{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}\}_{\vecoccurrence}$ in the test set here (i.e., in the miniature follow-up). Since, by \cref{prop:predict_kr_tons}, this probability factorizes across unique values of $\vecoccurrence$, we can write this likelihood as follows, where we emphasize the dependence on the hyperparameters $\allhyper := (\mass, \rate{1}, \rate{2}, \corr{1}, \corr{2}, \conc{1}, \conc{2})$.
+\begin{equation}
+    \label{eq:likelihood_prior_full}
+    \mathcal{L}(\allhyper)=
+    	\sum_{\substack{\vecoccurrence: \forall \popidx\in \{1,2\}, \occurrence{\popidx}\le \samplesize{\popidx}- \samplesize{\popidx,\train} %\in \{0, 1, \dots, v\}
+		 \\ \occurrence{1} + \occurrence{2} \ge 1}}
+		\log \left[ \pois \left(
+				\obsnews{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}
+				\mid \newsparam{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}(\allhyper)
+			\right) \right].	
+\end{equation}
+In writing the sum above, we use that the elements of $\vecoccurrence$ can be as large as $\samplesize{1}-\samplesize{1,\train}$ and $\samplesize{2}-\samplesize{2,\train}$ in the two populations, respectively. However, each element in the sum can be expensive to calculate since we currently use a numeric integral to compute \cref{eqn:kr_tons}. So, for computational reasons, we would like to reduce the number of terms in the sum. 
+In particular, we replace the sum in \cref{eq:likelihood_prior_full} with a sum where the elements of $\vecoccurrence$ go up to at most some maximum count $v \in \NN$, as follows; we give a justification for this choice just below.
+\begin{equation}
+    \label{eq:likelihood_prior}
+    \mathcal{L}(\allhyper)=
+    	\sum_{\substack{\vecoccurrence: \occurrence{1},\occurrence{2} \in \{0, 1, \dots, v\} \\ \occurrence{1} + \occurrence{2} \ge 1}}
+		\log \left[ \pois \left(
+				\obsnews{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}
+				\mid \newsparam{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}(\allhyper)
+			\right) \right].	
+\end{equation}
+In fact, we use a fixed truncation level $v$ regardless of pilot study size in \cref{eq:likelihood_prior}.
+The key observation that underlies our truncation choice and fixed-$v$ level is the following: biologists are interested in predicting the number of new variants in the follow-up study. By construction, variants that are new in the follow-up did not appear in the pilot and therefore can be expected to have a low frequency (i.e., be rare) with high probability. Moreover, similarly-rare variants in the pilot should be the most informative about behavior of these rare variants in the follow-up study. But similarly-rare variants can be expected to appear a small number of times in the pilot.
+We make this argument more precise in Section S7.6 of the Supplementary Material \citep{supplement}.}
+
+
+
+%To do so, we observe that in the (miniature) follow-up, we expect to observe primarily rare variants with high probability; any non-rare variants should appear (with high probability) in the (miniature) pilot. Therefore, we expect that it should be a reasonable approximation to replace the sum above with a sum where the elements of $\vecoccurence$ go up to at most some maximum count $v \in \NN$, as follows.
+%
+%Roughly, we will aim to choose hyperparameters that maximize the probability of observing 
+%$\obsnews{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}$. \internal{We set a maximum counts for calculating these probabilities to balance our goals of accurate prediction with computational cost.} 
+%More precisely, we consider $\occurrence{\popidx}$ in the miniature follow-up study up to a maximum count $v \in \NN$. \internal{We denote the number of variants in the miniature pilot samples whose occurrence is $\vecoccurrence$ as $\obsnews{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}$.}
+%Due to the conditional independence of $\genericfreqnews$ across $\vecoccurrence$ (\cref{prop:predict_kr_tons}), \minorrevision{the log probability of observing $\obsnews{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}$ factorizes over $\vecoccurrence$.}
+%We emphasize the dependence on the hyperparameters $\allhyper := (\mass, \rate{1}, \rate{2}, \corr{1}, \corr{2}, \conc{1}, \conc{2})$.
+%
+%Due to the conditional independence of $\genericfreqnews$ across $\vecoccurrence$ (\cref{prop:predict_kr_tons}), \minorrevision{the log probability of observing the number of variants in the miniature pilot samples whose occurrence is $\vecoccurrence$, $\obsnews{\vecsamplesize_\train}{\vecsamplesize - \vecsamplesize_\train, \vecoccurrence}$, factorizes over $\vecoccurrence$ as follows,} where we emphasize the dependence on the hyperparameters $\allhyper := (\mass, \rate{1},\rate{2}, \corr{1},\corr{2}, \conc{1},\conc{2})$:
+%Each term in the sum requires
+%computing \cref{eqn:kr_tons}, and there are $(v+1)^2-1$ terms in the sum.
+We find empirically that setting $v=10$ gives 
+results comparable to larger settings of $v$ and henceforth use $v=10$; see Section S7.6 of the Supplementary Material \citep{supplement}
+for our experimental comparison of $v$ levels. 
+
+
+We choose the training set size as $\samplesize{\popidx,\train}=\lfloor \samplesize{\popidx}/2\rfloor$.
+We expect a larger training set size to more closely represent the actual pilot study. However, recall that we focus on 
+the challenging case where the size of the pilot study is small. A larger training set size yields a smaller test size, which
+can yield a very noisy estimate of test error if too small. Our choice is meant to balance between these two extremes.
+
+In our experiments, we optimize $\mathcal{L}(\allhyper)$ across the hyperparameters $\allhyper$
+using L-BFGS in \texttt{scipy} with default parameters
+and gradients estimated numerically. We initialize at $\allhyper_{\text{init}} =
+(\mass, \rate{1},\rate{2}, \corr{1},\corr{2}, \conc{1},\conc{2})_{\text{init}} = (10^3, 0.5,0.5,0.5,0.5,1,1)$.
+Local optima and the accuracy of our gradient approximations are concerns. But our experiments
+suggest that our procedure is able to return useful predictions.
+\internal{Even with our truncation approximation to level $v$,} the overall
+optimization procedure can take several hours; reducing this cost is a promising area for future work.
+

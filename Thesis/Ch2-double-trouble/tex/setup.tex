@@ -1,0 +1,50 @@
+% !TEX root = ../double_trouble_main.tex
+
+We consider the case where we have genomic samples from a pilot study conducted in two populations, indexed by $\popidx \in \{1,2\}$,
+and want to predict variant numbers in a follow-up study. 
+Let $\samplesize{\popidx}$ be the number of pilot samples from population $\popidx$, and let $\vecsamplesize := (\samplesize{1}, \samplesize{2})$.
+We assume there is a common fixed reference genome for the two populations and that
+each variant is given a unique label; for instance, one might assign a random label, uniform on $[0,1]$, to a variant upon its discovery.
+Take the $\unitidx$-th sample in the $\popidx$-th population; we let $\genericvariantcount$ equal 1 if the variant with label 
+$\genericvariantlabel$ is observed in this sample and 0 otherwise. Let $\genericnumvariants$ denote the (scalar) total number
+of unique variants observed across the $\vecsamplesize$ samples. Then the following measure will have a mass
+of size 1 at each variant label where the $\unitidx$-th sample in the $\popidx$-th population differs from the reference genome:
+$\genericmeasurevariantcount := \sum_{\variantidx=1}^{\genericnumvariants} \genericvariantcount \dirac{\genericvariantlabel},$
+where $\dirac{\genericvariantlabel}$ is a Dirac mass at $\genericvariantlabel$; that is, $\dirac{\genericvariantlabel}(\variantlabel{})$ equals 1 if $\variantlabel{} = \genericvariantlabel$ and 0 otherwise. 
+Equivalently, we might let $\genericvariantcount = 0$ for an imagined countable infinity of possible yet-to-be-observed variants, each assigned a new label $\genericvariantlabel$ for $\variantidx > \genericnumvariants$; then we have
+\begin{equation}
+	\genericmeasurevariantcount = \sum_{\variantidx=1}^{\infty} \genericvariantcount \dirac{\genericvariantlabel}. \label{eq:observation_measure_inf}
+\end{equation}
+To represent the pilot study, we write $1{:}\samplesize{\popidx}$ for indices $\{1,\ldots,\samplesize{\popidx}\}$. We write
+$\measurevariantcount{\popidx}{1:\samplesize{\popidx}}$ for the pilot samples in population $\popidx$ and
+$\pilotdata$ for the pilot samples across both populations.
+
+
+Given the pilot study, we would like to predict (1) the total number of new variants in a follow-up study, as well as (2) the number of new variants shared between the populations.
+To that end, let $\futuresamplesize{\popidx}$ be the number of new samples from $\popidx$ considered for the follow-up study; collect
+the vector of follow-up study sample cardinalities in $\vecfuturesamplesize = (\futuresamplesize{1},\futuresamplesize{2})$. 
+First, then, we are interested in the number of variants that (a) are not present in the first $\vecsamplesize$ pilot samples but (b) are
+present in at least one of the $\vecfuturesamplesize$ follow-up samples. We call this quantity $\genericnews$, 
+where the $U$ stands for ``unseen,'' and write:
+\begin{equation}
+	\genericnews = 
+		\sum_{\variantidx=1}^{\infty} \left[ \prod_{\popidx=1}^{2} \mathbf{1}\left( \sum_{\unitidx=1}^{\genericsamplesize} \genericvariantcount = 0\right) \right] 
+				\mathbf{1}\left( \sum_{\popidx=1}^{2} \sum_{\futureunitidx=1}^{\genericfuturesamplesize} 
+				\variantcount{\popidx}{\genericsamplesize+\futureunitidx}{\variantidx} > 0 \right). 
+	\label{eq:news}
+\end{equation}
+%
+We next consider the number of new variants appearing $\occurrence{1}$ times in population 1 and $\occurrence{2}$ times in population 2, \revision{with $\occurrence{1}+\occurrence{2}\ge 1$}.
+In a single population, the variants appearing once are often called singletons, the variants appearing twice called doubletons, and so on. Analogously and collecting $\vecoccurrence := (\occurrence{1},\occurrence{2})$, we will denote the variants appearing $\vecoccurrence$ times across the two populations as \emph{$\vecoccurrence$-tons}.
+We can write the number of $\vecoccurrence$-tons in the follow-up as
+\begin{equation}
+	\genericfreqnews = 
+		\sum_{\variantidx=1}^{\infty} \left[ \prod_{\popidx=1}^{2} \mathbf{1}\left( \sum_{\unitidx=1}^{\genericsamplesize} \genericvariantcount = 0\right) \right]
+		 \left[ \prod_{\popidx=1}^{2} \mathbf{1}\left( \sum_{\futureunitidx=1}^{\genericfuturesamplesize} \genericfuturevariantcount = \occurrence{\popidx} \right) \right]. 
+	\label{eq:news_freq}
+\end{equation}
+The total number of new variants appearing \revision{across} both populations in the follow-up can be found by summing $\genericfreqnews$ over integers $\occurrence{1},\occurrence{2}\ge1$. And
+$\genericnews$ can similarly be recovered by summing over $\vecoccurrence$ such that $\occurrence{1} + \occurrence{2} \ge 1$.
+%
+Our aim in what follows is, then, to predict $\genericnews$ and $\genericfreqnews$, across $\vecfuturesamplesize$ and $\vecoccurrence$, given the pilot data
+$\pilotdata$.

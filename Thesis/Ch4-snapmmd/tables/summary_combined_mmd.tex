@@ -1,0 +1,46 @@
+\begin{table}[t]
+\centering
+\caption{MMD for forecast and interpolation tasks. For forecast, we report mean and standard deviation over 10 random seeds. For interpolation, we aggregate over 10 seeds and validation time points. The best method (lowest MMD) is shown in bold in a green cell; we also highlight in green any other methods whose mean is contained in the one-standard deviation interval for the best method. We show the top three interpolation methods here; full results can be found in \protect\cref{app:complete-summary-interpolation}.}
+\small
+{\footnotesize
+\setlength{\tabcolsep}{4pt}        % tighter column spacing
+\renewcommand{\arraystretch}{1} % slightly tighter rows
+
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+      & \multicolumn{3}{c}{\textbf{Forecast}} 
+      & \multicolumn{3}{c}{\textbf{Interpolation}} \\ 
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+\textbf{Task}
+        & \textbf{Ours} & \texttt{SBIRR-ref} & \texttt{SB-forward}
+        & \textbf{Ours} & \texttt{SBIRR} & \texttt{DMSB} \\ 
+\midrule
+LV
+      & \best{\ms{0.057}{0.03}} & \ms{0.69}{0.11} & \ms{2.99}{1.88}
+      & \best{\ms{0.01}{0.01}} & \ms{0.04}{0.08} & \ms{3.31}{2.18} \\ 
+\midrule
+ReprParam
+      & \best{\ms{0.072}{0.080}} & \ms{2.06}{1.34} & \ms{2.09}{0.74}
+      & \best{\ms{0.04}{0.03}} & \ms{0.16}{0.10} & \ms{7.23}{2.00} \\
+ReprSemiparam
+      & \best{\ms{0.32}{0.15}} & \ms{1.46}{0.55} & \ms{5.26}{1.66}
+      & \best{\ms{0.38}{0.38}} & \ms{1.11}{0.82} & \ms{7.23}{2.00} \\
+ReprProtein
+      & \best{\ms{0.048}{0.029}} & \ms{2.50}{0.05} & \ms{2.42}{0.13}
+      & \best{\ms{0.01}{0.00}} & \ms{1.48}{2.95} & \ms{5.15}{2.63} \\ 
+\midrule
+GoM
+      & \ms{2.36}{0.11} & \best{\ms{1.41}{0.18}} & \ms{2.59}{0.33}
+      & \ms{0.07}{0.05} & \best{\ms{0.01}{0.01}} & \ms{0.05}{0.06} \\ 
+\midrule
+PBMC
+      & \best{\ms{0.11}{0.04}} & \ms{0.71}{0.34} & \ms{2.38}{0.49}
+      & \best{\ms{0.11}{0.05}} & \greencell{\ms{0.11}{0.12}} & \ms{0.97}{0.10} \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:mmd_main_text}
+\end{table}
+
+
+

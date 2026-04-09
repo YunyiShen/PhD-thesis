@@ -1,0 +1,110 @@
+
+%% marginal stuff
+\newcommand{\marginalplain}{\pi}
+\newcommand{\measurefamily}{\mathcal{D}}
+\newcommand{\marginal}[1]{\marginalplain_{#1}}
+\newcommand{\timet}{t}
+\newcommand{\timeidx}{i}
+\newcommand{\sampleidx}{n}
+\newcommand{\totsteps}{I}
+\newcommand{\timestep}[1]{\timet_{#1}}
+\newcommand{\forecast}{\tilde{\marginalplain}}
+
+\newcommand{\marginalmeasureplain}{\mathbb{Q}}
+\newcommand{\forwarddrift}[1]{\drift^{\text{forward}}_{#1}}
+\newcommand{\backwarddrift}[1]{\drift^{\text{backward}}_{#1}}
+
+
+
+\newcommand{\marginalmeasure}[1]{\marginalmeasureplain_{#1}}
+\newcommand{\iter}{\ell}
+
+\newcommand{\modelfamily}{\mathcal{F}}
+
+%% SDE stuff
+\newcommand{\de}{\text{d}}
+\newcommand{\responseplain}{X}
+\newcommand{\obsplain}{Y}
+\newcommand{\altrespplain}{Z}
+\newcommand{\statevar}{\bm{y}}
+
+\newcommand{\response}{\bm{\responseplain}_{\timet}}
+\newcommand{\responseat}[1]{\bm{\responseplain}_{#1}}
+
+\newcommand{\altresponseat}[1]{\bm{\altrespplain}_{#1}}
+
+\newcommand{\obs}{\bm{\obsplain}_{\timet}}
+\newcommand{\obsat}[1]{\bm{\obsplain}_{#1}}
+
+\newcommand{\obsatall}[1]{\bm{\obsplain}_{#1}^{\text{all}}}
+
+\newcommand{\tottrajec}{N}
+\newcommand{\permutation}[1]{\sigma_{#1}}
+\newcommand{\conttime}{\tau}
+\newcommand{\noise}{\epsilon}
+
+\newcommand{\drift}{\bm b}
+\newcommand{\volatility}{\bm g}
+\newcommand{\driftfun}{\drift(\response, \timet)}
+\newcommand{\truevolatility}{\volatility_{0}}
+\newcommand{\volatilityfun}{\volatility(\response, \timet)}
+\newcommand{\truedriftfun}{\truedrift(\response, \timet)}
+\newcommand{\truedriftfunest}{\truedrift(\cdot, \cdot)}
+\newcommand{\truevolatilityfunest}{\truevolatility(\cdot, \cdot)}
+
+\newcommand{\brownianm}{\bm{W}_{\timet}}
+\newcommand{\truedrift}{\drift_{0}}
+\newcommand{\drifthat}{\hat{\drift}}
+
+%% parameter
+\newcommand{\allparam}{\bm \theta}
+\newcommand{\estallparam}{\hat{\allparam}}
+
+%% empirical distribution and matching
+\newcommand{\stateconditionalplain}{f}
+\newcommand{\empconditional}[2]
+{\hat{\stateconditionalplain}(#1;#2)}
+\newcommand{\empjoint}[2]{\hat{\stateconditionalplain}(#1,#2)}
+\newcommand{\empjointnoarg}{\hat{\stateconditionalplain}}
+\newcommand{\predconditional}[2]
+{\stateconditionalplain_{\allparam}(#1|#2)}
+\newcommand{\predjoint}[2]{\stateconditionalplain_{\allparam}(#1,#2)}
+\newcommand{\predjointnoarg}
+{\stateconditionalplain_{\allparam}}
+
+%% marginal things
+\newcommand{\marginaldenplain}{f}
+\newcommand{\predmarginaldensity}[2]{\marginaldenplain_{\allparam, #1}(#2)}
+%\newcommand{\empmarginal}[2]{\hat{\marginaldenplain}_{#1}(#2)}
+\newcommand{\empmarginalshort}[1]{\hat{\marginaldenplain}_{#1}}
+\newcommand{\predmarginalshort}[1]{\marginaldenplain_{\allparam, #1}}
+\newcommand{\timemeasure}{h}
+\newcommand{\emptimemeasure}{\hat{h}}
+\newcommand{\mmdkernel}[2]{K(#1,#2)}
+
+\newcommand{\predjointmeasure}{f_{\allparam}}
+
+\newcommand{\barycentershort}{\marginaldenplain_{\text{bary}}}
+
+%% MMD thingy
+\newcommand{\genericdist}[2]{d^2(#1, #2)}
+\newcommand{\MMD}{\text{MMD}}
+\newcommand{\MMDu}{\text{MMD}^2_{U,U}}
+\newcommand{\diag}{\text{diag}}
+\newcommand{\resprange}{\R^d}
+
+\newcommand{\timerange}{\mathcal{T}}
+\newcommand{\weight}[1]{w_{#1}}
+\newcommand{\timekernel}[2]{k_\tau(#1,#2)}
+\newcommand{\totsimummd}{M}
+\newcommand{\simuidx}{m}
+
+%% Helmholtz thing
+\newcommand{\solenoid}{\bm{R}}
+\newcommand{\compress}{\bm{C}}
+\newcommand{\potential}{\Phi}
+
+
+%% comment stuff
+\newcommand{\RB}[1]{\textcolor{blue}{RB: #1}}
+\newcommand{\YS}[1]{\textcolor{red}{YS: #1}}

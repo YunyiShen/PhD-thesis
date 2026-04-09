@@ -1,0 +1,82 @@
+% !TEX root = ../double_trouble_supp.tex
+
+In this section we provide the proofs for the results stated in Section 6.1.
+
+\subsection{Proof of Proposition 2}
+\label{sec:kton_proof}
+%Here we give the proof of Proposition 2. 
+
+\begin{proof}
+    We assume to have collected $\vecsamplesize= (\samplesize{1}, \samplesize{2})$ samples $X_{1,1:\samplesize{1}}, X_{2, 1:\samplesize{2}}$ from the model of Equation (3.1) where $\ratemeasproposed$ is  the rate measure defined in \cref{eq:proposed_levy}. It follows from the same method used in \citet[Proposition 2]{Masoero2022} on thinning of a Poisson point process, that, given the data $X_{1,1:\samplesize{1}}, X_{2,1:\samplesize{2}}$, the  frequencies corresponding to variants that (i) have not yet been observed in any of the first $\samplesize{1}+\samplesize{2}$ and (ii) that are going to be observed exactly $\bm{k} = (k_1, k_2)$ times in each population when additional $\vecfuturesamplesize = (\futuresamplesize{1}, \futuresamplesize{2})$ samples are collected, with $0 \le k_{\popidx} \le \futuresamplesize{\popidx}$ for $\popidx = 1, 2$ and $k_1+k_2>0$, follows a thinned Poisson point process with rate measure:
+\begin{equation}
+    \begin{aligned}
+    \ratemeasproposed(\de\boldsymbol{\theta})&\Bernoulli(0 \mid \variantfreqperpop{1})^{\samplesize{1}}\Bernoulli(0 \mid \variantfreqperpop{2})^{\samplesize{2}}\\
+    &\binom{\futuresamplesize{1}}{\occurrence{1}}\Bernoulli(1 \mid \variantfreqperpop{1})^{\occurrence{1}}\Bernoulli(0 \mid \variantfreqperpop{1})^{\futuresamplesize{1}-\occurrence{1}}\\
+    & \binom{\futuresamplesize{2}}{\occurrence{2}}\Bernoulli(1 \mid \variantfreqperpop{2})^{\occurrence{2}}\Bernoulli(0 \mid \variantfreqperpop{2})^{\futuresamplesize{2}-\occurrence{2}}\\
+    =&\mass\binom{\futuresamplesize{1}}{\occurrence{1}}\binom{\futuresamplesize{2}}{\occurrence{2}}\frac{(\variantfreqperpop{1}+\variantfreqperpop{2}^{\rate{2}/\rate{1}})^{-\rate{1}}}{(\variantfreqperpop{1}+\variantfreqperpop{2})^{\corr{1}+\corr{2}}}\\ 
+    &\times\variantfreqperpop{2}^{\corr{2}+\occurrence{2}-1}(1-\variantfreqperpop{2})^{\conc{2}+\futuresamplesize{2}+\samplesize{2}-\occurrence{2}-1}\variantfreqperpop{1}^{\corr{1}+\occurrence{1}-1}(1-\variantfreqperpop{1})^{\conc{1}+\futuresamplesize{1}+\samplesize{1}-\occurrence{1}-1}\\
+    &\times\frac{1}{B(\corr{1},\conc{1})B(\corr{2},\conc{2})}. \label{eq:rate_news_two_pop}
+    \end{aligned}
+\end{equation}
+ Thus the number of variants that are observed exactly $\bm{k}$ times in $\vecfuturesamplesize$ new samples, $\news{\vecsamplesize}{\vecfuturesamplesize, \bm{k}}$, is a Poisson distributed random variable whose parameter is the integral of the rate measure in \cref{eq:rate_news_two_pop}:
+\begin{align}
+    \begin{split}
+      \genericfreqnewsparam =&\mass\binom{\futuresamplesize{1}}{\occurrence{1}}\binom{\futuresamplesize{2}}{\occurrence{2}}\frac{B(\corr{2}+\occurrence{2},\conc{2}+\futuresamplesize{2}+\samplesize{2}-\occurrence{2})B(\corr{1}+\occurrence{1},\conc{1}+\futuresamplesize{1}+\samplesize{1}-\occurrence{1})}{B(\corr{1},\conc{1})B(\corr{2},\conc{2})}\\
+    &\times\E_{Z,W}\left[\frac{(Z+W^{\rate{2}/\rate{1}})^{-\rate{1}}}{(Z+W)^{\corr{1}+\corr{2}}}\right],
+    \end{split} \label{eq:expected_ktons}
+\end{align}
+where $B(a,b)$ is the beta function, and $\E_{Z,W}$ is the expectation over independent beta distributed random variables $Z, W$:
+\begin{align*}
+    Z\sim \Beta(\corr{1}+\occurrence{1},\conc{1}+\futuresamplesize{1}+\samplesize{1}-\occurrence{1}), \quad 
+    W\sim \Beta(\corr{2}+\occurrence{2},\conc{2}+\futuresamplesize{2}+\samplesize{2}-\occurrence{2}).
+\end{align*}
+\revision{The (conditional) independency of $\genericfreqnews$ follow the fact that for each $\bm{k}$ the thinned Poisson point processes \cref{eq:rate_news_two_pop} are independent.}
+\end{proof}
+%\revision{Note that different from species sampling case where each individual belong to one and only one group, thus the number of unique species has to be bounded by sample size. In our setup it is the case that a variant cannot show up more than the sample size time, i.e., $k_\popidx\le M_\popidx$ for $\popidx = 1,2$ but also since each organism can have any nonnegative number of variants the number of variants $\genericfreqnews$ does not have to be bounded by sample size. }
+
+\subsection{Total number of variants}
+\label{sec:proof_total_number}
+Next, we give the proof of~Proposition 3.
+
+\begin{proof}
+    The proof closely resembles the proof of \citet[Proposition 1]{Masoero2022}. The idea is to consider the frequencies of newly appeared variants (i.e., variants first appearing  in a new sample). These frequencies follow a (thinned) Poisson point process. 
+    %\lom{I tried to fix this proof, but I am not sure I agree with what comes next --- more generally I am not sure I understand the argument rigorously. Can you take a pass to polish first?}
+    Under Equation (3.1) where $\nu$ is the rate measure defined in \cref{eq:proposed_levy}, the frequencies $\vecvariantfreq{\variantidx}$ follow a Poisson point process with rate measure $\ratemeasproposed(\de\vecvariantfreq{})$. 
+    When observations are formed via independent multi-population Bernoulli processes  $\mBeP$, given an individual from population $\popidx$, variant $\variantidx$ appears with probability $\variantfreq{\variantidx}{\popidx}$ independently across all samples of populations 1 and 2. 
+    The probability a variant did not appear in the first $\vecsamplesize$ samples is then $\BER(0 \mid \variantfreq{\variantidx}{1})^{\samplesize{1}}\BER(0 \mid \variantfreq{\variantidx}{2})^{\samplesize{2}}$. Therefore, the collection of variants that did not appear in the first $\vecsamplesize=(\samplesize{1}, \samplesize{2})$ are characterized by a collection of frequencies whose distribution is given by a thinned multivariate Poisson point process with rate $\ratemeasproposed(\de\vecvariantfreq{})\BER(0 \mid \variantfreqperpop{1})^{\samplesize{1}}\BER(0 \mid \variantfreqperpop{2})^{\samplesize{2}}$. These variants' rates (and locations) are independent of the collection of frequencies that did appear in the first $\vecsamplesize$ samples.
+    
+    Within this (infinite) collection of variant frequencies, there are some that will appear in the next sample from population 1. Indeed, these new variants are themselves a thinned Poisson point process with rate measure 
+%    $\ratemeasproposed(\de\vecvariantfreq{})\BER(1|\variantfreqperpop{1})$. That is, the variant frequencies whose corresponding variants did not appear in the first $\vecsamplesize=(\samplesize{1}, \samplesize{2})$ samples but is going to appear if we were to collect an additional sample from population 1 samples is characterized by a thinned Poisson point process with rate measure 
+    $$
+    \ratemeasproposed(\de\vecvariantfreq{})\BER(0|\variantfreqperpop{1})^{\samplesize{1}}\BER(0|\variantfreqperpop{2})^{\samplesize{2}} \BER(1|\variantfreqperpop{1}),
+    $$
+  independent of the collection of frequencies that appeared in the first $(\samplesize{1}, \samplesize{2})$ samples.
+
+    Similarly if the first follow up sample is from population 2 the (thinned) rate measure for the new variants is  
+    $$
+    \ratemeasproposed(\de\vecvariantfreq{})\BER(0|\variantfreqperpop{1})^{\samplesize{1}}\BER(0|\variantfreqperpop{2})^{\samplesize{2}} \BER(1|\variantfreqperpop{2})
+    $$
+    and these are independent of the collection of frequencies that appeared in the first $(\samplesize{1}, \samplesize{2})$ samples.
+
+    Recursively, suppose we first sample follow up samples from population 1, for $\followupidx{1}\ge 1$, the collection of variant frequencies corresponding to variants that did not appear in the first $(\samplesize{1}+\followupidx{1}-1, \samplesize{2})$ samples but then did appear in the $\followupidx{1}$th follow-up samples of population 1 comes from a thinned Poisson point process with rate measure
+    \begin{align*}
+        \ratemeasproposed(\de\vecvariantfreq{})\BER(0|\variantfreqperpop{1})^{\samplesize{1}+\followupidx{1}-1}\BER(0|\variantfreqperpop{2})^{\samplesize{2}} \BER(1|\variantfreqperpop{1})
+    \end{align*}
+
+    The number of such variants, by property of Poisson point process, is a Poisson distributed random variable with mean equal to the integral of the underlying rate measure, and by~\cref{eq:expected_ktons}, this is exactly $\newsparam{(\samplesize{1}+\followupidx{1}-1,\samplesize{2})}{(1,0),(1,0)}$. 
+    
+    Now suppose we sampled all $\futuresamplesize{1}$ follow up units from population $1$ and start sampling from population 2. For $\followupidx{2}\ge 1$, the collection of variant frequencies corresponding to variants that did not appear in the first $(\samplesize{1}+\futuresamplesize{1}, \samplesize{2}+\followupidx{2}-1)$ samples but then did appear in the $\followupidx{2}$th follow-up sample of population 2 comes from a thinned Poisson point process with rate measure
+    \begin{align*}
+        \ratemeasproposed(\de\vecvariantfreq{})\BER(0|\variantfreqperpop{1})^{\samplesize{1}+\futuresamplesize{1}}\BER(0|\variantfreqperpop{2})^{\samplesize{2}+\followupidx{2}-1} \BER(1|\variantfreqperpop{2})
+    \end{align*}
+
+    The number of such variants is a Poisson distribution with mean equal to the integral of the underlying rate measure, and by~\cref{eq:expected_ktons}, it is exactly $\newsparam{(\samplesize{1}+\futuresamplesize{1},\samplesize{2}+\followupidx{2}-1)}{(0,1),(0,1)}$. 
+
+    Each of these Poisson point processes are independent. Since the total number of new variants $\genericnews$ coincides with the sum of new variants discovered at each of these individual $\futuresamplesize{1}+\futuresamplesize{2}$ sampling steps, which are independently Poisson distributed, the total number of new variants is also a Poisson distributed random quantity with mean  
+    \begin{align*}
+        \sum_{\followupidx{1}=1}^{\futuresamplesize{1}}\newsparam{(\samplesize{1}+\followupidx{1}-1,\samplesize{2})}{(1,0),(1,0)}+\sum_{\followupidx{2}=1}^{\futuresamplesize{2}} \newsparam{(\samplesize{1}+\futuresamplesize{1},\samplesize{2}+\followupidx{2}-1)}{(0,1),(0,1)}
+    \end{align*}
+    The recursive scheme of population 2 following population 1 is not the only method to get the distribution, one can also start with population 2 then population 1 or any other recursive scheme to get $\vecfuturesamplesize=(\futuresamplesize{1}, \futuresamplesize{2})$.
+\end{proof}
+
+

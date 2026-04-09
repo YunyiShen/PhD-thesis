@@ -1,0 +1,106 @@
+\begin{myLemma}[A modified version of Theorem 3.1 of \citet{csiszar2004information} using Lemma 2.1 of  \citet{csiszar1975divergence}]
+\label{lemma:pyth}
+Suppose $p\in \measurefamily$ and $q\in \modelfamily$, with convex $\measurefamily$. If for all such $p$ and $q$ the log density ratio under some measure is bounded, i.e., $|\log(p/q)|<C$ for some $C<\infty$, then for $p^*(q):=\argmin_{p\in \measurefamily}\KL(p||q)$, we have $\KL(p||q)\ge \KL(p||p^*) + \KL(p^*||q)$
+\end{myLemma}
+\begin{proof}
+    Since $\measurefamily$ convex, we consider $p_{\omega} = (1-\omega)p^*+\omega p\in \measurefamily$ for $\omega\in [0,1]$, by mean value theorem, we have there exist a $\tilde{\omega} \in (0,1)$ such that 
+    \begin{align*}
+        0\le \frac{1}{\omega} [\KL( p_{\omega }||q)-\KL(p^*||q)]=\frac{d}{d\omega} \KL( p_{\omega }||q) \vert_{\omega = \tilde{\omega}}
+    \end{align*}
+    The lower bound 0 is because $p^*$ is the minimizer. Consider the derivative 
+    \begin{align*}
+        \frac{d}{d\omega} \KL( p_{\omega }||q)=\frac{d}{d\omega} \int p_{\omega} \log \frac{p_{\omega}}{q}
+    \end{align*}
+    $p_{\omega} \log \frac{p_{\omega}}{q}$ is integrable by the assumption of bounded density ratio and the partial derivative exists for all $\omega$.
+    To move the derivative inside we require that the partial derivative being also integrable
+    \begin{align*}
+        \frac{\partial}{\partial \omega} p_{\omega} \log \frac{p_{\omega}}{q}&= \left(\frac{\partial}{\partial \omega} p_{\omega}\right) \log \frac{p_{\omega}}{q} + p_{\omega} \frac{\partial}{\partial \omega} \log\frac{p_{\omega}}{q}\\
+        &=(p-p^*)\log \frac{p_{\omega}}{q}+p_{\omega}\frac{1}{p_{\omega}} (p-p^*)\\
+        &=(p-p^*)(\log \frac{p_{\omega}}{q}+1)
+    \end{align*}
+    By bounded density ratio, we have for some finite $C$
+    \begin{align*}
+        |(p-p^*)(\log \frac{p_{\omega}}{q}+1)|\le (p+p^*)\left|\log \frac{p_{\omega}}{q}+1\right|<C(p+p^*)
+    \end{align*} 
+    Thus the derivative is also integrable. Thus we have 
+    \begin{align*}
+        \frac{d}{d\omega} \KL( p_{\omega }||q) = \int \frac{\partial}{\partial \omega} p_{\omega} \log \frac{p_{\omega}}{q} = \int (p-p^*)(\log \frac{p_{\omega}}{q}+1) = \int (p-p^*)\log \frac{p_{\omega}}{q}
+    \end{align*}
+    again by bounded density ratio and DCT, we have 
+    \begin{align*}
+        \lim_{\omega \to 0}\int (p-p^*)\log \frac{p_{\omega}}{q} = \int (p-p^*)\log \frac{p^*}{q}\ge 0
+    \end{align*}
+    Then 
+    \begin{align*}
+        \int (p-p^*)\log \frac{p^*}{q}=\int p\log \frac{p^*}{p}\frac{p}{q}-\int p^* \log \frac{p^*}{q}=\int p\log \frac{p}{q} - \int p\log \frac{p}{p^*}-\int p^* \log \frac{p^*}{q}\ge 0
+    \end{align*}
+    And by definition this is $\KL(p||q)-\KL(p||p^*)-\KL(p^*||q)\ge 0$ proving the stated inequality. 
+\end{proof}
+
+
+\section{Identifiability concerns}
+\label{sec:identifiability}
+
+In settings like ours, marginal samples may not provide sufficient information to discern the underlying system. One case this might happen is when the system is at equilibrium to start with, e.g., our initial distribution is the invariant measure of the system (if it exists). However, this is not the only case and could happen even the system is not at equilibrium or even without invariant measure. For the former, consider a scenario where the drift is the sum of a rotationally symmetric gradient field and a constant-curl rotation, with the initial sample distribution also being rotationally symmetric. In this case, the marginal distribution would maintain rotational symmetry at each subsequent time step, irrespective of the constant-curl rotation's angular velocity. This means that merely by observing marginal samples, we might fail to detect the rotation parameter that controls angular velocity. 
+
+%This example can be seen as a special case (where we have a system with a stationary invariant measure, i.e. a measure that is preserved by the dynamics moving forward, and for which it is reasonable that the marginal samples do not provide enough information to identify the system), but we can also provide a more general example where the system does not have an invariant measure, and yet we are not able of identifying the system's only parameter.
+
+One particularly case of a rotational invariant vector filed is a simple vector field with constant curl with Gaussian initial distribution. Formally in the settings of \cref*{eq:mainsde}, consider a simple drift parameterized by $\alpha\in \R$, $\drift(\bm x) := [\alpha x_2, -\alpha x_1]^\top$, a simple vector field with constant curl. When $\alpha=0$ the dynamics is driven just by the Brownian motion. Suppose $\marginal{0}$ is an isotropic normal, $\marginal{0} \sim \mathcal{N}(0, \beta I_2)$ for some $\beta$ (and $I_2$ denoting the 2D identity matrix). For a given constant volatility $\gamma$, when $\alpha=0$, the distribution of the particles at any time step is always isotropic normal. 
+
+Indeed, if we consider the general form of the Fokker-Planck equation, this can be written as
+\begin{align*}
+    \frac{\partial p(\bm x, t)}{\partial t} &= -\nabla\cdot (\drift(\bm x)p(\bm x, t))+\gamma \nabla^2 p(\bm x, t)\\
+    &=-p(\bm x, t) (\nabla\cdot \drift(\bm x)) - \nabla p(\bm x, t)\cdot \drift(\bm x) + \gamma \nabla^2 p(\bm x, t)\\
+    &=- \nabla p(\bm x, t)\cdot \drift(\bm x) + \gamma \nabla^2 p(\bm x, t)\\
+\end{align*}
+
+If we adapt this to isotropic Gaussians, we have $\nabla p(\bm x, t)\cdot \drift(\bm x)=0$, and therefore we only end up with the diffusion term for the Brownian motion, meaning that the distribution of the particles at any time step will always remain isotropic Gaussian with increasing variance. 
+
+% Another similar example is if we consider a drift that consists of a quadratic potential field and a constant-curl vector field, i.e., $\drift(\bm x) := -2[x_1, x_2]^\top + [\alpha x_2, -\alpha x_1]^\top$. An isotropic Guassian with contracting variance will solve the Fokker-Planck equation for general $\alpha$ and we cannot identify the single parameter. 
+
+In general, the identifiability of the drift is an interesting question for future research. We believe that the identifiability literature of partial differential equations (especially Fokker-Planck equations) should be useful in this regard.
+
+
+\SetKwComment{Comment}{/* }{ */}
+\begin{algorithm}[!ht]
+    \caption{Our method with iterative projections}\label{algo:iterative_proj}
+    \KwData{marginal samples $\{\obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}}\}_{\sampleidx, \timeidx}$ $i =1,\dots, \totsteps$, $j_i=1,\dots, N_i$}
+    \KwResult{drift estimate $\drifthat$}
+    $\drifthat \gets 0$\ \Comment*[r]{Start from some initial drift guess} 
+    \While{not converge}{
+        \For{$i=1,\dots,\totsteps-1$}{
+            $\forwarddrift{i},\backwarddrift{i} \gets$ Forward-Backward SB$(\obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}}, \obsat{\timestep{\timeidx+1}}^{\sampleidx_{\timeidx+1}}||\drifthat)$\ \Comment*[r]{solve SB problem with prior SDE being the current estimated drift}
+        }
+        \For{all $\sampleidx_{\timeidx}$}{
+            $\responseat{0\le \timet\le \timestep{\timeidx}}^{ \sampleidx_{\timeidx} }=$backwardSDEs$(\backwarddrift{1},\dots,\backwarddrift{\timeidx}, \obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}})$ \Comment*[r]{simulate backward with learned backward SDEs for time before sampling}
+            $\responseat{\timestep{\timeidx}< \timet\le \timestep{\totsteps}}^{ \sampleidx_{\timeidx} }=$forwardSDEs$(\forwarddrift{i+1},\dots,\forwarddrift{\totsteps-1}, \obsat{\timestep{\timeidx}}^{\sampleidx_{\timeidx}})$ \Comment*[r]{simulate forward with learned forward SDEs for time after sampling}
+        }
+        $\drifthat \gets$ DriftFit$(\responseat{\timestep \timet}^{ \sampleidx_{\timeidx} })$ \Comment*[r]{Fit drift with interpolated trajectories}
+    }
+\end{algorithm}
+
+
+Here we give proof of the Lemma that we can solve SB problems using forward-backward SDEs by solving consecutive pairs. Similar argument were also made in \citet{chen2019multi}
+\begin{proof}[Proof of~\cref{lemma:consecutive_pairs}]
+    Since SDEs are Markovian, we can expand $q=q_{0}\prod_{\timeidx=1}^{\totsteps} q_{\timeidx|\timeidx-1}$ and $p=p_{0}\prod_{\timeidx=1}^{\totsteps} p_{\timeidx|\timeidx-1}$ and thus $\KL((q||p_{\drift}))=\E_{q_{0}}\prod_{\timeidx=1}^{\totsteps}\E_{p_{\timeidx|\timeidx-1}}\left[\log q_0/p_0 +\sum_{\timeidx=1}^{\totsteps}\log q_{\timeidx|\timeidx-1}/p_{\timeidx|\timeidx-1} \right]$, the last term equals to the expectation of L2 difference in that time interval by Girsano's theorem. Backward results is by applying forward results into backward dynamics.
+\end{proof}
+
+\section{Multimarginal Schr\"odinger bridge}
+\label{sec:multimarginal}
+
+In this section we provide a short review on solving the SB problem with multiple marginals. Indeed, the most classic SB (that achieved great success for example as a deep generative model) only has a pair of end points while we have $\totsteps$. The simplest way to solve this problem is to solve a sequence of SB problems between consecutive pairs of marginals, and then the general forward-backward SDE can be obtained by concatenating the forward SDEs and backward SDEs at the corresponding time intervals. This naive approach is theoretically motivated by the work of \citet{Lavenant2021} who showed that if we slightly restrict $\measurefamily$ to be Markov, the KL between two measures satisfying all $\totsteps$ marginal constraints is lower bounded by the sum of pairwise KL between measures satisfying the pairwise marginal constraints. 
+
+\begin{myLemma}[Proposition D.1 of \citet{Lavenant2021}]
+    For a general reference measure $\sdeprior$
+\begin{align*}
+   \KL((\marginalmeasureplain)_{t_1,\dots,\timestep{\totsteps}}||(\sdeprior)_{t_1,\dots, \timestep{\totsteps}})
+    &\ge \KL((\marginalmeasureplain)_{t_1,t_2}||(\sdeprior)_{t_1,t_2})\\
+    &~~~~+\sum_{i=2}^{T-1}\left[ \KL((\marginalmeasureplain)_{t_{i},t_{i+1}}||(\sdeprior)_{t_{i},t_{i+1}}) -\KL((\marginalmeasureplain)_{t_i}||(\sdeprior)_{t_i}) \right]
+\end{align*}
+Inequality attend equal when $(\marginalmeasureplain)_{t_1,\dots,\timestep{\totsteps}}$ is Markov. 
+\end{myLemma}
+
+Because of this lemma, when solving the SB problem with more than two marginal constraints, we can find the SBs between consecutive pairs of marginals and then concatenate the forward SDEs and backward SDEs at the corresponding time intervals. As discussed in the main text, this approach can be problematic, because it can lead to neglecting long-term dependencies, seasonalities, and cyclic patterns. 
+
+
+

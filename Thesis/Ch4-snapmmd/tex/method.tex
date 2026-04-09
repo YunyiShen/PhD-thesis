@@ -1,0 +1,127 @@
+
+
+To address the forecasting limitations of SBs described above, we propose an alternative approach.
+SBs compare the observed data and candidate model directly via Kullback–Leibler divergence.
+We instead formulate an optimization problem that directly matches the joint distribution of state–time pairs predicted by a candidate model to the empirical distribution observed in the data. Below, we describe precisely how we frame and solve this optimization problem using MMD, introduce an interpretable diagnostic metric for assessing model fit, and detail how this framework naturally extends to scenarios involving incomplete state measurements.
+
+\subsection{A least squares approach}
+We formalize our approach by (1) decomposing the joint state--time empirical distribution into marginal and conditional components and (2) detailing how the resulting matching problem  reduces to a least-squares formulation when using Maximum Mean Discrepancy (MMD) for distance.
+
+\textbf{Empirical distributions.}
+We let $\empconditional{\statevar}{\timestep{}}$ denote the empirical measure over state $\statevar$ at any observed time $\timestep{\timeidx}$. For unobserved times, we give it a placeholder distribution. Likewise, we let $\emptimemeasure(\timestep{})$ denote the (marginal) empirical measure over observed times. Precisely, we have
+\begin{equation}
+    \label{eq:empirical_dists}
+\empconditional{\statevar}{\timestep{}} = \left\{ \begin{array}{ll} (\tottrajec_{\timeidx})^{-1} \sum_{\sampleidx=1}^{\tottrajec_{\timeidx}} \delta_{\obsat{\timet_{\timeidx}}^{\sampleidx}}(\statevar) & \timestep{} = \timestep{\timeidx} \\
+    \delta_{\bm{0}}(\statevar) & \textrm{else}
+    \end{array}
+    \right.,
+    \quad \textrm{ and } \quad
+        \emptimemeasure(\timestep{}) = \sum_{\timeidx=1}^{\totsteps} \left(\frac{\tottrajec_{\timeidx}}{\sum_{j=1}^{\totsteps} \tottrajec_{j}}\right) \delta_{\timestep{\timeidx}}(\timestep{}). 
+\end{equation}
+where $\delta$ denotes as usual the Dirac measure. Let $\empjoint{\statevar}{\timestep{}}$ denote the empirical joint distribution over observed state-time pairs. This joint decomposes into the empirical marginal and conditional described above: $\empjoint{\statevar}{\timestep{}} = \emptimemeasure(\timestep{}) \empconditional{\statevar}{\timestep{}}$.
+
+
+\textbf{Directly matching the joint state--time distributions.} We plan to estimate the parameters \(\allparam\) of a candidate SDE model by aligning its predicted joint distribution over state--time pairs with the empirical distribution. 
+Let $\predconditional{\statevar}{\timestep{}}$ denote the predicted state distribution at time $t$. We will minimize a discrepancy between (1) the empirical joint $\empjoint{\statevar}{\timestep{}}$ and (2) the joint implied by the predictive conditional $\predconditional{\statevar}{\timestep{}}$ together with the empirical marginal $\emptimemeasure(\timestep{})$: namely, $\predjoint{\statevar}{\timestep{}} := \emptimemeasure(\timestep{}) \predconditional{\statevar}{\timestep{}}$.
+
+For the discrepancy, we choose the MMD \citep{gretton2012kernel}. MMD computes the squared distance between the kernel mean embeddings of two distributions in a reproducing kernel Hilbert space (RKHS). 
+While in principle other measures of divergence (e.g., Wasserstein, Kullback--Leibler) could be employed, we adopt MMD for its favorable computational and statistical properties. In particular, MMD admits a closed-form empirical estimator with efficient gradients, remains well behaved in moderately high dimensions where Wasserstein distances suffer from poor sample complexity, and naturally provides a quantitative model selection criterion, as discussed in \cref{sec:r2-main}. We refer to \cref{app:mmd-computation} for further discussion on the computational aspects of MMD.
+
+To apply MMD in practice, one must specify a kernel. For our method, we choose a kernel that factors across state and time; this choice lets us break the joint MMD into a weighted sum of marginal MMDs at each time point. The resulting optimization objective is reminiscent of least-squares regression, with time acting as a discrete index. We formalize this idea in the following result.
+
+\begin{proposition}
+\label{prop:MMDdecomposition}
+Let \(f(\statevar,t) = f(\statevar\mid t) h(t)\) and \(g(\statevar,t) = g(\statevar\mid t) h(t)\)
+be joint distributions over \(\statevar\in \resprange\) (for dimension $d$) and discrete time \(t \in \timerange\), where $\timerange$ denotes a finite index set of observation times, \(h(t)\) is a probability mass function and $f(\statevar\mid t),  g(\statevar\mid t)$ are conditional distributions. Use the kernel \(K((\statevar,t), (\statevar',t')) = K_{\statevar}(\statevar,\statevar') \delta(t - t')\), where \(K_{\statevar}\) is positive definite on the state space and, for all $t\in \timerange$, $\E_{\statevar\sim f(\statevar\mid t), \statevar'\sim f(\statevar\mid t)}K_{\statevar}(\statevar,\statevar')<\infty$, $\E_{\statevar\sim f(\statevar\mid t), \statevar'\sim g(\statevar\mid t)}K_{\statevar}(\statevar,\statevar')<\infty$, and $\E_{\statevar\sim g(\statevar\mid t), \statevar'\sim g(\statevar\mid t)}K_{\statevar}(\statevar,\statevar')<\infty$.\footnote{Many practical kernels satisfy these assumptions, e.g.,  radial basis function, Mat\'ern, and Laplace.} Then:
+\[
+\MMD_K^2(f, g) = \sum_{t \in \timerange} h^2(t) \, \MMD_{K_{\statevar}}^2\left(f(\cdot\mid t), g(\cdot\mid t)\right).
+\]
+\end{proposition}
+
+This result (proof in \cref{app:proof-main-prop}) shows that aligning joint distributions here boils down to matching conditional state distributions across time. 
+We apply \cref{prop:MMDdecomposition} with the two joint distributions from above, $\predjoint{y}{\timestep{}}$ and $\empjoint{y}{\timestep{}}$, to obtain the following optimization objective:
+\begin{align}
+   \MMD_K^2(\predjointnoarg, \empjointnoarg)
+=\sum_{\timeidx=1}^{\totsteps} \left(\frac{\tottrajec_{\timeidx}}{\sum_{j=1}^{\totsteps}\tottrajec_{j}}\right)^2\,\MMD_{K_{\statevar}}^2 ( \predconditional{\cdot}{\timestep{\timeidx}}, \empconditional{\cdot}{\timestep{\timeidx}} ).
+\end{align}
+It remains to estimate the righthand MMDs and also to choose the MMD state-space kernel, the model $\predconditional{\cdot}{\timestep{}}$, and the optimization algorithm.
+
+\textbf{Estimating MMD at each time point.} In practice, we approximate $\MMD_{K_{\statevar}}^2 ( \predconditional{\cdot}{\timestep{}},\allowbreak \empconditional{\cdot}{\timestep{}} )$ using the MMD's U-statistic estimator \citep[][Lemma 6]{gretton2012kernel}. To that end, we simulate $\totsimummd$ trajectories from the candidate model. For the $\simuidx$th trajectory, we record the state snapshot $\altresponseat{\timestep{\timeidx}}^{\simuidx}$ at time $\timestep{\timeidx}$. 
+The U-statistic estimator, which is unbiased and consistent \citep{hall2004generalized}, is then given by
+\[
+\begin{aligned}
+\MMDu( \predconditional{\cdot}{\timestep{\timeidx}}, \empconditional{\cdot}{\timestep{\timeidx}} )
+=&\,\frac{1}{\tottrajec_{\timeidx}(\tottrajec_{\timeidx}-1)}\sum_{\sampleidx\ne \sampleidx'} K_{\statevar}({\obsat{\timestep{\timeidx}}^{\sampleidx}},{\obsat{\timestep{\timeidx}}^{\sampleidx'}}) -\frac{2}{\tottrajec_{\timeidx}\totsimummd}\sum_{\sampleidx,\simuidx}K_{\statevar}({\obsat{\timestep{\timeidx}}^{\sampleidx}},{\altresponseat{\timestep{\timeidx}}^{\simuidx}}) \\
+&\quad +\frac{1}{\totsimummd(\totsimummd-1)}\sum_{\simuidx\ne \simuidx'}K_{\statevar}({\altresponseat{\timestep{\timeidx}}^{\simuidx}},{\altresponseat{\timestep{\timeidx}}^{\simuidx'}}).
+\end{aligned}
+\]
+
+The overall optimization problem for parameter fitting then becomes:
+\begin{align}
+    \label{eq:leastsquare}
+\hat{\allparam} = \argmin_{\allparam}\; \sum_{\timeidx=1}^{\totsteps} w_{\timeidx} \MMDu( \predconditional{\cdot}{\timestep{\timeidx}}, \empconditional{\cdot}{\timestep{\timeidx}} )
+\quad
+\textrm{ with weights }
+    \quad
+    w_{\timeidx} := \left(\frac{\tottrajec_{\timeidx}}{\sum_{j=1}^{\totsteps}\tottrajec_{j}}\right)^2
+\end{align}
+The least squares objective from \cref{eq:leastsquare} naturally extends classical regression to distributional settings by measuring discrepancy in the RKHS defined by kernel mean embeddings. Specifically, this least squares framework reduces to classical Euclidean regression if each predicted distribution is a Dirac measure and the kernel is linear. 
+
+\input{tables/summary_combined_mmd}
+
+\textbf{Choosing kernel, optimizer, and SDE model.}
+In practice, we use the radial basis function (RBF) kernel for the state space; we determine the length scale by the median heuristic \citep{garreau2017large} applied to pairwise distances in the data. Additionally, we scale time to lie in  $[0,1]$. For optimization, we compute  gradients with respect to the parameters using the stochastic adjoint method \citep{li2020scalable}. We use the Adam optimizer to perform the parameter updates. 
+%
+%
+%We pick the candidate conditional $\predconditional{\cdot}{\timestep{}}$ based on domain knowledge about the underlying process. This SDE can either follow a parametric form, in which drift and volatility are governed by functions with finitely many parameters (as in the Lotka--Volterra experiment; see \cref{sec:lv-main}), or a more flexible design that incorporates neural network architectures for the drift or volatility terms. For example, in the repressilator experiment (\cref{sec:repr-main}), we compare a purely parametric model to a semiparametric approach in which we used a multilayer perceptron to approximate part of the drift in the system; see \cref{eq:mlpactive} for more details. Here the neural component is not intended to replace parametric structure, but to complement it when the mechanistic form is incomplete. This combination allows the model to flexibly capture residual nonlinear effects while still benefiting from the inductive bias provided by known biological constraints.
+We pick the candidate conditional $\predconditional{\cdot}{\timestep{}}$ based on domain knowledge by specifying parametric components of the SDE in every experiment, reflecting the partial mechanistic understanding available in scientific settings. A strength of our method is that it can leverage this information, and in \cref{sec:ablations} we show through ablations that doing so yields clear improvements over fully neural models.
+
+
+\textbf{Handling incomplete state measurements.} In many practical applications --- such as our mRNA sequencing example --- it is common for only a subset of relevant state variables to be observed. For instance, while mRNA concentrations are routinely measured, corresponding protein levels (which are also important for modeling the underlying dynamical system) are often unavailable. Our framework can handle these missing-data settings because it relies on matching the joint distribution of time and the observed dimensions, rather than requiring all dimensions to be measured. More precisely, since our loss (\cref{eq:leastsquare}) is defined over the observed state variables (together with time), the model is trained to match the marginal distribution of the observed variables along with time, without making any additional assumptions or imputations for the missing dimensions. We illustrate with an experiment in \cref{sec:experiments} (\cref{fig:repr-main}, lower row).
+
+\subsection{Evaluating model fit with an $R^2$-style metric}
+\label{sec:r2-main}
+
+In traditional regression, \(R^2\) offers a  straightforward diagnostic and basis for model comparison; we propose a similar metric for distributional data.
+Recall that \(R^2\) quantifies how well a model explains the data by comparing residual variability against total variability around a baseline constant prediction, the mean response. Given the least-squares objective of \cref{eq:leastsquare}, we might consider a similar metric in the present distributional case. But first we need to choose an appropriate baseline.
+
+
+\textbf{A distributional baseline.}
+Analogous to the response-mean baseline in traditional regression, we want to find the best constant (time-independent) model within our RKHS-based least squares framework. The barycenter of distributional data is the distribution minimizing the sum of squared RKHS distances to all observed distributions. For distributions embedded in an RKHS, \citet{cohen2020estimating} showed that the barycenter is  the weighted mixture of the empirical distributions:
+\begin{equation}
+    \label{eq:barycenter}
+    \barycentershort(\statevar) := \argmin_{\marginaldenplain} \sum_{\timeidx=1}^{\totsteps} w_{\timeidx}\, \MMD_{K_{\statevar}}^2 ( f(\statevar\mid \timestep{\timeidx}), \empconditional{\statevar}{\timestep{\timeidx}} ) = \frac{1}{\sum_{\timeidx=1}^{\totsteps} w_{\timeidx}\tottrajec_{\timeidx}}\sum_{\timeidx=1}^{\totsteps}\sum_{\sampleidx=1}^{\tottrajec_{\timeidx}}w_{\timeidx}\delta_{\obsat{\timet_{\timeidx}}^{\sampleidx}}(\statevar),
+\end{equation}
+with weights \(w_{\timeidx}\) as in \cref{eq:leastsquare}.
+
+\textbf{Our RKHS-based \(R^2\) metric.}
+With this baseline in hand, we define our metric.
+
+\begin{definition}[RKHS-based \(R^2\) metric]
+\label{def:R2_metric}
+
+Let $\predconditional{\cdot}{\timestep{}}$ denote the model-predicted state distribution at time $\predconditional{\cdot}{\timestep{}}$. Let $ \empconditional{\cdot}{\timestep{\timeidx}}$ be defined as in \cref{eq:empirical_dists}, 
+\(\barycentershort\) as in \cref{eq:barycenter}, and \(w_{\timeidx}\) as in \cref{eq:leastsquare}.
+The RKHS-based coefficient of determination \(R^2\) is
+\begin{equation}
+    \label{eq:R2_metric}
+    R^2 = 1 - \frac{\sum_{\timeidx=1}^{\totsteps} w_{\timeidx}\,\MMD_{K_{\statevar}}^2(\predconditional{\cdot}{\timestep{\timeidx}}, \empconditional{\cdot}{\timestep{\timeidx}})}{\sum_{\timeidx=1}^{\totsteps} w_{\timeidx}\,\MMD_{K_{\statevar}}^2(\barycentershort, \empconditional{\cdot}{\timestep{\timeidx}})}.
+\end{equation}
+\end{definition}
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\linewidth]{Figs/LV_forecasting.pdf}
+    \vspace{-0.6cm}
+    \caption{Lotka-Volterra results (\protect\cref{sec:lv-main}). We show 200 samples at each of 10 training times and 1 forecast time (red). Forecast points overlap with the training points at time 0 (blue).}
+    \vspace{-0.3cm}
+    \label{fig:LV}
+\end{figure}
+
+
+%The numerator captures how well the candidate model explains the observed data by measuring the discrepancy between predicted and empirical distributions at each time. The denominator quantifies the total variability around the barycenter, akin to total variance in standard regression. Thus, \(R^2\) represents the fraction of total variability explained by the candidate model. 
+
+%The \(R^2\) metric defined in \cref{eq:R2_metric} naturally provides a standardized and interpretable criterion to compare candidate SDE models, guiding model selection and diagnosing fit quality. Values of \(R^2\) close to 1 indicate a high-quality fit, while values near or below 0 signal poor model performance relative to the simple barycenter model. Finally, note that \(R^2\) is always upper bounded by 1 due to the non-negativity of the MMD, and it may become negative if the candidate model performs worse than the barycenter, analogous to regression models without an intercept. We discuss how we use this metric in our experiments in \cref{app:use-r2-experiments}.
+
+The numerator measures the discrepancy between model predictions and empirical distributions, while the denominator quantifies total variability around the barycenter (analogous to total variance in standard regression). Thus, \(R^2\) captures the fraction of variability explained by the model. By construction, \(R^2 \le 1\), with values near 1 indicating good fit and values near or below 0 indicating performance no better (or worse) than the barycenter. We use this metric for model comparison and fit diagnostics; see \cref{app:use-r2-experiments}.
+
