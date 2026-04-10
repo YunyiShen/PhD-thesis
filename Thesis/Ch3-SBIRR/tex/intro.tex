@@ -20,7 +20,7 @@ see \citet[sections 3.2 and 4.1]{tong2020trajectorynet}. See \cref{app:related-w
 
 Due to the limitations of existing methods, we propose a new approach that (1) infers the distribution of trajectories from sample snapshots at multiple time points and (2) requires the user to specify only a parametric family of reference dynamics rather than a single one. Our method iterates between two steps. (i) Given our current best guess of the latent dynamics, we learn a piecewise SB and sample the resulting trajectories. (ii) We use the learned SB to refine our best guess of the latent dynamics within the reference family. 
 Since the estimate of latent dynamics uses information from all times, we expect our method to share information across time intervals.
-In our experiments (\cref{sec:experiments-main}), we find that our method is more accurate than both vanilla SBs and alternatives that nontrivially handle multiple time points. %Moreover, our method is substantially faster than the latter methods in all experiments, sometimes over 40 times faster. 
+In our experiments (\cref{ch3sec:experiments-main}), we find that our method is more accurate than both vanilla SBs and alternatives that nontrivially handle multiple time points. %Moreover, our method is substantially faster than the latter methods in all experiments, sometimes over 40 times faster. 
 Moreover, our method is faster than the latter methods in all experiments.\footnote{Code to reproduce the experiments is available at \href{https://github.com/YunyiShen/SB-Iterative-Reference-Refinement}{https://github.com/YunyiShen/SB-Iterative-Reference-Refinement}.} %, sometimes over 40 times faster. 
 
 

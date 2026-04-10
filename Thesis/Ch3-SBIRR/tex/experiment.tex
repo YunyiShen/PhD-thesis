@@ -1,6 +1,6 @@
 In simulated and real experiments, we find that our method gives more accurate predictions than alternatives and is substantially faster than existing methods that share information across time intervals. Each of our experiments explores a different application with a different natural reference family.
 
-\subsection{Baselines.} We compare to three other methods, all described in \cref{sec:intro}. (1) A vanilla multimarginal SB (\textit{\vanilla{}}) with a Brownian motion reference. See \cref{sec:vanilla-app} for implementation details.
+\subsection{Baselines.} We compare to three other methods, all described in \cref{ch3sec:intro}. (1) A vanilla multimarginal SB (\textit{\vanilla{}}) with a Brownian motion reference. See \cref{sec:vanilla-app} for implementation details.
 (2) The Deep Momentum multimarginal Schr\"odinger bridge (\textit{\dmsbname{}}) \citep{chen2024deep}. We use the authors' code at \href{https://github.com/TianrongChen/DMSB.}{\nolinkurl{https://github.com/TianrongChen/DMSB}}; see \cref{sec:dmsb-app} for details. (3) \textit{TrajectoryNet} \citep{tong2020trajectorynet}. We use the code at \href{https://github.com/KrishnaswamyLab/TrajectoryNet}{\nolinkurl{https://github.com/KrishnaswamyLab/TrajectoryNet}}; see \cref{app:trajnetdetails}. In all SB methods, we set the volatility $\volatility$ to 0.1, as suggested by \citet{Vargas2021}. See \cref{app:train-hyperparams-ref} for implementation details of our method. 
 
 
