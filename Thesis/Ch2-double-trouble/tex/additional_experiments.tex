@@ -10,7 +10,7 @@ Here we generate data from the i3BP and the d3BP to test the performance of our 
 
 For the i3BP, we generate data using a three parameter Indian buffet process, \citep{Broderick2012, Masoero2022}, assuming there are no shared variants across the two populations. For the d3BP, we generate variants from a single Indian buffet process and then randomly split individuals into two populations. 
 
-In our plots, as in the main text, we use the \emph{relative residual} as a measure of accuracy. Namely, the signed difference between a method’s prediction and the observed value in the reserved follow-up data, normalized by the observed value.
+In our plots, we use the \emph{relative residual} as a measure of accuracy. Namely, the signed difference between a method’s prediction and the observed value in the reserved follow-up data, normalized by the observed value.
 
 
 \paragraph{Data from the i3BP}
@@ -84,7 +84,7 @@ We provide a summary of our findings with results on \internal{two largest cance
 \subsection{Raw number of shared variants and residuals in simulation and real data experiments}
 \label{sec:raw_responses}
 
-In this section, unlike in the main text and in \cref{sec:single_pop_methods}, we report the raw number of shared variants and the raw magnitude of residuals (difference between predicted and true). Our findings when using this raw measure are similar to the ones obtained when using normalized residuals: our proposed methods performs well overall. 
+In this section, unlike in \cref{sec:single_pop_methods}, we report the raw number of shared variants and the raw magnitude of residuals (difference between predicted and true). Our findings when using this raw measure are similar to the ones obtained when using normalized residuals: our proposed methods performs well overall. 
 We adopt the same ``cross-validation-like'' approach discussed in Section 8 (Experimental Setup).
 
 
@@ -181,7 +181,7 @@ Our results show that the optimization is relatively insensitive to the trimming
     \centering
     \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//kor_bgr_30fold_trim15.png}
     \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//seu_bgr_30fold_trim15.png}
-    \caption{Prediction for the GnomAD dataset, Korean--Bulgarian and Southern European--Bulgarian respectively. The trimming here is set to 15. The results are the same as trimming at 10 in the main text Figure 5.}
+    \caption{Prediction for the GnomAD dataset, Korean--Bulgarian and Southern European--Bulgarian respectively. The trimming here is set to 15. The results are the same as trimming at 10 in \cref{fig:pop_gen}.}
     %\label{fig:seu_bgr_15}
     \label{fig:seu_bgr_15}
 \end{figure}
@@ -189,14 +189,14 @@ Our results show that the optimization is relatively insensitive to the trimming
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//seu_bgr_30fold_trim20.png}
-    \caption{Prediction for the GnomAD dataset Southern European--Bulgarian respectively. The trimming here is set to 20. The results are the same as trimming at 10 in the main text Figure 5. The Korean population does not have enough training samples to allow a trimming of 20.}
+    \caption{Prediction for the GnomAD dataset Southern European--Bulgarian respectively. The trimming here is set to 20. The results are the same as trimming at 10 in the \cref{fig:pop_gen}. The Korean population does not have enough training samples to allow a trimming of 20.}
     \label{fig:seu_bgr_20}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.9\textwidth]{Ch2-double-trouble/Figs//BIDC_LA2_20fold_trim15.png}
-    \caption{Prediction for the variant counts in, breast and lung cancer. For  MSK-IMPACT dataset. This experiment used trimming of 15 during training. The results are the same as trimming at 10 in the main text Figure 4.}
+    \caption{Prediction for the variant counts in, breast and lung cancer. For  MSK-IMPACT dataset. This experiment used trimming of 15 during training. The results are the same as trimming at 10 in the \cref{fig:cancer}.}
     \label{fig:bidc_la2_15}
 \end{figure}
 

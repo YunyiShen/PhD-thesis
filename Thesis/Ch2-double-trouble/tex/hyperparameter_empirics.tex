@@ -41,7 +41,7 @@ In particular, we replace the sum in \cref{eq:likelihood_prior_full} with a sum 
 \end{equation}
 In fact, we use a fixed truncation level $v$ regardless of pilot study size in \cref{eq:likelihood_prior}.
 The key observation that underlies our truncation choice and fixed-$v$ level is the following: biologists are interested in predicting the number of new variants in the follow-up study. By construction, variants that are new in the follow-up did not appear in the pilot and therefore can be expected to have a low frequency (i.e., be rare) with high probability. Moreover, similarly-rare variants in the pilot should be the most informative about behavior of these rare variants in the follow-up study. But similarly-rare variants can be expected to appear a small number of times in the pilot.
-We make this argument more precise in Section S7.6 of the Supplementary Material \citep{supplement}.}
+We make this argument more precise in \cref{sec:large_triming}.}
 
 
 
@@ -57,7 +57,7 @@ We make this argument more precise in Section S7.6 of the Supplementary Material
 %Each term in the sum requires
 %computing \cref{eqn:kr_tons}, and there are $(v+1)^2-1$ terms in the sum.
 We find empirically that setting $v=10$ gives 
-results comparable to larger settings of $v$ and henceforth use $v=10$; see Section S7.6 of the Supplementary Material \citep{supplement}
+results comparable to larger settings of $v$ and henceforth use $v=10$; see \cref{sec:large_triming}
 for our experimental comparison of $v$ levels. 
 
 

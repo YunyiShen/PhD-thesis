@@ -18,8 +18,8 @@ We focus on two sampling schemes
 \end{itemize}
 \revision{We let $\zerovec = (0,0)$ denote a vector of zeros, and $a_\samplesizenosubscript \sim b_\samplesizenosubscript$ indicate $\lim_{\samplesizenosubscript\to\infty}a_\samplesizenosubscript/b_\samplesizenosubscript=1$. 
 In this section, we establish \textit{a priori} power-law behavior for the number of new variants.
-The same asymptotic behavior also holds \textit{a posteriori}, due to conjugacy of our model \citep[Section S3]{supplement}. 
-\internal{For details of conjugacy and proofs}, see Section S8 in \citet{supplement}.}
+The same asymptotic behavior also holds \textit{a posteriori}, due to conjugacy of our model (see \cref{app:conjugacy}). 
+\internal{For details of conjugacy and proofs}, see \cref{app:power_law}.}
 
 
 \subsection{The projection scheme} \label{sec:projection_powerlaw}
@@ -68,7 +68,7 @@ First we establish power-law bounds for the expected rate of growth of the numbe
 	\end{equation}
 \end{myProposition}
 
-See Section S8.1 in the Supplementary Material \citep{supplement} for the proof.
+See \cref{sec:projection_scheme_proof} for the proof.
 Note that, due to the maximum in \cref{eq:power-law_projection-max_lowerbound}, the lower bound will grow (asymptotically) at least as fast as 
 $\samplesize{\notpopidx}^{\rate{\popidx}}$ as $\samplesize{\notpopidx} \to \infty$. It follows that the lower bound is (asymptotically) positive and diverging.
 
@@ -136,7 +136,7 @@ We next establish power-law bounds for the expected rate of growth of the number
 			\textrm{ \ as } \samplesize{1} \rightarrow \infty.
     \end{align*}
 \end{myProposition}
-See Section S8.2 of the Supplementary Material \citep{supplement} for a proof. Essentially we lower bound the total number of variants by the number seen in either population. 
+See Section \cref{sec:proportion_scheme_proof} for a proof. Essentially we lower bound the total number of variants by the number seen in either population. 
 We upper bound the total number of variants by the sum of variants seen in each population; this bound may be somewhat loose since some variants might be shared across the two populations, and hence double counted.  
 
 We next present the special case where the two rate parameters are equal; in this case, the powers in the lower and upper bounds align up to an arbitrary $\smallpositive > 0$ difference.

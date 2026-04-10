@@ -12,9 +12,9 @@ The measure $\levync$ is characterized by seven scalar hyperparameters, which we
 
 Before discussing the \revision{hyperparameter roles below}, we observe that our rate measure takes the form of the product rate measure $\levytbp(\de\variantfreqperpop{1}) \levytbp(\de\variantfreqperpop{2})$ multiplied by a term that does not factorize into components unique to 
 frequencies in population 1 and 2. 
-\revision{A rough intuition for our choice of $\ratemeasproposed$ is that first, we wish to retain a product of beta distributions to ensure conjugacy.
+A rough intuition for our choice of $\ratemeasproposed$ is that first, we wish to retain a product of beta distributions to ensure conjugacy.
 Second, we observe that, per \cref{prop:incomp}, we need a leading factor before the beta-distribution product that does not factorize. Moreover,
-we need to choose the leading factor in a way that satisfies \cref{req:finite_mean,req:inf_mass} and also allows desirable power law growth properties (\cref{sec:powerlaw}). We describe how we arrived at the particular choice of $\ratemeasproposed$ in more detail in S2.2 in \internal{the} Supplementary Material \citep{supplement}}.
+we need to choose the leading factor in a way that satisfies \cref{req:finite_mean,req:inf_mass} and also allows desirable power law growth properties (\cref{sec:powerlaw}). We describe how we arrived at the particular choice of $\ratemeasproposed$ in more detail in \cref{sec:prior_construction_details}.
 
 \revision{Next, we describe the roles of the various hyperparameters in $\ratemeasproposed.$}
 The \emph{mass} parameter $\mass>0$ has the same role as in the (one-population) 3BP rate measure. \revision{Namely, it linearly scales
@@ -42,11 +42,11 @@ in the population with the larger $\corr{}$ value.}
 
 
 Our next result verifies that the hyperparameter ranges here are sufficient to ensure our desiderata;
-see Section S2 of the Supplementary Material \citep{supplement} for a proof. \minorrevision{An interesting line of investigation for future work would be to establish hyperparameter ranges that are both sufficient and necessary.}
+see \cref{sec:proper_proof} for a proof. \minorrevision{An interesting line of investigation for future work would be to establish hyperparameter ranges that are both sufficient and necessary.}
 \begin{myProposition} \label{prop:hyperparams}
 If the hyperparameters satisfy $\mass, \conc{1}, \conc{2}, \corr{1}, \corr{2}>0$ and $\rate{1}, \rate{2} \in (0,1)$, the two-population model (\cref{eq:generative_model}) satisfies \cref{req:finite_mean,req:inf_mass} when paired with our rate measure $\ratemeasproposed$ from \cref{eq:proposed_prior}.
 \end{myProposition}
 
 A common challenge in BNP is computation with the countably infinite set of parameters implied by \cref{req:inf_mass}.
-Like typical models used in practice, though, our model enjoys conjugacy. Namely, analogous to the one-population model from \citet{Masoero2022}, our rate measure in \cref{eq:proposed_prior} is an exponential family conjugate prior for the Bernoulli process likelihood in the sense of \citet{Broderick2018}. We thereby avoid any infinite-dimensional integrals. See Section S3 of the Supplementary Material \citep{supplement} for a formal account and proof. 
+Like typical models used in practice, though, our model enjoys conjugacy. Namely, analogous to the one-population model from \citet{Masoero2022}, our rate measure in \cref{eq:proposed_prior} is an exponential family conjugate prior for the Bernoulli process likelihood in the sense of \citet{Broderick2018}. We thereby avoid any infinite-dimensional integrals. See Section \cref{app:conjugacy} for a formal account and proof. 
 

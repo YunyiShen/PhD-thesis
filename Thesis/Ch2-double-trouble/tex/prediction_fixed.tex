@@ -24,7 +24,7 @@ $\E_{Z,W}$ denotes the expectation with respect to independent random variables 
 \end{equation*}
 \revision{Further, $\genericfreqnews$ are independent across unique values of the vector $\vecoccurrence$, conditionally on the data $\pilotdata$.}
 \end{myProposition}
-The proof appears in Section S5.1 of the Supplementary Material \citep{supplement}. Like the one-population case \citep{Masoero2022},
+The proof appears in \cref{sec:kton_proof}. Like the one-population case \citep{Masoero2022},
 the predictive distribution is Poisson. Unlike the one-population case,
 the Poisson parameter here is not available in closed form (\cref{eqn:kr_tons}).
 
@@ -47,6 +47,6 @@ where $\genericfreqnewsparam$ is defined in \Cref{eqn:kr_tons}.
 \end{myProposition}
 
 
-See Section S5.2 of the Supplementary Material \citep{supplement} for the proof. Intuitively, we first imagine taking a single new draw at a time from population 1 ($\vecfuturesamplesize = (1,0)$) and then a single new draw at a time from population 2 ($\vecfuturesamplesize = (0,1)$). Any variant that is new in the follow-up relative to the pilot must be new at exactly one step of this scheme.
+See \cref{sec:proof_total_number} for the proof. Intuitively, we first imagine taking a single new draw at a time from population 1 ($\vecfuturesamplesize = (1,0)$) and then a single new draw at a time from population 2 ($\vecfuturesamplesize = (0,1)$). Any variant that is new in the follow-up relative to the pilot must be new at exactly one step of this scheme.
 
 The naive proposal in \cref{sec:setup} would require summing over all possible $\vecoccurrence$ such that $\occurrence{1} + \occurrence{2} \ge 1$. We know that, for each population, $\occurrence{\popidx} \le \futuresamplesize{\popidx}$. If we sum up to this bound, we would require $\futuresamplesize{1} * \futuresamplesize{2} - 1$ evaluations of \cref{eqn:kr_tons}. By contrast, \cref{eqn:faster_total_count} requires just $\futuresamplesize{1} + \futuresamplesize{2}$ total evaluations of \cref{eqn:kr_tons}. In practice, we expect that $\genericfreqnewsparam$ becomes negligible for larger $\occurrence{\popidx}$, so one might employ a truncation to speed up the naive scheme. But figuring out an appropriate truncation level would require some work and involve a tradeoff between computation and accuracy.
